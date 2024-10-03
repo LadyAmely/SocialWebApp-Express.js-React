@@ -3,9 +3,10 @@ const express = require('express');
 const session = require('express-session');
 const authRoutes = require('./routes/auth');
 const sequelize = require('./config/db');
+const path = require('path');
 
 const app = express();
-const port = 3003;
+const port = 5000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,7 +33,12 @@ app.get('/dashboard', (req, res) => {
 });
 
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
 
 app.listen(port, () => {
     console.log(`Serwer działa na porcie ${port}`);
