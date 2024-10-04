@@ -1,0 +1,136 @@
+
+
+.hero {
+    background: linear-gradient(to right, #131723, #10151b);
+    color: #ffffff;
+    text-align: center;
+    padding: 4rem 1rem;
+    display: flex;
+    z-index: 0;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-image {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    z-index: 1;
+    background-image: url('../../../public/sky.jpg');
+    background-size: cover;
+    background-position: center;
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 90%);
+}
+
+.registration-form {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    background: rgba(128, 128, 128, 0.7);
+    color: #333333;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    height: auto;
+    z-index: 2;
+    border-radius: 8px;
+    flex: 1;
+}
+
+
+.registration-form p {
+    color: #ffffff;
+    margin-top: 10px;
+    z-index: 2;
+}
+
+.registration-form h1 {
+    margin-bottom: 20px;
+    color: #ffffff;
+    z-index: 2;
+}
+
+.registration-form a {
+    color: #c0a8e4;
+    z-index: 2;
+}
+
+a:hover {
+    color: #8c3cff;
+    text-decoration: underline;
+}
+
+.registration-form form {
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+}
+
+.registration-form label {
+    margin-bottom: 5px;
+    color: #ffffff;
+    z-index: 2;
+}
+
+.registration-form input {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    background-color: #f9f9f9;
+    color: #333333;
+    border-radius: 4px;
+    z-index: 2;
+}
+
+.registration-form button[type="submit"] {
+    padding: 10px;
+    border: none;
+    background-color: #1c1918;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    z-index: 2;
+}
+
+.registration-form .social-login button {
+    padding: 10px;
+    border: 1px solid #cccccc;
+    background-color: #f9f9f9;
+    color: #333333;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    z-index: 2;
+}
+
+.registration-text {
+    background-color: #ffffff;
+    color: #333333;
+    padding: 40px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    flex: 1;
+    max-width: 550px;
+    height:auto;
+    z-index: 2;
+
+
+}
+
+.registration-text h2 {
+    margin-bottom: 20px;
+    color: #333333;
+    z-index: 2;
+}
+
+
+
