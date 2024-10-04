@@ -29,7 +29,7 @@ app.get('/dashboard', (req, res) => {
         return res.redirect('/auth/login');
     }
 
-    res.send(`<h1>Witaj, ${req.session.user.username}!</h1><a href="/auth/logout">Wyloguj</a>`);
+    res.send(`<h1>Witaj, ${req.session.user.username}!</h1><a href="/">Wyloguj</a>`);
 });
 
 
