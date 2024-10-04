@@ -78,7 +78,7 @@ router.post('/logout', (req, res) => {
         if (err) {
             return res.status(500).json({ message: 'Błąd przy wylogowaniu' });
         }
-        res.redirect('/auth/login');
+        res.redirect('/');
     });
 });
 
