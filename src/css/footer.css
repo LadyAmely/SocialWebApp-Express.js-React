@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+.footer {
+    color: #ecf0f1;
+    font-family: 'Orbitron', sans-serif;
+    padding: 20px 0;
+    text-align: center;
+    justify-content: center;
+    margin-top: 0;
+    position: relative;
+    background-color: #1f2230;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 10px rgb(11, 12, 14);
+}
+
+.footer-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: white;
+    text-shadow: 2px 2px 4px rgb(19, 20, 25);
+    font-family: 'Orbitron', sans-serif;
+}
+
+
+
+
+
+

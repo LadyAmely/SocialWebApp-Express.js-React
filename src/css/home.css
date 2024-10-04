@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+body{
+    background-color: #2b2f3c;
+}
+
+.hero {
+    background: linear-gradient(to right, #131723, #10151b);
+    color: #ffffff;
+    text-align: center;
+    padding: 4rem 1rem;
+    display: flex;
+    z-index: 0;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+    position: relative;
+}
+
+.hero-image {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    z-index: 1;
+    background-image: url('../../public/sky.jpg');
+    background-size: cover;
+    background-position: center;
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 90%);
+}
+
+.hero-content {
+    max-width: 800px;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    z-index: 2;
+}
+
+.typewriter {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.typewriter-text {
+    display: inline-block;
+    animation: typing 2s steps(30, end) 1;
+    white-space: nowrap;
+    font-family: monospace;
+    overflow: hidden;
+    border-right: none;
+}
+
+h1{
+    font-family: Orbitron, sans-serif;
+    text-shadow: 2px 2px 4px rgba(205, 201, 201, 0.7);
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+.grid-layout{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 2fr));
+    justify-content: center;
+    align-content: center;
+    gap: 40px;
+    padding: 40px;
+    position: relative;
+}
+
+.grid-card{
+    background-color: #1f2230;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px #151722;
+    padding: 30px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 40px;
+    height: 200px;
+}
+
+h3 {
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    text-shadow: 2px 2px 4px rgba(205, 201, 201, 0.7);
+    text-align: center;
+
+}
+
+p {
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 13px;
+    font-family: 'monospace', sans-serif;
+    text-align: justify;
+}
