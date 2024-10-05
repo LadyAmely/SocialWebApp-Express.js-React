@@ -106,14 +106,14 @@ router.post('/login', async (req, res) => {
             email: user.email
         };
 
-        res.json({ message: 'Zalogowano pomyślnie', token: 'twój-token' });
+        res.json({ message: 'Zalogowano pomyślnie', token: 'twój-token', username: user.username  });
     } catch (err) {
         console.error('Błąd logowania:', err);
         res.status(500).json({ message: 'Błąd serwera' });
     }
 });
 
-
+/*
 
 router.post('/logout', (req, res) => {
     req.session.destroy((err) => {
@@ -123,5 +123,17 @@ router.post('/logout', (req, res) => {
         res.redirect('/');
     });
 });
+
+ */
+
+router.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ message: 'Błąd przy wylogowaniu' });
+        }
+        res.json({ message: 'Successfully logged out' });
+    });
+});
+
 
 module.exports = router;

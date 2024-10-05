@@ -28,8 +28,8 @@ app.get('/dashboard', (req, res) => {
     if (!req.session.user) {
         return res.redirect('/auth/login');
     }
-
-    res.send(`<h1>Witaj, ${req.session.user.username}!</h1><a href="/">Wyloguj</a>`);
+   // res.send(`<h1>Witaj, ${req.session.user.username}!</h1><a href="/">Wyloguj</a>`);
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
 
