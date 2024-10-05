@@ -30,7 +30,9 @@ function Register(): React.ReactElement {
             });
             if (response.ok) {
                 const data = await response.json();
+                localStorage.setItem('username', username);
                 console.log('Rejestracja zakończona sukcesem:', data);
+                window.location.href = '/dashboard';
             } else {
                 const errorData = await response.json();
                 console.error('Błąd rejestracji:', errorData.message);
