@@ -21,6 +21,18 @@ router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });
 
+router.get('/users', async (req, res) => {
+    try {
+        const users = await User.findAll({
+            attributes: ['username']
+        });
+        const usernames = users.map(user => user.username);
+        res.json(usernames);
+    } catch (err) {
+        console.error('Błąd podczas pobierania użytkowników:', err.message);
+        res.status(500).json({ message: 'Błąd serwera' });
+    }
+});
 
 
 router.post('/register', async (req, res) => {
@@ -126,6 +138,7 @@ router.post('/logout', (req, res) => {
 
  */
 
+/*
 router.post('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -134,6 +147,21 @@ router.post('/logout', (req, res) => {
         res.json({ message: 'Successfully logged out' });
     });
 });
+
+ */
+
+router.post('/logout', (req, res) => {
+    console.log('Logout request received');
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).json({ message: 'Błąd przy wylogowaniu' });
+        }
+        console.log('Session destroyed successfully');
+        res.json({ message: 'Successfully logged out' });
+    });
+});
+
 
 
 module.exports = router;
