@@ -13,7 +13,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('../../../public/mountain.jpg');
+    background-image: url('../../../public/best.jpg');
     background-size: cover;
     background-position: center;
     opacity: 0.4;
@@ -144,28 +144,50 @@ nav ul li a:hover::after {
 
 .sidebar ul {
     list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+
 }
 
 .sidebar ul li a {
     text-decoration: none;
     color: #bddcfb;
-    padding: 10px;
-    display: block;
-    margin-bottom: 10px;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
     border-radius: 8px;
+    transition: background-color 0.3s, transform 0.2s;
 }
+
+
 
 .sidebar ul li a:hover {
-    background-color: rgb(1, 22, 43);
+    background-color: rgba(237, 242, 246, 0.37);
+    transform: translateY(-2px);
 }
 
+.sidebar a{
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .icon {
+    margin-right: 10px;
+
+}
 
 .feed {
     flex: 1;
     padding: 0 20px;
     overflow-y: auto;
-
+    height: 100vh;
+    scrollbar-width: thin;
+    scrollbar-color: #75a7d8 rgba(39, 50, 71, 0.94);
 }
+
 
 .post {
     background-color: rgba(13, 25, 39, 0.7);
@@ -246,6 +268,13 @@ nav ul li a:hover::after {
 
 .chat-sidebar ul {
     list-style: none;
+    padding: 0;
+}
+
+.chat-sidebar ul li {
+    padding: 5px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
 }
 
 .chat-sidebar ul li a {
@@ -255,11 +284,13 @@ nav ul li a:hover::after {
     display: block;
     margin-bottom: 10px;
     border-radius: 8px;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-.chat-sidebar ul li a:hover {
-    background-color: rgb(1, 22, 43);
+.chat-sidebar ul li:hover {
+    background-color: rgba(237, 242, 246, 0.37);
 }
+
 
 .chat-avatar {
     width: 30px;
@@ -268,7 +299,16 @@ nav ul li a:hover::after {
     margin-right: 15px;
     margin-left: 15px;
     border: 2px solid #bddcfb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
 }
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 
 button {
     position: relative;

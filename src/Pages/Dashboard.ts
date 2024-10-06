@@ -2,15 +2,15 @@ import React, {useEffect, useState} from 'react';
 import '../css/pages/dashboard.css';
 import { useNavigate } from 'react-router-dom';
 import Avatar from 'react-avatar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faUser, faComments, faUsers, faCalendar, faNewspaper, faCog } from '@fortawesome/free-solid-svg-icons';
 
 function Dashboard(): React.ReactElement {
-
 
     const navigate = useNavigate();
     const username = localStorage.getItem('username') || 'Unknown User';
    // const [users, setUsers] = useState<{ username: string;}[]>([]);
     const [users, setUsers] = useState<string[]>([]);
-
 
     /*
     const handleLogout = async () => {
@@ -102,7 +102,8 @@ function Dashboard(): React.ReactElement {
                     )
                 ),
             ),
-            createChatSidebar()
+
+            createChatSidebar({name: username, avatar:React.createElement(Avatar, {name: username, size: '50', round: true})}, users)
         )
     );
 
@@ -146,17 +147,29 @@ function createHeader(handleLogout: () => void): React.ReactElement {
 
 
 function createSidebar(): React.ReactElement {
+    const menuItems = [
+        { name: 'Home', icon: faHome },
+        { name: 'My Profile', icon: faUser },
+        { name: 'Forum', icon: faComments },
+        { name: 'Community', icon: faUsers },
+        { name: 'Events', icon: faCalendar },
+        { name: 'News', icon: faNewspaper },
+        { name: 'Settings', icon: faCog },
+    ];
     return React.createElement(
         'aside',
         { className: 'sidebar' },
         React.createElement(
             'ul',
             null,
-            ['Home', 'My Profile', 'Friends', 'Groups', 'Marketplace', 'Watch', 'Memories'].map((item) =>
+            menuItems.map((item) =>
                 React.createElement(
                     'li',
-                    null,
-                    React.createElement('a', { href: '#' }, item)
+                    { key: item.name },
+                    React.createElement('a', { href: '#' },
+                        React.createElement(FontAwesomeIcon, { icon: item.icon, className: 'icon' }),
+                        ` ${item.name}`
+                    )
                 )
             )
         )
@@ -202,7 +215,7 @@ function createPost(
     );
 }
 
-function createChatSidebar(): React.ReactElement {
+function createChatSidebar( user: { name: string; avatar: string | React.ReactNode }, users: string[]): React.ReactElement {
     return React.createElement(
         'aside',
         { className: 'chat-sidebar' },
@@ -210,13 +223,14 @@ function createChatSidebar(): React.ReactElement {
         React.createElement(
             'ul',
             null,
-            ['Sarah', 'Michael', 'Emily'].map((friend) =>
+            users.map((username) =>
                 React.createElement(
                     'li',
-                    null,
-                    React.createElement('a', { href: '#' }, friend)
+                    { className: 'chat-item'},
+                    React.createElement(Avatar, { name: username, size: '40', round: true }),
+                    React.createElement('a', { href: '#' }, username)
                 )
-            )
+            ),
         )
     );
 }
