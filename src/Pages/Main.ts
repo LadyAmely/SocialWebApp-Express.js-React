@@ -1,15 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import '../css/pages/dashboard.css';
 import { useNavigate } from 'react-router-dom';
 import Avatar from 'react-avatar';
 
-function Dashboard(): React.ReactElement {
+function Main(): React.ReactElement {
 
 
     const navigate = useNavigate();
     const username = localStorage.getItem('username') || 'Unknown User';
-   // const [users, setUsers] = useState<{ username: string;}[]>([]);
-    const [users, setUsers] = useState<string[]>([]);
+
 
 
     /*
@@ -38,27 +37,10 @@ function Dashboard(): React.ReactElement {
 
      */
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/auth/users');
-                const data = await response.json();
-                console.log("Fetched users: ", data);
-                setUsers(data);
-            } catch (error) {
-                console.error('Error fetching users:', error);
-            }
-        };
-
-        fetchUsers();
-    }, []);
-
-
-
     const handleLogout = async () => {
         console.log('Logout button clicked');
         try {
-            const response = await fetch('http://localhost:5000/auth/logout', {
+            const response = await fetch('http://localhost:5000/logout', {
                 method: 'POST',
                 credentials: 'include',
             });
@@ -91,16 +73,18 @@ function Dashboard(): React.ReactElement {
             React.createElement(
                 'section',
                 { className: 'feed' },
-                users.map((username) =>
-                    createPost(
-                        {
-                            name: username,
-                            avatar: React.createElement(Avatar, { name: username, size: '50', round: true }),
-                            time: "3 hours ago",
-                        },
-                        'Had a great time hiking in the mountains today! 🌄'
-                    )
+                createPost(
+                    { name: username, avatar: React.createElement(Avatar, { name: username, size: '50', round: true }), time: '3 hours ago' },
+                    'Had a great time hiking in the mountains today! 🌄'
                 ),
+                createPost(
+                    { name: 'Jane Smith', avatar: React.createElement(Avatar, { name: "Jane", size: '50', round: true }), time: '5 hours ago' },
+                    "Can't wait for the weekend! 🎉"
+                ),
+                createPost(
+                    { name: 'Elizabeth Johnson', avatar: React.createElement(Avatar, { name: "Elizabeth", size: '50', round: true }), time: '5 hours ago' },
+                    "Can't wait for the weekend! 🎉"
+                )
             ),
             createChatSidebar()
         )
@@ -221,5 +205,4 @@ function createChatSidebar(): React.ReactElement {
     );
 }
 
-export default Dashboard;
-
+export default Main;
