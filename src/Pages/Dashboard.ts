@@ -3,10 +3,12 @@ import '../css/pages/dashboard.css';
 import { useNavigate } from 'react-router-dom';
 import Avatar from 'react-avatar';
 
-
 function Dashboard(): React.ReactElement {
+
+
     const navigate = useNavigate();
     const username = localStorage.getItem('username') || 'Unknown User';
+
 
     /*
     const handleLogout = async () => {
@@ -71,11 +73,15 @@ function Dashboard(): React.ReactElement {
                 'section',
                 { className: 'feed' },
                 createPost(
-                    { name: username, avatar: 'avatar.jpg', time: '2 hours ago' },
+                    { name: username, avatar: React.createElement(Avatar, { name: username, size: '50', round: true }), time: '3 hours ago' },
                     'Had a great time hiking in the mountains today! 🌄'
                 ),
                 createPost(
-                    { name: 'Jane Smith', avatar: 'avatar.jpg', time: '5 hours ago' },
+                    { name: 'Jane Smith', avatar: React.createElement(Avatar, { name: "Jane", size: '50', round: true }), time: '5 hours ago' },
+                    "Can't wait for the weekend! 🎉"
+                ),
+                createPost(
+                    { name: 'Elizabeth Johnson', avatar: React.createElement(Avatar, { name: "Elizabeth", size: '50', round: true }), time: '5 hours ago' },
                     "Can't wait for the weekend! 🎉"
                 )
             ),
@@ -93,11 +99,11 @@ function createHeader(handleLogout: () => void): React.ReactElement {
         React.createElement(
             'div',
             { className: 'dashboard-header-left' },
-            React.createElement('h1', { className: 'dashboard-logo' }, 'SocialApp'),
+            React.createElement('h1', { className: 'dashboard-logo' }, 'AstronomySocialApp'),
             React.createElement('input', {
                 type: 'text',
                 className: 'search-bar',
-                placeholder: 'Search on SocialApp'
+                placeholder: 'Search on AstronomySocialApp'
             })
         ),
         React.createElement(
@@ -106,7 +112,7 @@ function createHeader(handleLogout: () => void): React.ReactElement {
             React.createElement(
                 'nav',
                 { className: 'nav' },
-                ['Home', 'Profile', 'Friends', 'Messages', 'Notifications'].map((link) =>
+                ['Home', 'Profile', 'Friends', 'Notifications'].map((link) =>
                     React.createElement('a', { href: '#' }, link)
                 )
             ),
@@ -141,7 +147,7 @@ function createSidebar(): React.ReactElement {
 }
 
 function createPost(
-    user: { name: string; avatar: string; time: string },
+    user: { name: string; avatar: string | React.ReactNode; time: string },
     content: string
 ): React.ReactElement {
     return React.createElement(
@@ -150,11 +156,13 @@ function createPost(
         React.createElement(
             'div',
             { className: 'post-header' },
-            React.createElement('img', {
-                src: user.avatar,
-                alt: 'User Avatar',
-                className: 'post-avatar'
-            }),
+            typeof user.avatar === 'string'
+                ? React.createElement('img', {
+                    src: user.avatar,
+                    alt: 'User Avatar',
+                    className: 'post-avatar'
+                })
+                : user.avatar,
             React.createElement(
                 'div',
                 { className: 'post-user-info' },

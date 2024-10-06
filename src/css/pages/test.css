@@ -1,0 +1,242 @@
+/* Nagłówek dashboardu */
+.dashboard-header {
+    background-color: #3b5998; /* Głęboki niebieski */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px; /* Większe paddingi */
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); /* Subtelny cień */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Delikatna linia */
+}
+
+.dashboard-header-left {
+    display: flex;
+    align-items: center;
+}
+
+.dashboard-logo {
+    font-size: 28px; /* Większy rozmiar czcionki */
+    font-weight: bold; /* Pogrubienie logo */
+    margin-right: 20px;
+}
+
+/* Pasek wyszukiwania */
+.search-bar {
+    padding: 10px 15px; /* Większe paddingi */
+    border-radius: 25px; /* Większe zaokrąglenie */
+    border: none;
+    width: 300px; /* Szerszy pasek */
+    color: #3b5998;
+    font-size: 14px; /* Większy rozmiar czcionki */
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.5) 80%); /* Radialny gradient */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Subtelny cień */
+    transition: box-shadow 0.3s ease-in-out; /* Płynne przejście */
+}
+
+.search-bar:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(59, 89, 152, 0.6),
+    0 0 20px rgba(59, 89, 152, 0.8),
+    0 0 30px rgba(59, 89, 152, 1);
+}
+
+/* Prawa część nagłówka */
+.dashboard-header-right {
+    display: flex;
+    align-items: center;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 15px;
+}
+
+/* Kontener główny */
+.main-container {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    overflow-y: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 20%;
+    background-color: #0d1927; /* Ciemny kolor */
+    padding: 30px; /* Większe paddingi */
+    border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15); /* Większy cień */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #bddcfb; /* Jasny kolor */
+    padding: 12px 15px; /* Większe paddingi */
+    display: block;
+    margin-bottom: 15px;
+    border-radius: 10px; /* Większe zaokrąglenie */
+    transition: background-color 0.3s ease; /* Płynne przejście */
+}
+
+.sidebar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Efekt hover */
+}
+
+/* Główna zawartość */
+.feed {
+    flex: 1;
+    padding: 0 20px;
+    overflow-y: auto;
+}
+
+/* Posty */
+.post {
+    background-color: #1a2a37; /* Ciemniejszy kolor tła */
+    padding: 20px; /* Większe paddingi */
+    margin-bottom: 25px; /* Większy odstęp */
+    border-radius: 15px; /* Większe zaokrąglenie */
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2); /* Większy cień */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post:hover {
+    transform: translateY(-5px); /* Efekt uniesienia */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); /* Zmiana cienia przy hover */
+}
+
+/* Nagłówek posta */
+.post-header {
+    display: flex;
+    align-items: center;
+}
+
+.post-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    margin-left: 15px;
+    border: 2px solid #bddcfb; /* Dodanie obramowania */
+}
+
+.post-user-info h2 {
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 600;
+    margin-left: 15px;
+}
+
+.post-user-info span {
+    color: #bddcfb;
+    font-size: 14px;
+    margin-left: 15px;
+}
+
+/* Treść posta */
+.post-content {
+    margin-top: 10px;
+    color: #e0e0e0;
+    font-size: 16px;
+}
+
+/* Akcje posta */
+.post-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 10px;
+}
+
+.post-actions button {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #bddcfb;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s; /* Płynne przejście */
+}
+
+.post-actions button:hover {
+    background-color: #3b5998; /* Efekt hover */
+    color: #ffffff; /* Zmiana koloru */
+}
+
+/* Sidebar czatu */
+.chat-sidebar {
+    width: 20%;
+    background-color: #0d1927;
+    padding: 20px;
+    color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.chat-sidebar ul {
+    list-style: none;
+}
+
+.chat-sidebar ul li a {
+    text-decoration: none;
+    color: #bddcfb;
+    padding: 10px;
+    display: block;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease; /* Płynne przejście */
+}
+
+.chat-sidebar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Efekt hover */
+}
+
+/* Ikony czatu */
+.chat-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 15px;
+    margin-left: 15px;
+    border: 2px solid #bddcfb; /* Dodanie obramowania */
+}
+
+/* Przycisk */
+button {
+    position: relative;
+    z-index: 2;
+    width: 120px; /* Szerszy przycisk */
+    height: 40px; /* Wyższy przycisk */
+    color: #3b5998;
+    background-color: white;
+    border: none;
+    border-radius: 25px; /* Większe zaokrąglenie */
+    box-shadow:
+            0 0 5px rgba(59, 89, 152, 0.6),
+            0 0 10px rgba(59, 89, 152, 0.8),
+            0 0 15px rgba(59, 89, 152, 1);
+    transition: all 0.3s ease, transform 0.3s ease; /* Dodanie transformacji */
+}
+
+button:hover {
+    transform: translateY(-2px); /* Efekt uniesienia przy hover */
+    box-shadow:
+            0 0 10px rgba(59, 89, 152, 0.8),
+            0 0 20px rgba(59, 89, 152, 1);
+}
