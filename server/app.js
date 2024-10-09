@@ -4,6 +4,7 @@ const session = require('express-session');
 const authRoutes = require('./routes/auth');
 const sequelize = require('./config/db');
 const path = require('path');
+const {WebSocketServer} = require('ws');
 
 const app = express();
 const port = 5000;
@@ -40,6 +41,34 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Serwer działa na porcie ${port}`);
 });
+
+const wss = new WebSocketServer({ server });
+
+
+wss.on('connection', (ws) => {
+    console.log('Connected to the server');
+
+    ws.on('message', (message) => {
+        console.log(`Received: ${message}`);
+
+        wss.clients.forEach(client => {
+            if (client.readyState === 1) {
+                client.send(message);
+            }
+        });
+    });
+
+    ws.on('close', () => {
+        console.log('Client disconnected');
+        console.log(`Current clients connected: ${wss.clients.size}`);
+    });
+
+    ws.on('error', (error) => {
+        console.error('WebSocket Error:', error);
+    });
+});
+
+
