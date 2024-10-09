@@ -329,3 +329,22 @@ button {
     transition: all 0.3s ease;
 
 }
+
+
+.logged-user-circle{
+
+    height: 20px;
+    width: 20px;
+    background-color: rgb(78, 230, 85);
+    border-radius: 50%;
+    border: none;
+
+}
+
+.unlogged-user-circle{
+    height: 20px;
+    width: 20px;
+    background-color: #531515;
+    border-radius: 50%;
+    border: none;
+}

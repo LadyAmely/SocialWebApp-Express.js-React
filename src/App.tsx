@@ -5,10 +5,6 @@ import Login from './Auth/Login';
 import Register from './Auth/Register';
 import Dashboard from './Pages/Dashboard';
 
-function About() {
-    return <h2>About Page</h2>;
-}
-
 function App() {
   return (
    <Router>

@@ -23,6 +23,15 @@ function Home(): React.ReactElement{
                     {className: 'typewriter-text'},
                     React.createElement('p', null, 'Join a community of stargazers, amateur astronomers, and space enthusiasts.'),
                 )
+            ),
+            React.createElement(
+              'div',
+                {className: 'hero-button-container'},
+                React.createElement(
+                    'button',
+                    {className: 'hero-button'},
+                    React.createElement('p', null, 'Join the Journey')
+                )
             )
         ),
         React.createElement('div', { className: 'hero-image' })

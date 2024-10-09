@@ -9,7 +9,7 @@ function Header(): React.ReactElement{
         React.createElement(
             'div',
             {className: 'logo'},
-            React.createElement('h1', null, 'Astronomy Social App'),
+            React.createElement('h1', null, 'GalaxyNET'),
             React.createElement(
                 'nav',
                 null,

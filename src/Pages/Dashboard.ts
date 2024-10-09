@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Avatar from 'react-avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faUser, faComments, faUsers, faCalendar, faNewspaper, faCog } from '@fortawesome/free-solid-svg-icons';
+import Chat from '../Components/Chat';
 
 function Dashboard(): React.ReactElement {
 
@@ -11,6 +12,7 @@ function Dashboard(): React.ReactElement {
     const username = localStorage.getItem('username') || 'Unknown User';
    // const [users, setUsers] = useState<{ username: string;}[]>([]);
     const [users, setUsers] = useState<string[]>([]);
+    const [selectedUser, setSelectedUser] = useState<string | null>(null);
 
     /*
     const handleLogout = async () => {
@@ -78,6 +80,10 @@ function Dashboard(): React.ReactElement {
         }
     };
 
+    const handleUserClick = (user: string) => {
+        setSelectedUser(user);
+    };
+
 
 
     return React.createElement(
@@ -103,7 +109,8 @@ function Dashboard(): React.ReactElement {
                 ),
             ),
 
-            createChatSidebar({name: username, avatar:React.createElement(Avatar, {name: username, size: '50', round: true})}, users)
+            createChatSidebar({name: username, avatar:React.createElement(Avatar, {name: username, size: '50', round: true})}, users, selectedUser, handleUserClick),
+
         )
     );
 
@@ -180,6 +187,7 @@ function createPost(
     user: { name: string; avatar: string | React.ReactNode; time: string },
     content: string
 ): React.ReactElement {
+    const loggedInUser = localStorage.getItem('username');
     return React.createElement(
         'div',
         { className: 'post' },
@@ -197,7 +205,9 @@ function createPost(
                 'div',
                 { className: 'post-user-info' },
                 React.createElement('h2', null, user.name),
-                React.createElement('span', null, user.time)
+                React.createElement('span', null,  loggedInUser === user.name
+                    ? React.createElement('div', { className: 'logged-user-circle' })
+                    : React.createElement('div', {className: 'unlogged-user-circle'}), user.time),
             )
         ),
         React.createElement(
@@ -215,7 +225,9 @@ function createPost(
     );
 }
 
-function createChatSidebar( user: { name: string; avatar: string | React.ReactNode }, users: string[]): React.ReactElement {
+
+/*
+function createChatSidebar( user: { name: string; avatar: string | React.ReactNode }, users: string[], handleUserClick: (username: string) => void, selectedUser: string | null): React.ReactElement {
     return React.createElement(
         'aside',
         { className: 'chat-sidebar' },
@@ -226,13 +238,70 @@ function createChatSidebar( user: { name: string; avatar: string | React.ReactNo
             users.map((username) =>
                 React.createElement(
                     'li',
-                    { className: 'chat-item'},
+                    { className: 'chat-item', onClick: () => handleUserClick(username)},
                     React.createElement(Avatar, { name: username, size: '40', round: true }),
                     React.createElement('a', { href: '#' }, username)
                 )
             ),
+
+            selectedUser
+                ? React.createElement(Chat, { user: selectedUser })
+                : React.createElement(
+                    'div',
+                    { className: 'no-chat' },
+                    'Wybierz użytkownika, aby rozpocząć czat.'
+                ),
         )
     );
+
+
+ */
+
+
+
+
+
+    function createChatSidebar(
+        user: { name: string; avatar: string | React.ReactNode },
+        users: string[],
+        selectedUser: string | null,
+        handleUserClick: (username: string) => void
+    ): React.ReactElement {
+        return React.createElement(
+            'aside',
+            { className: 'chat-sidebar' },
+            React.createElement('h2', null, 'Chats'),
+            React.createElement(
+                'ul',
+                null,
+                users.map((username) =>
+                    React.createElement(
+                        'li',
+                        {
+                            className: 'chat-item',
+                            onClick: () => handleUserClick(username)
+                        },
+                        React.createElement(Avatar, { name: username, size: '40', round: true }),
+                        React.createElement('span', null, username),
+                    )
+                )
+            ),
+            selectedUser
+                ? React.createElement(
+                    'div',
+                    { className: 'chat-window' },
+                    React.createElement(Chat, { user: selectedUser })
+                )
+                : React.createElement(
+                    'div',
+                    { className: 'no-chat' },
+                    ''
+                )
+        );
+
+
+
+
 }
 
 export default Dashboard;
