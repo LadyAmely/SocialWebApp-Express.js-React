@@ -1,27 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Exo:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Saira:wght@400;700&display=swap');
-
 header {
-    background-color: rgba(39, 50, 71, 0.94);
-    background-image: linear-gradient(135deg, rgba(39, 50, 71, 0.94), rgba(9, 17, 30, 0.94));
-    animation: backgroundPulse 5s infinite alternate ease-in-out;
+    background: linear-gradient(180deg, rgb(43, 47, 60), rgba(17, 26, 39, 0.94)); /* Ciemny gradient */
     padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    color: rgba(255, 255, 255, 0.9); /* Jaśniejszy kolor tekstu */
     font-family: 'Orbitron', sans-serif;
+    position: relative; /* Umożliwia umiejscowienie ::before */
+    overflow: hidden; /* Ukrywa nadmiar elementów */
     transition: padding 0.3s ease;
-}
-
-@keyframes backgroundPulse {
-    0% {
-        background-color: rgba(39, 50, 71, 0.94);
-    }
-    100% {
-        background-color: rgba(15, 30, 55, 0.94);
-    }
+    z-index: 3; /* Ustawienie z-index, aby nagłówek był ponad innymi elementami */
+    box-shadow: 0 0 10px rgba(59, 89, 152, 0.6),
+    0 0 20px rgba(59, 89, 152, 0.8),
+    0 0 30px rgba(59, 89, 152, 1); /* Dodanie efektu box-shadow */
 }
 
 header::before {
@@ -31,69 +25,109 @@ header::before {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
-    background: radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1%) repeat;
-    background-size: 50px 50px;
+    z-index: -1; /* Ustawienie tła poniżej */
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1%) repeat; /* Subtelne tło */
+    background-size: 60px 60px; /* Zwiększone rozmiary */
     animation: twinkling 3s infinite ease-in-out;
 }
 
 @keyframes twinkling {
     0% {
-        opacity: 0.8;
+        opacity: 0.2; /* Zmniejszona przezroczystość */
     }
     50% {
         opacity: 1;
     }
     100% {
-        opacity: 0.8;
+        opacity: 0.2; /* Zmniejszona przezroczystość */
     }
 }
 
 .logo {
-    font-size: 13px;
+    font-size: 18px; /* Zwiększenie rozmiaru logo */
     font-weight: 300;
     display: flex;
-    gap: 110vh;
-    margin-right: auto;
+    align-items: center; /* Wyrównanie logo */
+    margin-right: 10px; /* Wyrównanie do prawej */
 }
 
-nav{
+nav {
     display: flex;
-    z-index: 2;
+    z-index: 2; /* Zmieniony z-index */
 }
 
 nav ul {
     list-style: none;
     display: flex;
     gap: 30px;
-    margin-left: auto;
-    width: 100%;
     padding: 10px;
 }
 
 nav ul li a {
     text-decoration: none;
-    color: #ffffff;
+    color: rgba(255, 255, 255, 0.68); /* Lekko przezroczysty biały */
     font-weight: 400;
     font-size: 16px;
     transition: color 0.3s;
+    position: relative; /* Umożliwia umiejscowienie ::after */
 }
 
 nav ul li a:hover {
-    color: #ffffff;
+    color: #ffffff; /* Pełna biel podczas najechania */
 }
-
 
 nav ul li a::after {
     content: '';
     display: block;
     height: 2px;
     width: 0;
-    background-color: #bddcfb;
+    background-color: #bddcfb; /* Utrzymany kolor podkreślenia */
     transition: width 0.3s;
+    position: absolute;
+    bottom: -5px; /* Umożliwia umiejscowienie pod linkiem */
+    left: 0;
 }
 
 nav ul li a:hover::after {
-    width: 100%;
+    width: 100%; /* Rozszerzenie podkreślenia przy hover */
+}
+
+.search-bar {
+    padding: 10px 15px; /* Zwiększone wyściółki dla większego komfortu */
+    border-radius: 25px; /* Większe zaokrąglenie dla nowoczesnego wyglądu */
+    border: none;
+    width: 300px; /* Zwiększona szerokość */
+    color: #ffffff; /* Kolor tekstu */
+    background: linear-gradient(135deg, rgba(39, 50, 71, 0.94), rgba(45, 45, 45, 0.9)); /* Gradientowe tło */
+    font-size: 14px; /* Zwiększona wielkość czcionki */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtelny cień */
+    transition: box-shadow 0.3s, transform 0.3s; /* Dodanie animacji transformacji */
+}
+
+.search-bar:focus {
+    outline: none;
+    box-shadow: 0 0 15px rgba(59, 89, 152, 0.6), /* Wyrazisty cień przy fokusie */
+    0 0 25px rgba(59, 89, 152, 0.8),
+    0 0 35px rgba(59, 89, 152, 1);
+    transform: scale(1.05); /* Powiększenie przy fokusie */
+}
+
+.search-bar::placeholder {
+    color: rgba(255, 255, 255, 0.6); /* Subtelnie przezroczysty placeholder */
+    font-weight: 300; /* Lżejsza czcionka dla placeholdera */
+    opacity: 1;
+}
+
+/* Dodanie stylu dla hover */
+.search-bar:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Subtelny cień przy najechaniu */
+    transform: scale(1.02); /* Lekka animacja przy najechaniu */
+}
+
+
+
+.dashboard-header-right {
+    display: flex;
+    align-items: center;
 }
 
