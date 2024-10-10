@@ -39,9 +39,9 @@
     margin-left: 50%;
     margin-top: 25%;
     transform: translateX(-50%);
-    z-index: 4;
+    z-index: 4; /* Zmieniamy z-index na 4, tak by nie zasłaniało innych elementów */
     border: 2px solid #0a0b10;
-    position: relative;
+    position: relative; /* Używamy relative, aby add-your-photo było pozycjonowane w odniesieniu do profile-image */
 }
 
 
@@ -70,4 +70,110 @@
 .profile-info p {
     color: #b0b3b8;
     font-size: 14px;
+}
+
+.profile-background input[type="file"],
+.profile-image input[type="file"] {
+    display: none;
+}
+
+.profile-background:hover::after,
+.profile-image:hover::after {
+    content: "Edit";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.create-post {
+    background-color: #1d2128;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.create-post textarea {
+    width: 100%;
+    border-radius: 5px;
+    padding: 10px;
+    resize: none;
+    margin-bottom: 10px;
+    font-size: 16px;
+    background-color: #2c2f33;
+    color: #ffffff;
+    border: none;
+    outline: none;
+}
+
+.create-post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.create-post-actions .upload-image {
+    display: none;
+}
+
+.create-post-actions label {
+    color: #ff6b6b;
+    background-color: #2c2f33;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.create-post-actions button {
+    padding: 10px 20px;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.image-preview {
+    margin: 10px 0;
+    text-align: center;
+}
+
+.image-preview-img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.add-your-photo {
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    background-color: #0a0b10;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.add-your-photo::after {
+    content: "+";
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
 }

@@ -135,7 +135,7 @@ nav ul li a:hover::after {
 
 .sidebar {
     width: 20%;
-    background-color: rgba(13, 25, 39, 0.7);
+    background-color: rgba(13, 25, 39, 0.33);
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -194,6 +194,7 @@ nav ul li a:hover::after {
     padding: 15px;
     margin-bottom: 20px;
     border-radius: 12px;
+    height: auto;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s, box-shadow 0.3s;
 }
@@ -258,7 +259,7 @@ nav ul li a:hover::after {
 
 .chat-sidebar {
     width: 20%;
-    background-color: rgba(13, 25, 39, 0.7);
+    background-color: rgba(13, 25, 39, 0.43);
     padding: 20px;
     color: white;
     border-radius: 12px;
@@ -358,4 +359,12 @@ button {
     display: inline-block;
     width: 40px;
     height: 40px;
+}
+
+.post-image{
+    width: 100%;
+    border-radius: 10px;
+    height: 800px;
+    border: none;
+    justify-content: center;
 }

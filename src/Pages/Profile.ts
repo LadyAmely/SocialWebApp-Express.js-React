@@ -7,26 +7,19 @@ import { useAuth } from "../context/AuthContext";
 
 function Profile(): React.ReactElement {
     const { username } = useAuth();
+    const [imageUrl, setImageUrl] = useState<string>("/best.jpg");
     const [users, setUsers] = useState<string[]>([]);
     const [backgroundColor, setBackgroundColor] = useState<string>('#ffffff');
+    const [fileInputKey, setFileInputKey] = useState<number>(0);
 
-    const imageUrl = "/best.jpg";
-
-
-  //  const imageUrl = "C:\\Users\\Amelia\\WebstormProjects\\SocialNetApp\\server\\client\\public\\astronomy.jpg";
-    /*
     useEffect(() => {
-        Vibrant.from(imageUrl).getPalette()
-            .then(palette => {
-                const dominantColor = palette.Vibrant?.hex || '#ffffff';
-                setBackgroundColor(dominantColor);
-            })
-            .catch(err => {
-                console.error("Error getting color palette:", err);
-            });
-    }, [imageUrl]);
-
-     */
+        const storedImageUrl = localStorage.getItem('profileImage');
+        if (storedImageUrl) {
+            setImageUrl(storedImageUrl);
+        } else {
+            setImageUrl("/best.jpg");
+        }
+    }, []);
 
     useEffect(() => {
         const img = new Image();
@@ -47,6 +40,23 @@ function Profile(): React.ReactElement {
             console.error("Error loading image:", err);
         };
     }, [imageUrl]);
+
+    function handleImageClick() {
+        const fileInput = document.getElementById('file-input');
+        fileInput?.click();
+    }
+
+
+    function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const file = event.target.files?.[0];
+        if (file) {
+            const newImageUrl = URL.createObjectURL(file);
+            setImageUrl(newImageUrl);
+            localStorage.setItem('profileImage', newImageUrl);
+            setFileInputKey(prev => prev + 1);
+        }
+    }
+
     function createHeader(): React.ReactElement {
         return React.createElement(
             'header',
@@ -90,9 +100,20 @@ function Profile(): React.ReactElement {
                 ),
                 React.createElement(
                     'div',
-                    { className: "profile-image" },
+                    { className: "profile-image",  onClick: handleImageClick },
                     React.createElement(Avatar, { name: username ?? 'User', size: '100%', round: true }),
 
+                ),
+                React.createElement(
+                    "input",
+                    {
+                        id: 'file-input',
+                        type: 'file',
+                        accept: 'image/*',
+                        style: { display: 'none' },
+                        key: fileInputKey,
+                        onChange: handleFileChange
+                    }
                 ),
                 React.createElement(
                     "div",
@@ -107,4 +128,3 @@ function Profile(): React.ReactElement {
 }
 
 export default Profile;
-

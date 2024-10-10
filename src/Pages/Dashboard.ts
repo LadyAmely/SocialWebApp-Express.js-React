@@ -10,6 +10,7 @@ import Chat from '../Components/Chat';
 function Dashboard(): React.ReactElement {
     const navigate = useNavigate();
     const { username, setUsername } = useAuth();
+    const [posts, setPosts] = useState<any[]>([]);
     const [users, setUsers] = useState<string[]>([]);
     const [selectedUser, setSelectedUser] = useState<string | null>(null);
 
@@ -26,6 +27,21 @@ function Dashboard(): React.ReactElement {
         };
 
         fetchUsers();
+    }, []);
+
+    useEffect(()=>{
+        const fetchPosts = async() =>{
+            try{
+                const response = await fetch('http://localhost:5000/api/posts');
+                const data = await response.json();
+                console.log("Fetched posts:", data);
+                setPosts(data);
+            }catch(error){
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchPosts();
     }, []);
 
      const handleLogout = async () => {
@@ -67,15 +83,16 @@ function Dashboard(): React.ReactElement {
             React.createElement(
                 'section',
                 { className: 'feed' },
-                users.map((user) =>
+                posts.map((post) =>
                     createPost(
                         {
-                            name: user,
-                            avatar: React.createElement(Avatar, { name: user, size: '50', round: true }),
-                            time: "3 hours ago",
+                            name: post.username,
+                            avatar: React.createElement(Avatar, { name: post.username, size: '50', round: true }),
+                            time: new Date(post.created_at).toLocaleString(),
                         },
-                        'Had a great time hiking in the mountains today! 🌄',
-                        username ?? 'Unknown User'
+                        post.description,
+                        post.image_path,
+                       // username ?? 'Unknown User'
                     )
                 ),
             ),
@@ -149,7 +166,8 @@ function createSidebar(): React.ReactElement {
 function createPost(
     user: { name: string; avatar: string | React.ReactNode; time: string },
     content: string,
-    loggedInUser: string
+    image: string,
+   // loggedInUser: string
 ): React.ReactElement {
     return React.createElement(
         'div',
@@ -175,6 +193,18 @@ function createPost(
             'div',
             { className: 'post-content' },
             React.createElement('p', null, content)
+        ),
+        React.createElement(
+            'div',
+            {className: 'post-image',
+
+                style: {
+                    backgroundImage: `url(${image})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    height: '200px',
+                }
+            }
         ),
         React.createElement(
             'div',
