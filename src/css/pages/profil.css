@@ -130,6 +130,13 @@
     background-color: #155bc1;
 }
 
+.profile-name{
+    height: auto;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+}
+
 .profile-name h2 {
     margin: 0;
     font-size: 26px;
@@ -501,3 +508,37 @@
 
 
 }
+
+.profile-top-menu{
+    width: 100%;
+    height: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 10px;
+
+}
+
+.profile-top-menu ul{
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    padding: 10px;
+}
+
+.profile-top-menu li a{
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.38);
+
+}
+
+
+.profile-top-menu li a:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.profile-top-menu li a:hover {
+    color: #ffffff;
+}
+

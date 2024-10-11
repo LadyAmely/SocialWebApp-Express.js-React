@@ -6,6 +6,8 @@ import "../css/pages/profil.css";
 import {faCog, faComments, faHome, faUser, faUsers} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faCamera, faVideo, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faNewspaper, faInfoCircle, faUserFriends, faImage, faFilm, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+
 
 function Profil(): React.ReactElement {
     const { username } = useAuth();
@@ -305,13 +307,97 @@ function Profil(): React.ReactElement {
                             React.createElement(
                                 'div',
                                 { className: 'profile-name' },
-                                React.createElement('h2', null, username ?? 'User')
-                            )
+                                React.createElement('h2', null, username ?? 'User'),
+                                React.createElement(
+                                    'p',
+                                    null,
+                                    '0 friends'
+                                )
+                            ),
+
+                        ),
+
+    React.createElement('div', {className: 'profile-top-menu'},
+
+        React.createElement(
+            'ul',
+            null,
+            React.createElement(
+                'li',
+                null,
+                React.createElement(
+                    'a',
+                    {href: '#'},
+                    React.createElement(FontAwesomeIcon, { icon: faNewspaper, style: { marginRight: '10px' } }),
+                    'Posts'
+                )
+            ),
+            React.createElement(
+                'li',
+                null,
+                React.createElement(
+                    'a',
+                    {href: '#'},
+                    React.createElement(FontAwesomeIcon, { icon: faInfoCircle, style: { marginRight: '10px' } }),
+                    'Information'
+                )
+            ),
+            React.createElement(
+                'li',
+                null,
+                React.createElement(
+                    'a',
+                    {href: '#'},
+                    React.createElement(FontAwesomeIcon, { icon: faUserFriends, style: { marginRight: '10px' } }),
+                    'Friends'
+                )
+            ),
+            React.createElement(
+                'li',
+                null,
+                React.createElement(
+                    'a',
+                    {href: '#'},
+                    React.createElement(FontAwesomeIcon, { icon: faImage, style: { marginRight: '10px' } }),
+                    'Photos'
+                )
+            ),
+            React.createElement(
+                'li',
+                null,
+                React.createElement(
+                    'a',
+                    {href: '#'},
+                    React.createElement(FontAwesomeIcon, { icon: faFilm, style: { marginRight: '10px' } }),
+                    'Films'
+                )
+            ),
+
+            React.createElement(
+                'li',
+                null,
+                React.createElement(
+                    'a',
+                    {href: '#'},
+                    React.createElement(FontAwesomeIcon, { icon: faEllipsisH, style: { marginRight: '10px' } }),
+                    'More'
+                )
+            )
+
+
+
+    ),
+
+
+
+
+),
+
+
+
+
+
                         )
-                    ),
-
-
-
 
                 ),
 
