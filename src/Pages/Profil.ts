@@ -12,6 +12,9 @@ function Profil(): React.ReactElement {
     const [imageUrl, setImageUrl] = useState<string>("/best.jpg");
     const [backgroundColor, setBackgroundColor] = useState<string>('#ffffff');
     const [fileInputKey, setFileInputKey] = useState<number>(0);
+    const [posts, setPosts] = useState<any[]>([]);
+    const [users, setUsers] = useState<string[]>([]);
+    const [selectedUser, setSelectedUser] = useState<string | null>(null);
 
 
     useEffect(() => {
@@ -20,6 +23,90 @@ function Profil(): React.ReactElement {
             setImageUrl(storedImageUrl);
         }
     }, []);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/auth/users');
+                const data = await response.json();
+                console.log("Fetched users: ", data);
+                setUsers(data);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
+    useEffect(()=>{
+        const fetchPosts = async() =>{
+            try{
+                const response = await fetch('http://localhost:5000/api/posts');
+                const data = await response.json();
+                console.log("Fetched posts:", data);
+                setPosts(data);
+            }catch(error){
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchPosts();
+    }, []);
+
+
+    function createPostInProfile(
+        user: { name: string; avatar: string | React.ReactNode; time: string },
+        content: string,
+        image: string,
+        loggedInUser: string
+    ): React.ReactElement {
+        return React.createElement(
+            'div',
+            { className: 'post' },
+            React.createElement(
+                'div',
+                { className: 'post-header' },
+                typeof user.avatar === 'string'
+                    ? React.createElement('img', {
+                        src: user.avatar,
+                        alt: 'User Avatar',
+                        className: 'post-avatar'
+                    })
+                    : user.avatar,
+                React.createElement(
+                    'div',
+                    { className: 'post-user-info' },
+                    React.createElement('h2', null, user.name),
+                    React.createElement('span', null,  user.time),
+                )
+            ),
+            React.createElement(
+                'div',
+                { className: 'post-content' },
+                React.createElement('p', null, content)
+            ),
+            React.createElement(
+                'div',
+                {className: 'post-image',
+
+                    style: {
+                        backgroundImage: `url(${image})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        height: '200px',
+                    }
+                }
+            ),
+            React.createElement(
+                'div',
+                { className: 'post-actions' },
+                ['Like', 'Comment', 'Share'].map((action) =>
+                    React.createElement('button', null, action)
+                )
+            )
+        );
+    }
 
     function createHeader(): React.ReactElement {
         const navItems = [
@@ -149,6 +236,32 @@ function Profil(): React.ReactElement {
 
     );
 
+    const friendCard = React.createElement(
+        'div',
+        {className: 'friends-card'},
+        React.createElement(
+            'div',
+            {className: 'friends-list'},
+            users.map((username, index) =>
+            React.createElement(
+                'div',
+                {className: 'friend', key: index},
+                React.createElement(
+                    'div',
+                    {className: 'friend-photo'},
+                    React.createElement(Avatar, { name: username, size: '100', round: false })
+                ),
+                React.createElement(
+                    'div',
+                    {className: 'friend-info'},
+                    React.createElement('h4', null,  username),
+                    React.createElement('p', null)
+                )
+            )
+            )
+        )
+    );
+
 
     const profileSection = React.createElement(
         'div',
@@ -207,7 +320,6 @@ function Profil(): React.ReactElement {
             React.createElement('div', {className: 'profile-dark-container'},
 
                userCard,
-
                 React.createElement('div', { className: 'create-post' },
                     React.createElement('div', {className:'post-title'}, 'Create post'),
                     React.createElement('div', {className: 'post-line'},
@@ -260,11 +372,33 @@ function Profil(): React.ReactElement {
                 React.createElement('div', { className: 'posts' },
 
 
-                )
+                ),
 
 
+                React.createElement('div', {className: 'profile-posts'},
+
+                    posts.map((post) =>
+                        createPostInProfile(
+                            {
+                                name: post.username,
+                                avatar: React.createElement(Avatar, { name: post.username, size: '50', round: true }),
+                                time: new Date(post.created_at).toLocaleString(),
+                            },
+                            post.description,
+                            post.image_path,
+                            username ?? 'Unknown User'
+                        )
+                    ),
+
+                    ),
+
+
+                friendCard,
 
             ),
+
+
+
 
 
     )

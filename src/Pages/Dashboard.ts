@@ -319,7 +319,7 @@ function createChatSidebar(
                 : React.createElement(
                     'div',
                     { className: 'no-chat' },
-                    'Wybierz użytkownika, aby rozpocząć czat.'
+                    'Select a user to start chatting.'
                 ),
         )
     );
