@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "../css/pages/profile.css";
 import "../css/pages/dashboard.css";
 import Avatar from 'react-avatar';
@@ -8,7 +8,6 @@ import { useAuth } from "../context/AuthContext";
 function Profile(): React.ReactElement {
     const { username } = useAuth();
     const [imageUrl, setImageUrl] = useState<string>("/best.jpg");
-    const [users, setUsers] = useState<string[]>([]);
     const [backgroundColor, setBackgroundColor] = useState<string>('#ffffff');
     const [fileInputKey, setFileInputKey] = useState<number>(0);
 
@@ -16,10 +15,9 @@ function Profile(): React.ReactElement {
         const storedImageUrl = localStorage.getItem('profileImage');
         if (storedImageUrl) {
             setImageUrl(storedImageUrl);
-        } else {
-            setImageUrl("/best.jpg");
         }
     }, []);
+
 
     useEffect(() => {
         const img = new Image();
@@ -41,12 +39,13 @@ function Profile(): React.ReactElement {
         };
     }, [imageUrl]);
 
+    // Obsługa kliknięcia na zdjęcie profilowe - otwieranie inputa do uploadu
     function handleImageClick() {
-        const fileInput = document.getElementById('file-input');
+        const fileInput = document.getElementById('file-input') as HTMLInputElement;
         fileInput?.click();
     }
 
-
+    // Obsługa zmiany pliku graficznego
     function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
         const file = event.target.files?.[0];
         if (file) {
@@ -57,6 +56,7 @@ function Profile(): React.ReactElement {
         }
     }
 
+    // Tworzenie nagłówka z elementami nawigacyjnymi
     function createHeader(): React.ReactElement {
         return React.createElement(
             'header',
@@ -74,35 +74,30 @@ function Profile(): React.ReactElement {
             React.createElement(
                 'div',
                 { className: 'dashboard-header-right' },
-                React.createElement(
-                    'nav',
-                    { className: 'nav' },
-
-                ),
-                React.createElement(
-                    'button',
-                    null,
-                    'Log Out'
-                )
+                React.createElement('nav', { className: 'nav' }),
+                React.createElement('button', null, 'Log Out')
             )
         );
     }
+
 
     return React.createElement(
         React.Fragment,
         null,
         createHeader(),
         React.createElement("div", { className: "profile" },
-            React.createElement("div", { className: "profile-section", style: { backgroundColor: backgroundColor } },
+            React.createElement("div", {
+                    className: "profile-section",
+                    style: { backgroundColor: backgroundColor }
+                },
                 React.createElement(
                     'div',
-                    {className: 'profile-background', style: { backgroundImage: `url(${imageUrl})` }},
+                    { className: 'profile-background', style: { backgroundImage: `url(${imageUrl})` } }
                 ),
                 React.createElement(
                     'div',
-                    { className: "profile-image",  onClick: handleImageClick },
-                    React.createElement(Avatar, { name: username ?? 'User', size: '100%', round: true }),
-
+                    { className: "profile-image", onClick: handleImageClick },
+                    React.createElement(Avatar, { name: username ?? 'User', size: '100%', round: true })
                 ),
                 React.createElement(
                     "input",
@@ -115,14 +110,13 @@ function Profile(): React.ReactElement {
                         onChange: handleFileChange
                     }
                 ),
-                React.createElement(
-                    "div",
-                    { className: "profile-container" },
-
-                )
+                React.createElement("div", { className: "profile-container" })
             ),
 
+        ),
+        React.createElement('div', {className: "post-card"},
 
+            React.createElement("h2", { className: "post-card-header" }, "Create a post"),
         )
     );
 }

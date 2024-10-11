@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth } from '../context/AuthContext';
 import { faHome, faUser, faComments, faUsers, faCalendar, faNewspaper, faCog } from '@fortawesome/free-solid-svg-icons';
 import Chat from '../Components/Chat';
+import { faUserFriends, faEnvelope, faBell } from '@fortawesome/free-solid-svg-icons';
 
 function Dashboard(): React.ReactElement {
     const navigate = useNavigate();
@@ -101,6 +102,7 @@ function Dashboard(): React.ReactElement {
     );
 }
 
+/*
  function createHeader(handleLogout: () => void): React.ReactElement {
     return React.createElement(
         'header',
@@ -109,11 +111,7 @@ function Dashboard(): React.ReactElement {
             'div',
             { className: 'dashboard-header-left' },
             React.createElement('h1', { className: 'dashboard-logo' }, 'GalaxyNET'),
-            React.createElement('input', {
-                type: 'text',
-                className: 'search-bar',
-                placeholder: 'Search on GalaxyNET'
-            })
+
         ),
         React.createElement(
             'div',
@@ -121,6 +119,12 @@ function Dashboard(): React.ReactElement {
             React.createElement(
                 'nav',
                 { className: 'nav' },
+                React.createElement(
+                    'a',
+                    { href: '/home'},
+                    React.createElement('i', { className: 'fas fa-home' }),
+                    'Home'
+                ),
             ),
             React.createElement(
                 'button',
@@ -132,6 +136,66 @@ function Dashboard(): React.ReactElement {
         )
     );
 }
+
+ */
+
+
+function createHeader(handleLogout: () => void): React.ReactElement {
+    const navItems = [
+        { name: 'Home', icon: faHome, href: '/home' },
+        { name: 'Profile', icon: faUser, href: '/profile' },
+        { name: 'Forum', icon: faComments, href: '/forum' },
+        { name: 'Community', icon: faUsers, href: '/community' },
+        { name: 'Settings', icon: faCog, href: '/settings' }
+    ];
+
+    return React.createElement(
+        'header',
+        { className: 'dashboard-header' },
+        React.createElement(
+            'div',
+            { className: 'dashboard-header-left' },
+            React.createElement('h1', { className: 'dashboard-logo' }, 'GalaxyNET'),
+        ),
+        React.createElement(
+            'div',
+            { className: 'dashboard-header-center' },
+            React.createElement(
+                'nav',
+                { className: 'nav' },
+                React.createElement(
+                    'ul',
+                    null,
+                    navItems.map(item =>
+                        React.createElement(
+                            'li',
+                            { key: item.name, className: 'nav-item' },
+                            React.createElement(
+                                'a',
+                                { href: item.href, className: 'nav-link' },
+                                React.createElement(FontAwesomeIcon, { icon: item.icon, className: 'icon' }),
+                            )
+                        )
+                    )
+                )
+            ),
+            React.createElement('div',
+                {className: 'dashboard-header-left'},
+                React.createElement(
+                    'button',
+                    {
+                        onClick: handleLogout,
+                        className: 'logout-button'
+                    },
+                    ' Log Out'
+                )
+
+                )
+
+        )
+    );
+}
+
 
 function createSidebar(): React.ReactElement {
     const menuItems = [

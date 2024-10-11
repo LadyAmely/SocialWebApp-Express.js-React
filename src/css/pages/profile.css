@@ -1,3 +1,75 @@
+/* Ogólne style dla preview obrazków */
+.image-preview {
+    display: none;
+    text-align: center;
+}
+
+.image-preview-img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    margin-top: 15px;
+}
+
+/* Ogólne style dla pól tekstowych */
+.textarea {
+    width: 100%;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #2c2f33;
+    color: #f0f2f5;
+    border: none;
+    resize: none;
+    font-size: 16px;
+    margin-bottom: 15px;
+    outline: none;
+    transition: background-color 0.3s;
+}
+
+.textarea:focus {
+    background-color: #353b41;
+}
+
+/* Ogólne style dla etykiet upload */
+.upload-label {
+    font-size: 14px;
+    background-color: #2c2f33;
+    color: #ff6b6b;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.upload-label:hover {
+    background-color: #353b41;
+    transform: translateY(-3px);
+}
+
+
+input[type="file"] {
+    display: none;
+}
+
+
+.button {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.button:hover {
+    background-color: #ff7f7f;
+    transform: translateY(-3px);
+}
+
+/* Profile section */
 .profile {
     display: flex;
     flex-direction: column;
@@ -13,7 +85,6 @@
     border: none;
     position: relative;
     background: linear-gradient(180deg, #43566c 0%, #1d2128 100%);
-
 }
 
 .profile-background {
@@ -39,11 +110,10 @@
     margin-left: 50%;
     margin-top: 25%;
     transform: translateX(-50%);
-    z-index: 4; /* Zmieniamy z-index na 4, tak by nie zasłaniało innych elementów */
+    z-index: 4;
     border: 2px solid #0a0b10;
-    position: relative; /* Używamy relative, aby add-your-photo było pozycjonowane w odniesieniu do profile-image */
+    position: relative;
 }
-
 
 .profile-container {
     position: absolute;
@@ -53,7 +123,6 @@
     z-index: 2;
     font-size: 15px;
     color: #f0f2f5;
-
 }
 
 .profile-info {
@@ -72,11 +141,6 @@
     font-size: 14px;
 }
 
-.profile-background input[type="file"],
-.profile-image input[type="file"] {
-    display: none;
-}
-
 .profile-background:hover::after,
 .profile-image:hover::after {
     content: "Edit";
@@ -91,89 +155,32 @@
     cursor: pointer;
 }
 
-.create-post {
-    background-color: #1d2128;
+/* Card for creating posts */
+.post-card, .create-post {
+    background-color: #2b2f3c;
     padding: 20px;
+    border-radius: 2px;
     margin-top: 20px;
-    border-radius: 8px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.create-post textarea {
+    color: #f0f2f5;
     width: 100%;
-    border-radius: 5px;
-    padding: 10px;
-    resize: none;
-    margin-bottom: 10px;
-    font-size: 16px;
-    background-color: #2c2f33;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.post-card-header {
+    font-size: 20px;
+    font-weight: bold;
     color: #ffffff;
-    border: none;
-    outline: none;
-}
-
-.create-post-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.create-post-actions .upload-image {
-    display: none;
-}
-
-.create-post-actions label {
-    color: #ff6b6b;
-    background-color: #2c2f33;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.create-post-actions button {
-    padding: 10px 20px;
-    background-color: #ff6b6b;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.image-preview {
-    margin: 10px 0;
+    margin-bottom: 15px;
     text-align: center;
 }
 
-.image-preview-img {
-    max-width: 100%;
-    max-height: 200px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.add-your-photo {
-    position: absolute;
-    bottom: -10px;
-    right: -10px;
-    background-color: #0a0b10;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid #ffffff;
+.post-card-actions, .create-post-actions {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    cursor: pointer;
-    z-index: 5;
-}
-
-.add-your-photo::after {
-    content: "+";
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
+    margin-bottom: 15px;
 }

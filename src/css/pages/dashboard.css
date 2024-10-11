@@ -1,4 +1,6 @@
 
+
+
 .main-container {
     position: relative;
     width: auto;
@@ -28,18 +30,18 @@
 .dashboard-header {
     color: white;
     display: flex;
+    max-height: 100px;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 5px 10px;
+    margin-bottom: 0;
+    position: relative;
 }
 
-.dashboard-header-left {
-    display: flex;
-    align-items: center;
-}
+
 
 .dashboard-logo {
-    font-size: 24px;
+    font-size: 18px;
     margin-right: 20px;
 }
 
@@ -56,7 +58,7 @@ nav ul li a {
     text-decoration: none;
     color: rgba(255, 255, 255, 0.68);
     font-weight: 400;
-    font-size: 16px;
+    font-size: 20px;
     transition: color 0.3s;
 }
 
@@ -74,15 +76,24 @@ nav ul li a::after {
     transition: width 0.3s;
 }
 
+.nav-link {
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 20px;
+}
+
 nav ul li a:hover::after {
     width: 100%;
 }
 
 .search-bar {
-    padding: 8px;
+    padding: 4px;
     border-radius: 20px;
     border: none;
-    width: 250px;
+    width: 200px;
+    height: 50px;
     color: #ffffff;
     opacity: 0.6;
     background-color: rgba(123, 133, 152, 0.94);
@@ -112,7 +123,7 @@ nav ul li a:hover::after {
 
 .nav a {
     color: rgba(255, 255, 255, 0.54);
-    font-size: 14px;
+    font-size: 18px;
     text-decoration: none;
     margin: 0 10px;
 }
@@ -132,13 +143,13 @@ nav ul li a:hover::after {
     overflow-y: hidden;
 }
 
-
 .sidebar {
-    width: 20%;
-    background-color: rgba(13, 25, 39, 0.33);
+    width: 18%;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
     padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
@@ -148,36 +159,41 @@ nav ul li a:hover::after {
 }
 
 .sidebar ul li {
-    margin-bottom: 10px;
-
+    margin-bottom: 12px;
 }
 
 .sidebar ul li a {
     text-decoration: none;
-    color: #bddcfb;
-    padding: 12px 15px;
+    color: #c0e1ff;
+    padding: 14px 18px;
     display: flex;
     align-items: center;
-    border-radius: 8px;
-    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
 }
-
-
 
 .sidebar ul li a:hover {
-    background-color: rgba(237, 242, 246, 0.37);
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
 }
 
-.sidebar a{
+.sidebar a {
     display: flex;
     align-items: center;
 }
 
 .sidebar .icon {
-    margin-right: 10px;
-
+    margin-right: 12px;
+    color: #ffffff;
+    font-size: 1.4em;
 }
+
+.sidebar ul li a:hover .icon {
+    color: #ffffff;
+}
+
 
 .feed {
     flex: 1;
@@ -190,7 +206,7 @@ nav ul li a:hover::after {
 
 
 .post {
-    background-color: rgba(13, 25, 39, 0.7);
+    background-color: rgba(0, 0, 0, 0.2);
     padding: 15px;
     margin-bottom: 20px;
     border-radius: 12px;
@@ -259,7 +275,7 @@ nav ul li a:hover::after {
 
 .chat-sidebar {
     width: 20%;
-    background-color: rgba(13, 25, 39, 0.43);
+    background-color: rgba(0, 0, 0, 0.2);
     padding: 20px;
     color: white;
     border-radius: 12px;
@@ -367,4 +383,36 @@ button {
     height: 800px;
     border: none;
     justify-content: center;
+}
+
+.dashboard-header-right .nav-link i {
+    margin-right: 8px;
+    color: white;
+    font-size: 24px;
+}
+
+.dashboard-header-right .nav-link {
+    display: flex;
+    align-items: center;
+}
+
+
+.dashboard-header-left {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+
+.dashboard-header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    margin-left: 30%;
+}
+
+
+.dashboard-header-right {
+    display: flex;
+    align-items: center;
 }
