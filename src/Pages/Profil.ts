@@ -114,6 +114,41 @@ function Profil(): React.ReactElement {
         }
     }
 
+    const userCard = React.createElement(
+
+        'div',
+        {className: 'user-card'},
+
+         React.createElement('div', {className: 'user-header'}),
+        React.createElement('div', {className: 'user-profile-photo'},
+            React.createElement(Avatar, { name: username ?? 'User', size: '100%', round: true })
+            ),
+        React.createElement('div', {className: 'user-info'},
+
+            React.createElement('h3', null, username ?? 'User'),
+            React.createElement('p', {className: 'user-location'},'Location:' ),
+            React.createElement('p', {className: 'user-interests'}, 'Interests:')
+
+        ),
+        React.createElement(
+            'div',
+            {className: 'user-details'},
+            React.createElement(
+                'div',
+                {className: 'user-stats'},
+                React.createElement('p', null, 'Observations:'),
+                React.createElement('p', null, 'Favourite Constellations:')
+            ),
+            React.createElement(
+                'div',
+                {className: 'user-quote'},
+
+            )
+        ),
+
+
+    );
+
 
     const profileSection = React.createElement(
         'div',
@@ -171,7 +206,7 @@ function Profil(): React.ReactElement {
             ),
             React.createElement('div', {className: 'profile-dark-container'},
 
-                React.createElement('div', {className: 'user-card'}),
+               userCard,
 
                 React.createElement('div', { className: 'create-post' },
                     React.createElement('div', {className:'post-title'}, 'Create post'),
