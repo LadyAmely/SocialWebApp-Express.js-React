@@ -57,12 +57,16 @@ function Profil(): React.ReactElement {
     }, []);
 
 
+
+
     function createPostInProfile(
         user: { name: string; avatar: string | React.ReactNode; time: string },
         content: string,
         image: string,
         loggedInUser: string
     ): React.ReactElement {
+
+
         return React.createElement(
             'div',
             { className: 'post' },
@@ -109,6 +113,16 @@ function Profil(): React.ReactElement {
             )
         );
     }
+
+
+
+
+
+
+
+
+
+
 
     function createHeader(): React.ReactElement {
         const navItems = [
@@ -463,7 +477,9 @@ function Profil(): React.ReactElement {
 
                 React.createElement('div', {className: 'profile-posts'},
 
-                    posts.map((post) =>
+                    posts
+                        .filter(post => post.username === username)
+                        .map((post) =>
                         createPostInProfile(
                             {
                                 name: post.username,
