@@ -1,10 +1,10 @@
 .chat-container {
     width: 250px;
-    background-color: #fff;
+    background-color: rgba(51, 64, 90, 0.94);
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     border: none;
+    margin-top: auto;
     flex-direction: column;
 }
 
@@ -13,7 +13,10 @@
     color: #fff;
     padding: 15px;
     border-radius: 10px 10px 0 0;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
 }
 
 .chat-messages {
@@ -33,35 +36,44 @@
 }
 
 .sent {
-    background-color: rgba(39, 50, 71, 0.94);
+    background: linear-gradient(135deg, rgb(54, 70, 103), rgb(98, 136, 209));
     color: white;
     align-self: flex-end;
+    border-radius: 20px;
+    padding: 10px;
+    word-wrap: break-word;
 }
 
 .received {
-    background-color: #0f2437;
+    background: linear-gradient(135deg, rgb(88, 161, 228), rgba(123, 159, 225, 0.6));
+    color: white;
     align-self: flex-start;
+    border-radius: 20px;
+    padding: 10px;
+    word-wrap: break-word;
 }
 
 .chat-input {
     display: flex;
     padding: 10px;
-    border-top: 1px solid #eee;
-    background-color: #f9f9f9;
+    border-top: 1px solid #2b2f3c;
+    background-color: rgba(39, 50, 71, 0.94);
     border-radius: 0 0 10px 10px;
 }
 
 .chat-input input {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    color: white;
+    border: 1px solid rgba(204, 204, 204, 0.04);
+    background-color: rgba(67, 83, 113, 0.94);
+    border-radius: 15px;
     outline: none;
 }
 
 .chat-input button {
     padding: 10px 20px;
-    background-color: rgba(39, 50, 71, 0.94);
+    background-color: rgba(101, 143, 223, 0.94);
     color: white;
     border: none;
     border-radius: 5px;
@@ -71,4 +83,25 @@
 
 .chat-input button:hover {
     background-color: #283250;
+}
+
+.chat-close-btn {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0);
+    color: #75a7d8;
+    border: none;
+    position: absolute;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: auto;
+    font-size: 16px;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease;
+}
+
+.chat-close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.4);
 }

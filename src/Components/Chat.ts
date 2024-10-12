@@ -1,12 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import "../css/components/chat.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faTimes} from '@fortawesome/free-solid-svg-icons';
+import Avatar from "react-avatar";
 
 function Chat({ user }: { user: string }): React.ReactElement {
     const [messages, setMessages] = useState<{ text: string, type: string }[]>([]);
     const [input, setInput] = useState('');
     const ws = useRef<WebSocket | null>(null);
     const [isConnected, setIsConnected] = useState(false);
+    const [isChatOpen, setIsChatOpen] = useState(true);
 
+    const closeChat = () => {
+        setIsChatOpen(false);
+    };
 
     useEffect(() => {
         ws.current = new WebSocket('ws://localhost:5000');
@@ -109,6 +116,7 @@ function Chat({ user }: { user: string }): React.ReactElement {
 
      */
 
+    /*
     const sendMessage = () => {
         if (ws.current && ws.current.readyState === WebSocket.OPEN && input.trim()) {
             try {
@@ -125,9 +133,40 @@ function Chat({ user }: { user: string }): React.ReactElement {
         }
     };
 
-
+     */
 
     /*
+
+    const sendMessage = () => {
+        if (ws.current && ws.current.readyState === WebSocket.OPEN && input.trim()) {
+            if (!user) {
+                alert('Nie wybrano odbiorcy!');
+                return;
+            }
+
+
+            const message = `${user}:${input}`;
+
+            try {
+                ws.current.send(message); // Wysłanie wiadomości jako zwykły tekst
+                console.log('Sent Message:', message);
+                setMessages((prevMessages) => [...prevMessages, { text: input, type: 'sent' }]);
+                setInput(''); // Wyczyść pole input
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('Wystąpił błąd podczas wysyłania wiadomości. Sprawdź konsolę.');
+            }
+        } else {
+            console.log('WebSocket is not open or input is empty');
+        }
+    };
+
+
+     */
+
+
+
+
     const sendMessage = () => {
 
         if(ws.current && ws.current.readyState === WebSocket.OPEN && input.trim()){
@@ -141,7 +180,7 @@ function Chat({ user }: { user: string }): React.ReactElement {
 
     };
 
-     */
+
 
 
 
@@ -168,16 +207,23 @@ function Chat({ user }: { user: string }): React.ReactElement {
         { className: 'chat-container' },
         createChatHeader(user),
         createMessageList(messages),
-        createChatInput(input, setInput, sendMessage)
+        createChatInput(input, setInput, sendMessage),
+
     );
 }
 
 
 function createChatHeader(user: string): React.ReactElement {
+
     return React.createElement(
         'div',
         { className: 'chat-header' },
-        React.createElement('h3', null, `Chat with ${user}`)
+        React.createElement(Avatar, { name: `${user}`, size: '30', round: true }),
+        React.createElement('p', {style:{marginRight: 'auto', marginLeft: '10px'} }, `${user}`,
+         React.createElement('button', {className:"chat-close-btn"},
+             React.createElement(FontAwesomeIcon, { icon: faTimes }),
+             )
+        )
     );
 }
 
