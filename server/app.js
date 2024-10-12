@@ -4,7 +4,10 @@ const session = require('express-session');
 const authRoutes = require('./routes/auth');
 const sequelize = require('./config/db');
 const path = require('path');
-const {WebSocketServer} = require('ws');
+const http = require('http');
+const WebSocket = require('ws');
+
+//const {WebSocketServer} = require('ws');
 
 const app = express();
 const port = 5000;
@@ -33,6 +36,16 @@ app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
+app.get('/api/posts', async (req, res) => {
+    try {
+        const [results, metadata] = await sequelize.query('SELECT * FROM posts');
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
@@ -41,13 +54,12 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
-const server = app.listen(port, () => {
-    console.log(`Serwer działa na porcie ${port}`);
-});
-
-const wss = new WebSocketServer({ server });
+const server = http.createServer(app);
 
 
+const wss = new WebSocket.Server({ server });
+
+/*
 wss.on('connection', (ws) => {
     console.log('Connected to the server');
 
@@ -71,4 +83,33 @@ wss.on('connection', (ws) => {
     });
 });
 
+ */
 
+wss.on('connection', (ws) => {
+    console.log('Nowe połączenie WebSocket');
+
+
+    ws.on('message', (message) => {
+        console.log('Otrzymano wiadomość od klienta:', message);
+
+
+        wss.clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(`${message}`);
+            }
+        });
+    });
+
+
+    ws.on('close', () => {
+        console.log('Klient rozłączony');
+    });
+
+
+   // ws.send('');
+});
+
+
+server.listen(port, () => {
+    console.log(`Serwer działa na porcie ${port}`);
+});
