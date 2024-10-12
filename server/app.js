@@ -6,21 +6,36 @@ const sequelize = require('./config/db');
 const path = require('path');
 const http = require('http');
 const WebSocket = require('ws');
+const { v4: uuidv4 } = require('uuid');
+
 
 //const {WebSocketServer} = require('ws');
 
 const app = express();
 const port = 5000;
+const userSockets = new Map();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+/*
 app.use(session({
     secret: 'mysecret',
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false }
 }));
+
+ */
+
+const sessionMiddleware = session({
+    secret: 'mysecret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }
+});
+
+app.use(sessionMiddleware);
 
 sequelize.sync().then(() => {
     console.log('Synchronizacja z bazą danych zakończona');
@@ -32,7 +47,7 @@ app.get('/dashboard', (req, res) => {
     if (!req.session.user) {
         return res.redirect('/auth/login');
     }
-   // res.send(`<h1>Witaj, ${req.session.user.username}!</h1><a href="/">Wyloguj</a>`);
+
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
@@ -59,55 +74,106 @@ const server = http.createServer(app);
 
 const wss = new WebSocket.Server({ server });
 
+const wrap = middleware => (ws, req, next) => middleware(req, {}, next);
+
 /*
-wss.on('connection', (ws) => {
-    console.log('Connected to the server');
+wss.on('connection', (ws, req) => {
+    if (req.session && req.session.user) {
 
-    ws.on('message', (message) => {
-        console.log(`Received: ${message}`);
+        const username = req.session.user.username;
+        console.log(`WebSocket: użytkownik ${username} połączony`);
 
-        wss.clients.forEach(client => {
-            if (client.readyState === 1) {
-                client.send(message);
+
+        userSockets.set(username, ws);
+
+        ws.on('message', (message) => {
+            console.log(`Otrzymano wiadomość od użytkownika ${username}: ${message}`);
+
+
+            const targetUsername = extractTargetUsername(message);
+
+
+            const targetSocket = userSockets.get(targetUsername);
+            if (targetSocket && targetSocket.readyState === WebSocket.OPEN) {
+                targetSocket.send(`Wiadomość od użytkownika ${username}: ${message}`);
             }
         });
-    });
 
-    ws.on('close', () => {
-        console.log('Client disconnected');
-        console.log(`Current clients connected: ${wss.clients.size}`);
-    });
-
-    ws.on('error', (error) => {
-        console.error('WebSocket Error:', error);
-    });
+        ws.on('close', () => {
+            console.log(`WebSocket: użytkownik ${username} rozłączony`);
+            userSockets.delete(username);
+        });
+    }
 });
+
 
  */
 
-wss.on('connection', (ws) => {
-    console.log('Nowe połączenie WebSocket');
+wss.on('connection', (ws, req) => {
+    wrap(sessionMiddleware)(ws, req, () => {
+        if (req.session && req.session.user) {
+            const username = req.session.user.username;
+            console.log(`WebSocket: użytkownik ${username} połączony`);
 
+            userSockets.set(username, ws);
 
-    ws.on('message', (message) => {
-        console.log('Otrzymano wiadomość od klienta:', message);
+            ws.on('message', (message) => {
+                console.log(` ${username}: ${message}`);
 
+                const targetUsername = extractTargetUsername(message);
+                if (!targetUsername) {
+                    ws.send('Błąd: nie podano odbiorcy.');
+                    return;
+                }
 
-        wss.clients.forEach(client => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(`${message}`);
-            }
-        });
+                const targetSocket = userSockets.get(targetUsername);
+                if (targetSocket && targetSocket.readyState === WebSocket.OPEN) {
+                    const parsedMessage = JSON.parse(message);
+                    targetSocket.send(`${username}: ${parsedMessage.message}`);
+                } else {
+                    ws.send(`Użytkownik ${targetUsername} nie jest dostępny.`);
+                }
+            });
+
+            ws.on('close', () => {
+                console.log(`WebSocket: użytkownik ${username} rozłączony`);
+                userSockets.delete(username);
+            });
+        } else {
+            ws.close();
+        }
     });
-
-
-    ws.on('close', () => {
-        console.log('Klient rozłączony');
-    });
-
-
-   // ws.send('');
 });
+
+
+
+/*
+function extractTargetUsername(message) {
+    try {
+        const parsedMessage = JSON.parse(message);
+        return parsedMessage.targetUsername;
+    } catch (e) {
+        console.error('Błąd parsowania wiadomości:', e);
+        return null;
+    }
+}
+
+ */
+
+
+function extractTargetUsername(message) {
+    try {
+        const parsedMessage = JSON.parse(message);
+        return parsedMessage.targetUsername;
+    } catch (e) {
+        console.error('Błąd parsowania wiadomości:', e);
+        return null;
+    }
+}
+
+
+
+
 
 
 server.listen(port, () => {
