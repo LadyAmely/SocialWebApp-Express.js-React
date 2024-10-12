@@ -167,6 +167,7 @@ function Chat({ user }: { user: string }): React.ReactElement {
 
 
 
+    /*
     const sendMessage = () => {
 
         if(ws.current && ws.current.readyState === WebSocket.OPEN && input.trim()){
@@ -179,6 +180,36 @@ function Chat({ user }: { user: string }): React.ReactElement {
 
 
     };
+
+     */
+
+    const sendMessage = () => {
+        if (ws.current && ws.current.readyState === WebSocket.OPEN && input.trim()) {
+
+            const message = JSON.stringify({
+                targetUsername: user,
+                message: input
+            });
+
+            try {
+
+                ws.current.send(message);
+                console.log('Sent Message:', message);
+
+
+                setMessages((prevMessages) => [...prevMessages, { text: input, type: 'sent' }]);
+                setInput('');
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('Wystąpił błąd podczas wysyłania wiadomości. Sprawdź konsolę.');
+            }
+        } else {
+            console.log('WebSocket is not open or input is empty');
+        }
+    };
+
+
+
 
 
 
