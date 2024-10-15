@@ -61,6 +61,31 @@ app.get('/api/posts', async (req, res) => {
     }
 });
 
+app.post('/api/posts', async (req, res) => {
+    const { description, image_path, username } = req.body;
+
+    if (!description || !image_path || !username) {
+        return res.status(400).json({ error: 'Description, image_path, and username are required' });
+    }
+
+    try {
+        const newPost = await sequelize.query(
+            'INSERT INTO posts (description, created_at, updated_at, image_path, username) VALUES (:description, NOW(), NOW(), :image_path, :username)',
+            {
+                replacements: { description, image_path, username },
+                type: sequelize.QueryTypes.INSERT
+            }
+        );
+
+        res.status(201).json({ id: newPost[0], description, image_path, username });
+    } catch (error) {
+        console.error('Error creating post:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
+
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
@@ -109,6 +134,7 @@ wss.on('connection', (ws, req) => {
 
  */
 
+
 wss.on('connection', (ws, req) => {
     wrap(sessionMiddleware)(ws, req, () => {
         if (req.session && req.session.user) {
@@ -148,6 +174,45 @@ wss.on('connection', (ws, req) => {
 
 
 /*
+wss.on('connection', (ws, req) => {
+    if (req.session && req.session.user) {
+        const username = req.session.user.username;
+        console.log(`WebSocket: użytkownik ${username} połączony`);
+
+        userSockets.set(username, ws);
+
+        ws.on('message', (message) => {
+            console.log(`Otrzymano wiadomość od użytkownika ${username}: ${message}`);
+
+            const parsedMessage = extractTargetUsername(message);
+
+            if (!parsedMessage) {
+                ws.send('Błąd: nie podano poprawnego formatu wiadomości.');
+                return;
+            }
+
+            const { targetUsername, messageText } = parsedMessage;
+
+            const targetSocket = userSockets.get(targetUsername);
+            if (targetSocket && targetSocket.readyState === WebSocket.OPEN) {
+                targetSocket.send(`Wiadomość od użytkownika ${username}: ${messageText}`);
+            } else {
+                ws.send(`Użytkownik ${targetUsername} nie jest dostępny.`);
+            }
+        });
+
+        ws.on('close', () => {
+            console.log(`WebSocket: użytkownik ${username} rozłączony`);
+            userSockets.delete(username);
+        });
+    }
+});
+
+
+ */
+
+
+/*
 function extractTargetUsername(message) {
     try {
         const parsedMessage = JSON.parse(message);
@@ -161,6 +226,7 @@ function extractTargetUsername(message) {
  */
 
 
+
 function extractTargetUsername(message) {
     try {
         const parsedMessage = JSON.parse(message);
@@ -170,6 +236,28 @@ function extractTargetUsername(message) {
         return null;
     }
 }
+
+
+
+
+/*
+
+function extractTargetUsername(message) {
+    try {
+        const [targetUsername, messageText] = message.split(':');
+
+        if (!targetUsername || !messageText) {
+            throw new Error('Niepoprawny format wiadomości');
+        }
+        return { targetUsername, messageText };
+    } catch (e) {
+        console.error('Błąd parsowania wiadomości:', e);
+        return null;
+    }
+}
+
+ */
+
 
 
 
