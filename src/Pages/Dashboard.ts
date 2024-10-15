@@ -13,7 +13,7 @@ function Dashboard(): React.ReactElement {
     const { username, setUsername } = useAuth();
     const [posts, setPosts] = useState<any[]>([]);
     const [users, setUsers] = useState<string[]>([]);
-    const [selectedUser, setSelectedUser] = useState<string | null>(null);
+    const [activeChats, setActiveChats] = useState<string[]>([]); // Przechowywanie otwartych czatów
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -30,14 +30,14 @@ function Dashboard(): React.ReactElement {
         fetchUsers();
     }, []);
 
-    useEffect(()=>{
-        const fetchPosts = async() =>{
-            try{
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
                 const response = await fetch('http://localhost:5000/api/posts');
                 const data = await response.json();
                 console.log("Fetched posts:", data);
                 setPosts(data);
-            }catch(error){
+            } catch (error) {
                 console.error('Error fetching posts:', error);
             }
         };
@@ -45,7 +45,7 @@ function Dashboard(): React.ReactElement {
         fetchPosts();
     }, []);
 
-     const handleLogout = async () => {
+    const handleLogout = async () => {
         console.log('Logout button clicked');
         try {
             const response = await fetch('http://localhost:5000/auth/logout', {
@@ -70,7 +70,9 @@ function Dashboard(): React.ReactElement {
     };
 
     const handleUserClick = (user: string) => {
-        setSelectedUser(user);
+        if (!activeChats.includes(user)) {
+            setActiveChats((prevChats) => [...prevChats, user]); // Dodaj czat do listy otwartych czatów
+        }
     };
 
     return React.createElement(
@@ -93,52 +95,19 @@ function Dashboard(): React.ReactElement {
                         },
                         post.description,
                         post.image_path,
-                       // username ?? 'Unknown User'
                     )
                 ),
             ),
-            createChatSidebar({ name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) }, users, selectedUser, handleUserClick, username ?? 'Unknown User'),
-        )
-    );
-}
-
-/*
- function createHeader(handleLogout: () => void): React.ReactElement {
-    return React.createElement(
-        'header',
-        { className: 'dashboard-header' },
-        React.createElement(
-            'div',
-            { className: 'dashboard-header-left' },
-            React.createElement('h1', { className: 'dashboard-logo' }, 'GalaxyNET'),
-
-        ),
-        React.createElement(
-            'div',
-            { className: 'dashboard-header-right' },
-            React.createElement(
-                'nav',
-                { className: 'nav' },
-                React.createElement(
-                    'a',
-                    { href: '/home'},
-                    React.createElement('i', { className: 'fas fa-home' }),
-                    'Home'
-                ),
+            createChatSidebar(
+                { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },
+                users,
+                activeChats,
+                handleUserClick,
+                username ?? 'Unknown User'
             ),
-            React.createElement(
-                'button',
-                {
-                    onClick: handleLogout,
-                },
-                'Log Out'
-            )
         )
     );
 }
-
- */
-
 
 function createHeader(handleLogout: () => void): React.ReactElement {
     const navItems = [
@@ -180,22 +149,19 @@ function createHeader(handleLogout: () => void): React.ReactElement {
                 )
             ),
             React.createElement('div',
-                {className: 'dashboard-header-left'},
+                { className: 'dashboard-header-left' },
                 React.createElement(
                     'button',
                     {
                         onClick: handleLogout,
                         className: 'logout-button'
                     },
-                    ' Log Out'
+                    'Log Out'
                 )
-
-                )
-
+            )
         )
     );
 }
-
 
 function createSidebar(): React.ReactElement {
     const menuItems = [
@@ -231,7 +197,6 @@ function createPost(
     user: { name: string; avatar: string | React.ReactNode; time: string },
     content: string,
     image: string,
-   // loggedInUser: string
 ): React.ReactElement {
     return React.createElement(
         'div',
@@ -250,7 +215,7 @@ function createPost(
                 'div',
                 { className: 'post-user-info' },
                 React.createElement('h2', null, user.name),
-                React.createElement('span', null,  user.time),
+                React.createElement('span', null, user.time),
             )
         ),
         React.createElement(
@@ -260,8 +225,8 @@ function createPost(
         ),
         React.createElement(
             'div',
-            {className: 'post-image',
-
+            {
+                className: 'post-image',
                 style: {
                     backgroundImage: `url(${image})`,
                     backgroundSize: 'cover',
@@ -283,7 +248,7 @@ function createPost(
 function createChatSidebar(
     user: { name: string; avatar: string | React.ReactNode },
     users: string[],
-    selectedUser: string | null,
+    activeChats: string[],
     handleUserClick: (username: string) => void,
     loggedInUser: string
 ): React.ReactElement {
@@ -295,7 +260,6 @@ function createChatSidebar(
             'ul',
             null,
             users.map((username) =>
-
                 React.createElement(
                     'li',
                     {
@@ -305,26 +269,30 @@ function createChatSidebar(
                     React.createElement('span', null, loggedInUser === user.name
                         ? React.createElement('div', { className: 'logged-user-circle' })
                         : React.createElement('div', { className: 'unlogged-user-circle' })),
-                    React.createElement(Avatar, { name: username, size: '40', round: true}),
+                    React.createElement(Avatar, { name: username, size: '40', round: true }),
                     React.createElement('span', null, username)
                 )
+            )
+        ),
+        React.createElement(
+            'div',
+            { className: 'chat-windows-container' },
+            activeChats.length > 0
+                ? activeChats.map((chatUser) =>
+                    React.createElement(
+                        'div',
+                        { className: 'chat-window', key: chatUser },
 
-            ),
-            selectedUser
-                ? React.createElement(
-                    'div',
-                    { className: 'chat-window' },
-                    React.createElement(Chat, { user: selectedUser })
+                        React.createElement(Chat, { user: chatUser })
+                    )
                 )
                 : React.createElement(
                     'div',
                     { className: 'no-chat' },
                     'Select a user to start chatting.'
-                ),
+                )
         )
     );
 }
 
 export default Dashboard;
-
-
