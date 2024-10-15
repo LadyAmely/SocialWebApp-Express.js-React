@@ -17,7 +17,13 @@ function Profil(): React.ReactElement {
     const [posts, setPosts] = useState<any[]>([]);
     const [users, setUsers] = useState<string[]>([]);
     const [selectedUser, setSelectedUser] = useState<string | null>(null);
+    const [newPostDescription, setNewPostDescription] = useState<string>("");
+    const [newPostImage, setNewPostImage] = useState<string | null>(null);
 
+    function handleDescriptionChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+
+        setNewPostDescription(event.target.value);
+    }
 
     useEffect(() => {
         const storedImageUrl = localStorage.getItem('profileImage');
@@ -57,6 +63,37 @@ function Profil(): React.ReactElement {
     }, []);
 
 
+    const postPost = async () => {
+        const newPost = {
+            description: newPostDescription,
+            image_path: newPostImage,
+            username: username,
+            created_at: new Date()
+        };
+
+        try {
+            const response = await fetch('http://localhost:5000/api/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newPost),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to post data');
+            }
+
+            const data = await response.json();
+            console.log('Post created successfully:', data);
+
+            setPosts([...posts, { ...data, created_at: newPost.created_at }]);
+            setNewPostDescription('');
+            setNewPostImage(null);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
 
     function createPostInProfile(
@@ -113,15 +150,6 @@ function Profil(): React.ReactElement {
             )
         );
     }
-
-
-
-
-
-
-
-
-
 
 
     function createHeader(): React.ReactElement {
@@ -206,6 +234,16 @@ function Profil(): React.ReactElement {
         fileInput?.click();
     }
 
+    function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const file = event.target.files?.[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setNewPostImage(imageUrl);
+        }
+    }
+
+
+    /*
 
     function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
         const file = event.target.files?.[0];
@@ -216,6 +254,13 @@ function Profil(): React.ReactElement {
             setFileInputKey(prev => prev + 1);
         }
     }
+
+     */
+
+
+
+
+
 
     const userCard = React.createElement(
 
@@ -427,7 +472,10 @@ function Profil(): React.ReactElement {
                         React.createElement('div', {className: 'post-photo'},
                             React.createElement(Avatar, { name: username ?? 'User', size: '100%', round: true }),
                         ),
-                        React.createElement('textarea', { placeholder: "What's on your mind?" }),
+                        React.createElement('textarea', { placeholder: "What's on your mind?",
+                            value: newPostDescription,
+                            onChange: handleDescriptionChange
+                        },),
 
                         ),
                     React.createElement('div', {className: 'post-button-container'},
@@ -439,11 +487,22 @@ function Profil(): React.ReactElement {
                                 null,
                                 React.createElement(
                                     'a',
-                                    {href:"#"},
+                                    {
+                                        href:"#",
+                                        onClick: () => document.getElementById('file-input')?.click()
+                                    },
+
                                     React.createElement(FontAwesomeIcon, { icon: faCamera, style: { marginRight: '10px' } }),
                                     'Photo/film'
                                 )
                             ),
+                            React.createElement('input', {
+                                id: 'file-input',
+                                type: 'file',
+                                accept: 'image/*',
+                                style: { display: 'none' },
+                                onChange: handleFileChange
+                            }),
                             React.createElement(
                                 'li',
                                 null,
@@ -467,13 +526,11 @@ function Profil(): React.ReactElement {
                         )
                         ),
 
-                    React.createElement('button', { className: 'post-btn' }, 'Publish')
+                    React.createElement('button', { className: 'post-btn', onClick: postPost }, 'Publish')
                 ),
                 React.createElement('div', { className: 'posts' },
 
-
                 ),
-
 
                 React.createElement('div', {className: 'profile-posts'},
 
@@ -491,22 +548,11 @@ function Profil(): React.ReactElement {
                             username ?? 'Unknown User'
                         )
                     ),
-
                     ),
-
-
                 friendCard,
-
             ),
-
-
-
-
-
     )
     );
-
-
 
     return React.createElement(
         React.Fragment,
