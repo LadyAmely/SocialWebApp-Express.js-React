@@ -8,3 +8,4 @@ A social platform created for astronomy and space exploration enthusiasts. It al
 
 Users can create their own account by registering with an email address. The registration process is simple – it requires providing basic information such as an email address and a password.
 
+![GalaxyFlow](https://github.com/LadyAmely/SocialWebApp/blob/master/galaxy-flow-homepage.png)
