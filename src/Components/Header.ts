@@ -8,36 +8,43 @@ function Header(): React.ReactElement{
         {className: 'header'},
         React.createElement(
             'div',
-            {className: 'logo'},
-            React.createElement('h1', null, 'GalaxyNET'),
+            {className: 'header-container'},
+
             React.createElement(
-                'nav',
-                null,
+                'div',
+                {className: 'logo'},
+                React.createElement('h1', null, 'GalaxyNET'),
                 React.createElement(
-                    'ul',
+                    'nav',
                     null,
                     React.createElement(
-                        'li',
+                        'ul',
                         null,
                         React.createElement(
-                            'a',
-                            { href: '/Auth/login' },
-                            'Log in'
-                        )
-                    ),
-                    React.createElement(
-                        'li',
-                        null,
+                            'li',
+                            null,
+                            React.createElement(
+                                'a',
+                                { href: '/Auth/login' },
+                                'Log in'
+                            )
+                        ),
                         React.createElement(
-                            'a',
-                            {href: '/Auth/register'},
-                            'Register'
+                            'li',
+                            null,
+                            React.createElement(
+                                'a',
+                                {href: '/Auth/register'},
+                                'Register'
+                            )
                         )
                     )
                 )
+
             )
 
-        )
+            ),
+
 
     );
 

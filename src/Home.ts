@@ -34,7 +34,7 @@ function Home(): React.ReactElement{
                 )
             )
         ),
-        React.createElement('div', { className: 'hero-image' })
+        React.createElement('div', { className: 'hero-image' }),
         ),
         React.createElement(
             'div',
@@ -71,6 +71,8 @@ function Home(): React.ReactElement{
 
             )
         ),
+
+
         React.createElement(Footer)
     );
 }

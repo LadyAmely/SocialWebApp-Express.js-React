@@ -13,19 +13,7 @@
     overflow: hidden;
 }
 
-.hero-image {
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    z-index: 1;
-    background-image: url('../../../public/sky.jpg');
-    background-size: cover;
-    background-position: center;
-    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 90%);
-}
+
 
 .registration-form {
     position: absolute;

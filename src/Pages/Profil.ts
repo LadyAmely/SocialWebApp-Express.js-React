@@ -7,7 +7,7 @@ import {faCog, faComments, faHome, faUser, faUsers} from "@fortawesome/free-soli
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faCamera, faVideo, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { faNewspaper, faInfoCircle, faUserFriends, faImage, faFilm, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
-
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 function Profil(): React.ReactElement {
     const { username } = useAuth();

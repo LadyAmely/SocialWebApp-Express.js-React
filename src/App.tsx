@@ -6,6 +6,7 @@ import Register from './Auth/Register';
 import Dashboard from './Pages/Dashboard';
 import { AuthProvider } from './context/AuthContext';
 import Profil from "./Pages/Profil";
+import Forum from './Pages/Forum';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
            <Route path="/Auth/register" element={<Register/>}/>
            <Route path="/dashboard" element={<Dashboard/>}/>
            <Route path="/profile" element={<Profil/>}/>
+           <Route path="/forum" element={<Forum/>}/>
        </Routes>
    </Router>
       </AuthProvider>
