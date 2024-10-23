@@ -273,7 +273,9 @@ function createChatSidebar(
         React.createElement(
             'ul',
             null,
-            users.map((username) =>
+            users
+                .filter(username => username !== loggedInUser)
+                .map((username) =>
                 React.createElement(
                     'li',
                     {
