@@ -14,6 +14,8 @@ Users can create their own account by registering with an email address. The reg
 
 The app enables users to chat with others effortlessly through its chat feature. Users can send text messages in real time, facilitating instant communication. This functionality enhances the user experience by allowing seamless interactions.
 
+![GalaxyFlow-dashboard](https://github.com/LadyAmely/SocialWebApp/blob/master/galaxy-flow-dashboard.png)
+
 ## License
 
 This project is licensed under the MIT License.
