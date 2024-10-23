@@ -88,52 +88,18 @@
 }
 
 /* Post header styling */
-.post-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
+
 
 /* User info in post */
-.post-user-info h2 {
-    font-size: 18px;
-    color: #ffffff;
-    margin: 0;
-}
+
 
 /* Post content styling */
-.post-content {
-    color: #e0e0e0;
-    font-size: 14px;
-}
+
 
 /* Post actions section */
-.post-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-}
 
 /* Post action button styling */
-.post-actions button {
-    display: flex;
-    align-items: center; /* Center icons and text vertically */
-    justify-content: center; /* Center text and icon horizontally */
-    background-color: #6a82fb; /* Button color */
-    border: none;
-    color: #ffffff; /* Text color white */
-    cursor: pointer;
-    font-size: 14px;
-    padding: 10px 15px; /* Adequate padding */
-    border-radius: 25px; /* More rounded corners */
-    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
-}
 
-/* Button hover effect */
-.post-actions button:hover {
-    background-color: #4b79a1; /* Darker shade on hover */
-    transform: scale(1.05); /* Slight grow effect */
-}
 
 /* Reply section styling */
 .reply-section {

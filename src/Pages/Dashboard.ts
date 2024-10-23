@@ -6,7 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth } from '../context/AuthContext';
 import { faHome, faUser, faComments, faUsers, faCalendar, faNewspaper, faCog } from '@fortawesome/free-solid-svg-icons';
 import Chat from '../Components/Chat';
-import { faUserFriends, faEnvelope, faBell } from '@fortawesome/free-solid-svg-icons';
+import { FaThumbsUp, FaComment, FaShare } from 'react-icons/fa';
+
 
 function Dashboard(): React.ReactElement {
     const navigate = useNavigate();
@@ -14,6 +15,10 @@ function Dashboard(): React.ReactElement {
     const [posts, setPosts] = useState<any[]>([]);
     const [users, setUsers] = useState<string[]>([]);
     const [activeChats, setActiveChats] = useState<string[]>([]);
+
+    const displayName = username || 'Unknown User';
+
+    const { FaThumbsUp, FaComment, FaShare } = require('react-icons/fa');
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -71,14 +76,14 @@ function Dashboard(): React.ReactElement {
 
     const handleUserClick = (user: string) => {
         if (!activeChats.includes(user)) {
-            setActiveChats((prevChats) => [...prevChats, user]); // Dodaj czat do listy otwartych czatów
+            setActiveChats((prevChats) => [...prevChats, user]);
         }
     };
 
     return React.createElement(
         React.Fragment,
         null,
-        createHeader(handleLogout),
+        createHeader(displayName, handleLogout),
         React.createElement(
             'div',
             { className: 'main-container' },
@@ -109,7 +114,7 @@ function Dashboard(): React.ReactElement {
     );
 }
 
-function createHeader(handleLogout: () => void): React.ReactElement {
+function createHeader(username: string, handleLogout: () => void): React.ReactElement {
     const navItems = [
         { name: 'Home', icon: faHome, href: '/home' },
         { name: 'Profile', icon: faUser, href: '/profile' },
@@ -124,7 +129,7 @@ function createHeader(handleLogout: () => void): React.ReactElement {
         React.createElement(
             'div',
             { className: 'dashboard-header-left' },
-            React.createElement('h1', { className: 'dashboard-logo' }, 'GalaxyNET'),
+            React.createElement('h1', { className: 'dashboard-logo' }, 'GalaxyFlow'),
         ),
         React.createElement(
             'div',
@@ -151,12 +156,13 @@ function createHeader(handleLogout: () => void): React.ReactElement {
             React.createElement('div',
                 { className: 'dashboard-header-left' },
                 React.createElement(
-                    'button',
+                    Avatar,
                     {
-                        onClick: handleLogout,
-                        className: 'logout-button'
-                    },
-                    'Log Out'
+                        name: username,
+                        size: '40',
+                        round: true,
+                        onClick: handleLogout
+                    }
                 )
             )
         )
@@ -235,14 +241,22 @@ function createPost(
                 }
             }
         ),
+
         React.createElement(
             'div',
             { className: 'post-actions' },
-            ['Like', 'Comment', 'Share'].map((action) =>
-                React.createElement('button', null, action)
-            )
+            ['Like', 'Comment', 'Share'].map((action, index) => {
+                const icons = [FaThumbsUp, FaComment, FaShare];
+                return React.createElement(
+                    'button',
+                    { key: action },
+                    React.createElement(icons[index], { style: { marginRight: '5px' } }),
+                    action
+                );
+            })
         )
-    );
+
+   );
 }
 
 function createChatSidebar(

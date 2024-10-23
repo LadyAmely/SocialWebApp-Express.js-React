@@ -1,6 +1,4 @@
 
-
-
 .main-container {
     position: relative;
     width: auto;
@@ -15,7 +13,12 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('../../../public/best.jpg');
+    background:
+            radial-gradient(circle at 50% 50%, rgba(0, 128, 255, 0.7) 0%, rgba(12, 16, 18, 0.4) 30%, rgba(25, 45, 46, 0.1) 70%, rgba(255, 255, 255, 0) 100%),
+            radial-gradient(circle at 30% 70%, rgba(58, 213, 183, 0.6) 0%, rgba(13, 32, 45, 0.3) 50%, rgba(0, 0, 0, 0.5) 100%),
+            radial-gradient(circle at 70% 30%, rgba(70, 201, 255, 0.5) 0%, rgba(25, 40, 55, 0.4) 50%, rgba(0, 0, 0, 0.6) 100%),
+            radial-gradient(circle at 80% 60%, rgba(120, 85, 255, 0.5) 0%, rgba(20, 30, 40, 0.4) 50%, rgba(0, 0, 0, 0.6) 100%),
+            radial-gradient(circle at 20% 40%, rgba(72, 187, 255, 0.5) 0%, rgba(15, 20, 30, 0.4) 60%, rgba(0, 0, 0, 0.5) 100%);
     background-size: cover;
     background-position: center;
     opacity: 0.4;
@@ -28,64 +31,77 @@
 }
 
 .dashboard-header {
-    color: white;
+    color: #ffffff;
     display: flex;
-    max-height: 100px;
+    max-height: 70px;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 10px;
+    padding: 20px 40px;
     margin-bottom: 0;
+    background: linear-gradient(180deg, rgba(8, 9, 11, 0.95), rgba(10, 12, 14, 0.9));
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
+    transition: background 0.3s, padding 0.3s;
 }
 
 
-
 .dashboard-logo {
-    font-size: 18px;
-    margin-right: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    margin-right: 40px;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 1px;
 }
 
 nav ul {
     list-style: none;
     display: flex;
-    gap: 30px;
+    gap: 40px;
     margin-left: auto;
-    width: 100%;
-    padding: 10px;
+    padding: 0;
 }
 
 nav ul li a {
     text-decoration: none;
-    color: rgba(255, 255, 255, 0.68);
-    font-weight: 400;
-    font-size: 20px;
-    transition: color 0.3s;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 4px;
+    transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 nav ul li a:hover {
     color: #ffffff;
+    background-color: rgba(173, 216, 230, 0.15);
 }
-
 
 nav ul li a::after {
     content: '';
     display: block;
     height: 2px;
     width: 0;
-    background-color: #bddcfb;
-    transition: width 0.3s;
+    background-color: #4f9cdf;
+    transition: width 0.3s ease;
+    margin-top: 5px;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
 }
 
 .nav-link {
     display: flex;
     align-items: center;
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    font-size: 20px;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.85);
 }
 
-nav ul li a:hover::after {
-    width: 100%;
+.nav-link:hover {
+    color: #ffffff;
+    background-color: rgba(0, 123, 255, 0.1);
+    border-radius: 4px;
 }
 
 .search-bar {
@@ -164,19 +180,20 @@ nav ul li a:hover::after {
 
 .sidebar ul li a {
     text-decoration: none;
-    color: #c0e1ff;
+    color: #a9b8c5;
     padding: 14px 18px;
     display: flex;
     align-items: center;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.05);
-    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s, color 0.3s;
 }
 
 .sidebar ul li a:hover {
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     transform: translateY(-3px);
+    color: #e6f1ff;
 }
 
 .sidebar a {
@@ -186,14 +203,14 @@ nav ul li a:hover::after {
 
 .sidebar .icon {
     margin-right: 12px;
-    color: #ffffff;
+    color: #8aa7c5;
     font-size: 1.4em;
+    transition: color 0.3s;
 }
 
 .sidebar ul li a:hover .icon {
-    color: #ffffff;
+    color: #f0f6ff;
 }
-
 
 .feed {
     flex: 1;
@@ -201,7 +218,7 @@ nav ul li a:hover::after {
     overflow-y: auto;
     height: 100vh;
     scrollbar-width: thin;
-    scrollbar-color: #75a7d8 rgba(39, 50, 71, 0.94);
+    scrollbar-color: #20273a rgba(21, 26, 35, 0.94);
 }
 
 
@@ -225,7 +242,7 @@ nav ul li a:hover::after {
     height: 50px;
     border-radius: 50%;
     margin-right: 15px;
-    margin-left: 15px;
+    margin-left: 5px;
     border: 2px solid #bddcfb;
 }
 
@@ -250,8 +267,11 @@ nav ul li a:hover::after {
 
 .post-actions {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 100px;
     margin-top: 15px;
+    margin-left: 20px;
+    margin-right: 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding-top: 10px;
 }
@@ -262,7 +282,7 @@ nav ul li a:hover::after {
     color: #bddcfb;
     cursor: pointer;
     font-size: 16px;
-    padding: 8px 12px;
+    padding: 8px 10px;
     border-radius: 8px;
     transition: background-color 0.3s, color 0.3s;
 }
@@ -331,7 +351,7 @@ nav ul li a:hover::after {
 }
 
 
-button {
+.dashboard-header-left button {
     position: relative;
     z-index: 2;
     width: 100px;
@@ -384,7 +404,7 @@ button {
 .post-image{
     width: 100%;
     border-radius: 10px;
-    height: 800px;
+    height: auto;
     border: none;
     justify-content: center;
 }

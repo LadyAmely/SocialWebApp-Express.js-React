@@ -34,6 +34,8 @@
 }
 
 
+
+
 .registration-form p {
     color: #ffffff;
     margin-top: 10px;
@@ -85,11 +87,12 @@ a:hover {
     color: #ffffff;
     font-size: 16px;
     cursor: pointer;
+    justify-content: center;
     border-radius: 4px;
     z-index: 2;
 }
 
-.registration-form .social-login button {
+.form button {
     padding: 10px;
     border: 1px solid #cccccc;
     background-color: #f9f9f9;

@@ -13,7 +13,7 @@ function Header(): React.ReactElement{
             React.createElement(
                 'div',
                 {className: 'logo'},
-                React.createElement('h1', null, 'GalaxyNET'),
+                React.createElement('h1', null, 'GalaxyFlow'),
                 React.createElement(
                     'nav',
                     null,
