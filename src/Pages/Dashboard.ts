@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import { faHome, faUser, faComments, faUsers, faCalendar, faNewspaper, faCog } from '@fortawesome/free-solid-svg-icons';
 import Chat from '../Components/Chat';
 import { FaThumbsUp, FaComment, FaShare } from 'react-icons/fa';
+import Footer from "../Components/Footer";
 
 
 function Dashboard(): React.ReactElement {
@@ -110,13 +111,15 @@ function Dashboard(): React.ReactElement {
                 handleUserClick,
                 username ?? 'Unknown User'
             ),
-        )
+
+        ),
+        React.createElement(Footer)
     );
 }
 
 function createHeader(username: string, handleLogout: () => void): React.ReactElement {
     const navItems = [
-        { name: 'Home', icon: faHome, href: '/home' },
+        { name: 'Home', icon: faHome, href: '/dashboard' },
         { name: 'Profile', icon: faUser, href: '/profile' },
         { name: 'Forum', icon: faComments, href: '/forum' },
         { name: 'Community', icon: faUsers, href: '/community' },
@@ -164,20 +167,22 @@ function createHeader(username: string, handleLogout: () => void): React.ReactEl
                         onClick: handleLogout
                     }
                 )
-            )
-        )
+            ),
+
+        ),
+
     );
 }
 
 function createSidebar(): React.ReactElement {
     const menuItems = [
-        { name: 'Home', icon: faHome },
-        { name: 'My Profile', icon: faUser },
-        { name: 'Forum', icon: faComments },
-        { name: 'Community', icon: faUsers },
-        { name: 'Events', icon: faCalendar },
-        { name: 'News', icon: faNewspaper },
-        { name: 'Settings', icon: faCog },
+        { name: 'Home', icon: faHome, href:'/dashboard' },
+        { name: 'My Profile', icon: faUser, href: '/profile' },
+        { name: 'Forum', icon: faComments, href: '/forum' },
+        { name: 'Community', icon: faUsers, href: '/community' },
+        { name: 'Events', icon: faCalendar, href: '/events' },
+        { name: 'News', icon: faNewspaper , href: '/news'},
+        { name: 'Settings', icon: faCog, href: '/settings' },
     ];
     return React.createElement(
         'aside',
@@ -189,7 +194,7 @@ function createSidebar(): React.ReactElement {
                 React.createElement(
                     'li',
                     { key: item.name },
-                    React.createElement('a', { href: '#' },
+                    React.createElement('a', { href: item.href },
                         React.createElement(FontAwesomeIcon, { icon: item.icon, className: 'icon' }),
                         ` ${item.name}`
                     )

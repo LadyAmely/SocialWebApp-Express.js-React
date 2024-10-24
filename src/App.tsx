@@ -7,6 +7,9 @@ import Dashboard from './Pages/Dashboard';
 import { AuthProvider } from './context/AuthContext';
 import Profil from "./Pages/Profil";
 import Forum from './Pages/Forum';
+import Events from './Pages/Events';
+import Community from "./Pages/Community";
+import News from './Pages/News';
 
 function App() {
   return (
@@ -19,6 +22,9 @@ function App() {
            <Route path="/dashboard" element={<Dashboard/>}/>
            <Route path="/profile" element={<Profil/>}/>
            <Route path="/forum" element={<Forum/>}/>
+           <Route path="/events" element={<Events/>}/>
+           <Route path="/community" element={<Community/>}/>
+           <Route path="/news" element={<News/>}/>
        </Routes>
    </Router>
       </AuthProvider>

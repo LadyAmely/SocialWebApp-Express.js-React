@@ -4,12 +4,12 @@ import {faCalendar, faCog, faComments, faHome, faNewspaper, faUser, faUsers} fro
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Avatar from "react-avatar";
 import '../css/pages/dashboard.css';
-import '../css/pages/forum.css';
+import '../css/pages/events.css';
 import Chat from "../Components/Chat";
 import Footer from "../Components/Footer";
 import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
 
-function Forum() : React.ReactElement{
+function Events() : React.ReactElement{
 
     const { username, setUsername } = useAuth();
     const displayName = username || 'Unknown User';
@@ -248,9 +248,9 @@ function Forum() : React.ReactElement{
 
 
     return React.createElement(
-        'div',
-        React.Fragment,
-        createHeader(displayName, handleLogout),
+      'div',
+      React.Fragment,
+      createHeader(displayName, handleLogout),
         React.createElement(
             'div',
             {className: 'main-container'},
@@ -276,4 +276,4 @@ function Forum() : React.ReactElement{
 
 }
 
-export default Forum;
+export default Events;
