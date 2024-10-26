@@ -18,6 +18,7 @@ import "../css/pages/profil.css";
 import Chat from "../Components/Chat";
 import Footer from "../Components/Footer";
 import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
+import {INTEGER} from "sequelize";
 
 function Forum() : React.ReactElement{
 
@@ -29,6 +30,21 @@ function Forum() : React.ReactElement{
     const [activeChats, setActiveChats] = useState<string[]>([]);
     const [newPostDescription, setNewPostDescription] = useState<string>("");
     const [newPostTitle, setNewPostTitle] = useState<string>("");
+    const [newComments, setNewComments] = useState<{ [postId: string]: string }>({});
+    const [activePostId, setActivePostId] = useState<string | null>(null);
+   // const [likes, setLikes] = useState(0);
+    const [likes, setLikes] = useState<{ [key: string]: number }>({});
+    //const [likes, setLikes] = useState(likesCount);
+    const [userGroups, setUserGroup] = useState<string[]>([]);
+    const [userId, setUserId] = useState<string | null>(null);
+
+    useEffect(() => {
+        const initialLikes = forumPosts.reduce((acc, post) => {
+            acc[post.forum_post_id] = post.likes;
+            return acc;
+        }, {} as { [key: string]: number });
+        setLikes(initialLikes);
+    }, [forumPosts]);
 
     useEffect(()=>{
         const fetchForumPosts = async() =>{
@@ -44,6 +60,55 @@ function Forum() : React.ReactElement{
         fetchForumPosts();
     }, []);
 
+
+    const fetchUserIdByUsername = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/auth/users/user_id?username=${username}`);
+            const data = await response.json();
+
+            if (data && data.id) {
+                setUserId(data.id);
+            } else {
+                console.log("Nie znaleziono userId dla podanego username.");
+            }
+        } catch (error) {
+            console.log("Błąd podczas pobierania userId:", error);
+        }
+    };
+
+
+
+    interface UserGroup {
+        title: string;
+    }
+
+
+
+    const fetchUserGroup = async () => {
+        if (!userId) return;
+        try {
+            const response = await fetch(`http://localhost:5000/api/user-groups/${userId}`);
+            const data = await response.json();
+            setUserGroup(data.map((group: UserGroup) => group.title));
+        } catch (error) {
+            console.log("Wystąpił błąd podczas pobierania grupy użytkownika:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (username) {
+            fetchUserIdByUsername();
+        }
+    }, [username]);
+
+
+
+    useEffect(() => {
+        fetchUserGroup();
+    }, [userId]);
+
+
+
     useEffect(()=>{
         const fetchCommentPosts = async() =>{
             try{
@@ -58,13 +123,18 @@ function Forum() : React.ReactElement{
         fetchCommentPosts();
     }, []);
 
+    const handleTextareaFocus = (postId: string) => {
+        setActivePostId(postId);
+    };
+
     const postForumPost = async () => {
         const newPost = {
             title: newPostTitle,
             description: newPostDescription,
             username: username,
             created_at: new Date(),
-            updated_at: new Date()
+            updated_at: new Date(),
+          //  likes: new INTEGER(),
         };
 
         try {
@@ -86,6 +156,7 @@ function Forum() : React.ReactElement{
             setForumPosts([...forumPosts, { ...data, created_at: newPost.created_at, updated_at: newPost.updated_at }]);
             setNewPostDescription('');
             setNewPostTitle('');
+            //setLikes(0);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -159,7 +230,7 @@ function Forum() : React.ReactElement{
                                 )
                             )
                         )
-                    )
+                    ),
                 ),
                 React.createElement('div',
                     { className: 'dashboard-header-left' },
@@ -180,14 +251,14 @@ function Forum() : React.ReactElement{
 
     function createSidebar(): React.ReactElement {
         const menuItems = [
-            { name: 'Home', icon: faHome, href: '/dashboard'},
-            { name: 'My Profile', icon: faUser, href: '/profile'},
+            { name: 'Home', icon: faHome, href: '/dashboard' },
             { name: 'Forum', icon: faComments, href: '/forum' },
             { name: 'Community', icon: faUsers, href: '/community' },
             { name: 'Events', icon: faCalendar, href: '/events' },
             { name: 'News', icon: faNewspaper, href: '/news' },
-            { name: 'Settings', icon: faCog, href: '/settings' },
+
         ];
+
         return React.createElement(
             'aside',
             { className: 'sidebar' },
@@ -203,7 +274,32 @@ function Forum() : React.ReactElement{
                             ` ${item.name}`
                         )
                     )
-                )
+                ),
+
+            ),
+            React.createElement(
+                'h3',
+                null,
+                'Your groups'
+            ),
+            userGroups.map((groupTitle, index) =>
+                React.createElement(
+                    'li',
+                    { key: `group-${index}`, style: { listStyleType: 'none', marginBottom: '10px', display: 'flex', alignItems: 'center' } }, // Ustawienie display na flex, aby wyśrodkować elementy
+                    React.createElement(
+                        Avatar,
+                        {
+                            name: groupTitle,
+                            size: '40',
+                            round: true,
+                        }
+                    ),
+                    React.createElement(
+                        'span',
+                        { style: { marginLeft: '10px', color: 'rgba(200, 220, 230, 0.6)' } },
+                        groupTitle
+                    )
+                ),
             )
         );
     }
@@ -336,12 +432,41 @@ function Forum() : React.ReactElement{
         )
     }
 
+    const handleLike = async (postId: string) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/forum-posts/${postId}/like`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log(data.message);
+            setLikes((prevLikes) => ({
+                ...prevLikes,
+                [postId]: (prevLikes[postId] || 0) + 1,
+            }));
+           // setLikes(likes + 1);
+        } catch (error) {
+            console.error('Error liking the post:', error);
+        }
+    }
 
     function createForumPost(
         user: { name: string; avatar: React.ReactNode },
         title: string,
         content: string,
+        postId: string,
+        likesCount: number,
+        handleLike: (postId: string)=>void,
     ): React.ReactElement {
+
+
         return React.createElement(
             'div',
             { className: 'forum-thread' },
@@ -350,32 +475,36 @@ function Forum() : React.ReactElement{
             React.createElement(
                 'div',
                 { className: 'post-actions',  style: { display: 'flex', justifyContent: 'flex-start', gap: '10px' } },
-                ['0', '0'].map((action, index) => {
+                [likesCount, '0'].map((action, index) => {
                     const icons = [FaThumbsUp, FaComment];
                     return React.createElement(
                         'button',
-                        { key: action,style: {backgroundColor: "transparent"} },
+                        { key: action,style: {backgroundColor: "transparent"}, onClick: index === 0 ? handleLike : undefined },
                         React.createElement(icons[index], { style: { marginRight: '5px' } }),
                         action
                     );
                 })
             ),
             React.createElement('div', { className: 'create-post-comment' },
-                React.createElement('div', {className: 'post-line'},
+                React.createElement('div', { className: 'post-line' },
+                    React.createElement('div', { className: 'post-photo' },
+                        React.createElement(Avatar, { name: user.name, size: '100%', round: true }),
+                    ),
+                    React.createElement('textarea', {
+                        className: "create-post-comment-textarea",
+                        placeholder: "Add a comment...",
+                        value: newComments[postId] || "",
+                        onFocus: () => handleTextareaFocus(postId),
+                       // onChange: (e) => handleCommentChange(postId, e.target.value),
+                    }),
+                    //React.createElement('button', { onClick: () => addComment(postId) }, 'Submit')
+                )
+            )
 
-                React.createElement('div', {className: 'post-photo'},
-                    React.createElement(Avatar, { name: username ?? 'User', size: '100%', round: true }),
-                ),
-                React.createElement('textarea', { className: "create-post-comment-textarea", placeholder: "Add a comment...",
-                       // value: newPostTitle,
-
-                       // onChange: (e: { target: { value: any; }; }) => setNewPostTitle(e.target.value),
-                    },
-                ),
-            ),
-                ),
         );
     }
+
+
 
     return React.createElement(
         'div',
@@ -403,11 +532,11 @@ function Forum() : React.ReactElement{
                                 React.createElement(Avatar, { name: username ?? 'User', size: '100%', round: true }),
                             ),
                             React.createElement('textarea', { placeholder: "Ask a question",
-                                value: newPostTitle,
-                                onChange: (e: { target: { value: any; }; }) => setNewPostTitle(e.target.value),
+                                    value: newPostTitle,
+                                    onChange: (e: { target: { value: any; }; }) => setNewPostTitle(e.target.value),
 
-                            },
-                                ),
+                                },
+                            ),
                         ),
                         React.createElement(
                             'textarea',
@@ -423,7 +552,7 @@ function Forum() : React.ReactElement{
                     ),
 
                     forumPosts.map((forumPost) => {
-                        const postComments = comments.filter(comment => comment.postId === forumPost.id);
+                        const postComments = comments.filter(comment => comment.postId === forumPost.forum_post_id);
                         return createForumPost(
                             {
                                 name: forumPost.username,
@@ -431,12 +560,13 @@ function Forum() : React.ReactElement{
                             },
                             forumPost.title,
                             forumPost.description,
-
+                            forumPost.forum_post_id,
+                            likes[forumPost.forum_post_id] || 0,
+                            handleLike
+                           // forumPost.likes,
 
                         );
-
                     }),
-
                 ),
                 React.createElement(
                     'div',
