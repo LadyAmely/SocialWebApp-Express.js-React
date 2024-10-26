@@ -359,7 +359,21 @@ function Forum() : React.ReactElement{
                         action
                     );
                 })
-            )
+            ),
+            React.createElement('div', { className: 'create-post-comment' },
+                React.createElement('div', {className: 'post-line'},
+
+                React.createElement('div', {className: 'post-photo'},
+                    React.createElement(Avatar, { name: username ?? 'User', size: '100%', round: true }),
+                ),
+                React.createElement('textarea', { className: "create-post-comment-textarea", placeholder: "Add a comment...",
+                       // value: newPostTitle,
+
+                       // onChange: (e: { target: { value: any; }; }) => setNewPostTitle(e.target.value),
+                    },
+                ),
+            ),
+                ),
         );
     }
 
@@ -386,7 +400,7 @@ function Forum() : React.ReactElement{
                         React.createElement('div', {className: 'post-line'},
 
                             React.createElement('div', {className: 'post-photo'},
-                                React.createElement(Avatar, { name: username ?? 'User', size: '40px', round: true }),
+                                React.createElement(Avatar, { name: username ?? 'User', size: '100%', round: true }),
                             ),
                             React.createElement('textarea', { placeholder: "Ask a question",
                                 value: newPostTitle,
@@ -394,7 +408,6 @@ function Forum() : React.ReactElement{
 
                             },
                                 ),
-
                         ),
                         React.createElement(
                             'textarea',

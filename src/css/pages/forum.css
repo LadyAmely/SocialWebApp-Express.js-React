@@ -186,6 +186,7 @@
 }
 
 
+
 .create-post-forum {
     width: 100%;
     background-color: rgba(28, 45, 56, 0.9);
@@ -195,6 +196,41 @@
     margin-bottom: 25px;
     overflow: hidden;
     box-sizing: border-box;
+}
+
+.create-post-comment {
+    width: 100%;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.create-post-comment-textarea{
+    width: 90%;
+    height: 20px;
+    padding: 12px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    resize: none;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.04);
+    font-size: 16px;
+    border: none;
+    margin-top: 10px;
+    outline: none;
+    margin-bottom: 10px;
+}
+
+.create-post-comment textarea::placeholder{
+    color: rgba(200, 220, 230, 0.6);
+}
+
+.create-post-comment textarea:focus {
+    border-color: rgba(255, 255, 255, 0.13);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .create-post-forum textarea {
@@ -240,7 +276,7 @@
 textarea.post-description-textarea,
 textarea.new-thread-textarea {
     display: block;
-    width: 95%;
+    width: 98%;
     height: 50px;
     padding: 12px;
     justify-content: center;
@@ -268,31 +304,32 @@ textarea.new-thread-textarea:focus {
 }
 
 .post-forum-btn {
-    background: linear-gradient(135deg, rgba(70, 150, 200, 1) 0%, rgba(58, 130, 190, 1) 100%);
+    padding: 14px 22px;
+    background-color: #46a5ff;
     color: #fff;
-    padding: 12px 28px;
+    font-size: 0.9em;
+    font-weight: 600;
     border: none;
-    border-radius: 8px;
-    font-size: 1em;
-    font-weight: bold;
+    border-radius: 12px;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
-    margin-top: 15px;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 12px rgba(70, 165, 255, 0.4);
+    margin-left: auto;
     display: block;
     width: fit-content;
-    margin-left: auto;
-    margin-right: 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Arial', sans-serif;
 }
 
+
 .post-forum-btn:hover {
-    background: linear-gradient(135deg, rgba(90, 170, 220, 1) 0%, rgba(78, 140, 200, 1) 100%);
-    transform: scale(1.03);
-    box-shadow: 0 6px 12px rgba(0, 128, 255, 0.3);
+    background-color: #5ab3ff;
+    box-shadow: 0 6px 15px rgba(90, 179, 255, 0.4);
+    transform: scale(1.02);
 }
+
 
 .post-forum-btn:active {
     transform: scale(0.98);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
+
