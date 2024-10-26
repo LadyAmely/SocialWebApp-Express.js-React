@@ -278,8 +278,8 @@ function Forum() : React.ReactElement{
 
             ),
             React.createElement(
-                'h3',
-                null,
+                'p',
+                {className: 'text-group'},
                 'Your groups'
             ),
             userGroups.map((groupTitle, index) =>

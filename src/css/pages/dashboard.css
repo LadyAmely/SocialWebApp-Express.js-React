@@ -446,3 +446,17 @@ nav ul li a:hover::after {
     width: 200px;
     margin: 20px;
 }
+
+.text-group {
+    font-size: 1.1em;
+    color: #e6f1ff;
+    font-weight: 400;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    padding: 10px;
+    text-transform: uppercase;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    letter-spacing: 1px;
+    transition: color 0.3s;
+}

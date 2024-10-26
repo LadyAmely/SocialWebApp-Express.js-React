@@ -16,10 +16,62 @@ function Dashboard(): React.ReactElement {
     const [posts, setPosts] = useState<any[]>([]);
     const [users, setUsers] = useState<string[]>([]);
     const [activeChats, setActiveChats] = useState<string[]>([]);
-
     const displayName = username || 'Unknown User';
+    const [userGroups, setUserGroup] = useState<string[]>([]);
+    const [userId, setUserId] = useState<string | null>(null);
 
     const { FaThumbsUp, FaComment, FaShare } = require('react-icons/fa');
+
+
+    const fetchUserIdByUsername = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/auth/users/user_id?username=${username}`);
+            const data = await response.json();
+
+            if (data && data.id) {
+                setUserId(data.id);
+            } else {
+                console.log("Nie znaleziono userId dla podanego username.");
+            }
+        } catch (error) {
+            console.log("Błąd podczas pobierania userId:", error);
+        }
+    };
+
+
+
+    interface UserGroup {
+        title: string;
+    }
+
+
+
+    const fetchUserGroup = async () => {
+        if (!userId) return;
+        try {
+            const response = await fetch(`http://localhost:5000/api/user-groups/${userId}`);
+            const data = await response.json();
+            setUserGroup(data.map((group: UserGroup) => group.title));
+        } catch (error) {
+            console.log("Wystąpił błąd podczas pobierania grupy użytkownika:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (username) {
+            fetchUserIdByUsername();
+        }
+    }, [username]);
+
+
+
+    useEffect(() => {
+        fetchUserGroup();
+    }, [userId]);
+
+
+
+
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -177,12 +229,11 @@ function createHeader(username: string, handleLogout: () => void): React.ReactEl
 function createSidebar(): React.ReactElement {
     const menuItems = [
         { name: 'Home', icon: faHome, href:'/dashboard' },
-        { name: 'My Profile', icon: faUser, href: '/profile' },
         { name: 'Forum', icon: faComments, href: '/forum' },
         { name: 'Community', icon: faUsers, href: '/community' },
         { name: 'Events', icon: faCalendar, href: '/events' },
         { name: 'News', icon: faNewspaper , href: '/news'},
-        { name: 'Settings', icon: faCog, href: '/settings' },
+
     ];
     return React.createElement(
         'aside',
@@ -200,7 +251,9 @@ function createSidebar(): React.ReactElement {
                     )
                 )
             )
-        )
+        ),
+
+
     );
 }
 
