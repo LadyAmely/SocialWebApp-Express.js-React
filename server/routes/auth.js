@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const { User } = require('../models');
 const router = express.Router();
 const path = require('path');
+const sequelize = require("../config/db");
 
 let loggedInUsers = [];
 
@@ -15,6 +16,32 @@ router.get('/register', (req, res) => {
 router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });
+
+router.get('/users/user_id', async (req, res) => {
+    try {
+        const { username } = req.query;
+        if (!username) {
+            return res.status(400).json({ message: 'Brakujący parametr username' });
+        }
+        const [results, metadata] = await sequelize.query(
+            'SELECT * FROM "Users" WHERE username = :username',
+            {
+                replacements: { username },
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'Użytkownik nie znaleziony' });
+        }
+
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Błąd podczas pobierania użytkownika:', error.message);
+        res.status(500).json({ message: 'Błąd serwera' });
+    }
+});
+
 
 router.get('/users', async (req, res) => {
     try {

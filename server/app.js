@@ -53,6 +53,24 @@ app.get('/api/posts', async (req, res) => {
     }
 });
 
+app.get('/api/user-groups/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const results = await sequelize.query(
+            'SELECT title FROM user_groups WHERE user_id = :id',
+            {
+                replacements: { id: id },
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        res.status(200).json(results);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 app.get('/api/news', async(req, res) => {
     try {
         const [results, metadata] = await sequelize.query('SELECT * FROM news');
@@ -135,6 +153,30 @@ app.get('/api/forum-posts', async (req, res) => {
     }
 });
 
+app.put('/api/forum-posts/:forum_post_id/like', async (req, res) => {
+    const { forum_post_id } = req.params;
+
+    console.log(`Attempting to like post with ID: ${forum_post_id}`);
+
+    try {
+        const [results] = await sequelize.query(
+            'UPDATE forum_posts SET likes = likes + 1 WHERE forum_post_id = :forum_post_id',
+            {
+                replacements: { forum_post_id },
+            }
+        );
+        console.log('Query results:', results);
+
+        if (results[0] > 0) {
+            res.status(200).json({ message: 'Likes increased successfully.' });
+        } else {
+            res.status(404).json({ error: 'Post not found.' });
+        }
+    } catch (error) {
+        console.error('Error updating likes:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 
 app.post('/api/community', async(req, res)=>{
@@ -195,6 +237,10 @@ app.get('/api/comment-posts', async(req, res) => {
 });
 
 
+
+
+
+
 app.delete('/api/events/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -234,6 +280,8 @@ app.delete('/api/community/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
 
 app.put('/api/events/:id', async (req, res) => {
     const { id } = req.params;
