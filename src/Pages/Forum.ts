@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useAuth} from "../context/AuthContext";
 import {faCalendar, faCog, faComments, faHome, faNewspaper, faUser, faUsers} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -13,8 +13,73 @@ function Forum() : React.ReactElement{
 
     const { username, setUsername } = useAuth();
     const displayName = username || 'Unknown User';
+    const [comments, setCommentPosts] = useState<any[]>([]);
+    const [forumPosts, setForumPosts] = useState<any[]>([]);
     const [users, setUsers] = useState<string[]>([]);
     const [activeChats, setActiveChats] = useState<string[]>([]);
+    const [newPostDescription, setNewPostDescription] = useState<string>("");
+    const [newPostTitle, setNewPostTitle] = useState<string>("");
+
+    useEffect(()=>{
+        const fetchForumPosts = async() =>{
+            try{
+                const response = await fetch('http://localhost:5000/api/forum-posts');
+                const data = await response.json();
+                setForumPosts(data);
+
+            }catch(error){
+                console.log(error);
+            }
+        };
+        fetchForumPosts();
+    }, []);
+
+    useEffect(()=>{
+        const fetchCommentPosts = async() =>{
+            try{
+                const response = await fetch('http://localhost:5000/api/comment-posts');
+                const data = await response.json();
+                setCommentPosts(data);
+
+            }catch(error){
+                console.log(error);
+            }
+        };
+        fetchCommentPosts();
+    }, []);
+
+    const postForumPost = async () => {
+        const newPost = {
+            title: newPostTitle,
+            description: newPostDescription,
+            username: username,
+            created_at: new Date(),
+            updated_at: new Date()
+        };
+
+        try {
+            const response = await fetch('http://localhost:5000/api/forum-posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newPost),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to post data');
+            }
+
+            const data = await response.json();
+            console.log('Post created successfully:', data);
+
+            setForumPosts([...forumPosts, { ...data, created_at: newPost.created_at, updated_at: newPost.updated_at }]);
+            setNewPostDescription('');
+            setNewPostTitle('');
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
 
     const handleLogout = async () => {
@@ -246,6 +311,48 @@ function Forum() : React.ReactElement{
     }
 
 
+    function createComment(
+        user: {name: string, avatar: string | React.ReactNode;},
+        content: string,
+    ): React.ReactElement{
+        return React.createElement(
+            'div',
+            { className: 'forum-comment' },
+            React.createElement(
+                'div',
+                { className: 'forum-comment-content' },
+                content
+            )
+        )
+    }
+
+
+    function createForumPost(
+        user: { name: string; avatar: React.ReactNode },
+        title: string,
+        content: string,
+        comments: any[]
+    ): React.ReactElement {
+        return React.createElement(
+            'div',
+            { className: 'forum-thread' },
+            React.createElement('div', { className: 'forum-thread-title' }, title),
+            React.createElement('div', { className: 'forum-thread-description' }, content),
+
+                    comments.map((comment) =>
+                        createComment(
+                            { name: comment.username, avatar: React.createElement(Avatar, { name: comment.username, size: '40', round: true }) },
+                            comment.content
+                        )
+
+
+                )
+
+        );
+    }
+
+
+
 
     return React.createElement(
         'div',
@@ -257,7 +364,98 @@ function Forum() : React.ReactElement{
             createSidebar(),
             React.createElement(
                 'section',
-                {className: 'feed'}
+                {className: 'feed'},
+                React.createElement(
+                    'div',
+                    {className: 'forum-container'},
+                    React.createElement(
+                        'div',
+                        {className: 'forum-header'},
+                        'Astronomy Enthusiasts Forum'
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'new-thread-container' },
+                        React.createElement(
+                            'h2',
+                            {className: 'forum-thread-title'},
+                            'Create a New Thread'
+                        ),
+                        React.createElement(
+                            'input',
+                            {
+                                type: 'text',
+                                placeholder: 'Enter thread title...',
+                                className: 'new-thread-title-input',
+                                value: newPostTitle,
+                                onChange: (e) => setNewPostTitle(e.target.value)
+                            }
+                        ),
+                        React.createElement(
+                            'textarea',
+                            {
+                                type: 'text',
+                                placeholder: 'Enter thread description...',
+                                className: 'new-thread-textarea',
+                                value: newPostDescription,
+                                onChange: (e: { target: { value: any; }; }) => setNewPostDescription(e.target.value),
+                            }
+                        ),
+                        React.createElement(
+                            'button',
+                            { className: 'forum-new-thread-btn', onClick: postForumPost},
+                            'Post Thread'
+                        )
+                    ),
+                    forumPosts.map((forumPost) => {
+                        const postComments = comments.filter(comment => comment.postId === forumPost.id);
+                        return createForumPost(
+                            {
+                                name: forumPost.username,
+                                avatar: React.createElement(Avatar, { name: forumPost.username, size: '50', round: true }),
+                            },
+                            forumPost.title,
+                            forumPost.description,
+                            postComments
+                        );
+
+                    }),
+
+
+                    React.createElement(
+                        'div',
+                        { className: 'new-comment-container' },
+                        React.createElement(
+                            'textarea',
+                            { placeholder: 'Add a comment...', className: 'new-comment-textarea' }
+                        ),
+                        React.createElement(
+                            'button',
+                            { className: 'forum-new-comment-btn' },
+                            'Add Comment'
+                        )
+                    ),
+
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'forum-pagination' },
+                    React.createElement(
+                        'a',
+                        { href: '#', className: 'pagination-link' },
+                        '1'
+                    ),
+                    React.createElement(
+                        'a',
+                        { href: '#', className: 'pagination-link' },
+                        '2'
+                    ),
+                    React.createElement(
+                        'a',
+                        { href: '#', className: 'pagination-link' },
+                        '3'
+                    )
+                )
             ),
             createChatSidebar(
                 { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },
@@ -269,10 +467,6 @@ function Forum() : React.ReactElement{
         ),
         React.createElement(Footer)
     );
-
-
-
-
 
 }
 

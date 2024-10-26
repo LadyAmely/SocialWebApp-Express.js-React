@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useAuth} from "../context/AuthContext";
 import {faCalendar, faCog, faComments, faHome, faNewspaper, faUser, faUsers} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -13,9 +13,23 @@ function Community() : React.ReactElement{
 
     const { username, setUsername } = useAuth();
     const displayName = username || 'Unknown User';
+    const [groupPosts, setGroupPosts] = useState<any[]>([]);
     const [users, setUsers] = useState<string[]>([]);
     const [activeChats, setActiveChats] = useState<string[]>([]);
 
+    useEffect(()=>{
+        const fetchEventPosts = async() =>{
+            try{
+                const response = await fetch('http://localhost:5000/api/community');
+                const data = await response.json();
+                setGroupPosts(data);
+
+            }catch(error){
+                console.log(error);
+            }
+        };
+        fetchEventPosts();
+    }, []);
 
     const handleLogout = async () => {
         console.log('Logout button clicked');
@@ -245,8 +259,6 @@ function Community() : React.ReactElement{
         );
     }
 
-
-
     return React.createElement(
         'div',
         React.Fragment,
@@ -257,7 +269,19 @@ function Community() : React.ReactElement{
             createSidebar(),
             React.createElement(
                 'section',
-                {className: 'feed'}
+                {className: 'feed'},
+                groupPosts.map((groupPost)=>
+                    createPost(
+                        {
+                            name: groupPost.username,
+                            avatar: React.createElement(Avatar, { name: groupPost.username, size: '50', round: true }),
+                            time: new Date(groupPost.created_at).toLocaleString(),
+                        },
+                        groupPost.description,
+                        groupPost.image_path,
+                    )
+
+                ),
             ),
             createChatSidebar(
                 { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },

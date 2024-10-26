@@ -242,26 +242,6 @@ function Profil(): React.ReactElement {
         }
     }
 
-
-    /*
-
-    function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const file = event.target.files?.[0];
-        if (file) {
-            const newImageUrl = URL.createObjectURL(file);
-            setImageUrl(newImageUrl);
-            localStorage.setItem('profileImage', newImageUrl);
-            setFileInputKey(prev => prev + 1);
-        }
-    }
-
-     */
-
-
-
-
-
-
     const userCard = React.createElement(
 
         'div',

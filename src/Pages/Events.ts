@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useAuth} from "../context/AuthContext";
 import {faCalendar, faCog, faComments, faHome, faNewspaper, faUser, faUsers} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -13,9 +13,23 @@ function Events() : React.ReactElement{
 
     const { username, setUsername } = useAuth();
     const displayName = username || 'Unknown User';
+    const [eventPosts, setEventPosts] = useState<any[]>([]);
     const [users, setUsers] = useState<string[]>([]);
     const [activeChats, setActiveChats] = useState<string[]>([]);
 
+    useEffect(()=>{
+        const fetchEventPosts = async() =>{
+            try{
+                const response = await fetch('http://localhost:5000/api/events');
+                const data = await response.json();
+                setEventPosts(data);
+
+            }catch(error){
+                console.log(error);
+            }
+        };
+        fetchEventPosts();
+        }, []);
 
     const handleLogout = async () => {
         console.log('Logout button clicked');
@@ -257,7 +271,18 @@ function Events() : React.ReactElement{
             createSidebar(),
             React.createElement(
                 'section',
-                {className: 'feed'}
+                {className: 'feed'},
+                eventPosts.map((event_post) =>
+                    createPost(
+                        {
+                            name: event_post.username,
+                            avatar: React.createElement(Avatar, { name: event_post.username, size: '50', round: true }),
+                            time: new Date(event_post.created_at).toLocaleString(),
+                        },
+                        event_post.description,
+                        event_post.image_path,
+                    )
+                ),
             ),
             createChatSidebar(
                 { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },

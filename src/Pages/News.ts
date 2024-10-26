@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useAuth} from "../context/AuthContext";
 import {faCalendar, faCog, faComments, faHome, faNewspaper, faUser, faUsers} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -13,9 +13,22 @@ function News() : React.ReactElement{
 
     const { username, setUsername } = useAuth();
     const displayName = username || 'Unknown User';
+    const [newPosts, setNewPosts] = useState<any[]>([]);
     const [users, setUsers] = useState<string[]>([]);
     const [activeChats, setActiveChats] = useState<string[]>([]);
 
+    useEffect(()=>{
+        const fetchEventPosts = async() =>{
+            try{
+                const response = await fetch('http://localhost:5000/api/news');
+                const data = await response.json();
+                setNewPosts(data);
+            }catch(error){
+                console.log(error);
+            }
+        };
+        fetchEventPosts();
+    }, []);
 
     const handleLogout = async () => {
         console.log('Logout button clicked');
@@ -257,7 +270,18 @@ function News() : React.ReactElement{
             createSidebar(),
             React.createElement(
                 'section',
-                {className: 'feed'}
+                {className: 'feed'},
+                newPosts.map((new_post) =>
+                    createPost(
+                        {
+                            name: new_post.username,
+                            avatar: React.createElement(Avatar, { name: new_post.username, size: '50', round: true }),
+                            time: new Date(new_post.created_at).toLocaleString(),
+                        },
+                        new_post.description,
+                        new_post.image_path,
+                    )
+                ),
             ),
             createChatSidebar(
                 { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },
