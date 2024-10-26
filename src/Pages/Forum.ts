@@ -1,10 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {useAuth} from "../context/AuthContext";
-import {faCalendar, faCog, faComments, faHome, faNewspaper, faUser, faUsers} from "@fortawesome/free-solid-svg-icons";
+import {
+    faCalendar,
+    faCamera,
+    faCog,
+    faComments,
+    faHome,
+    faNewspaper,
+    faUser,
+    faUsers, faVideo
+} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Avatar from "react-avatar";
 import '../css/pages/dashboard.css';
 import '../css/pages/forum.css';
+import "../css/pages/profil.css";
 import Chat from "../Components/Chat";
 import Footer from "../Components/Footer";
 import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
@@ -331,28 +341,27 @@ function Forum() : React.ReactElement{
         user: { name: string; avatar: React.ReactNode },
         title: string,
         content: string,
-        comments: any[]
     ): React.ReactElement {
         return React.createElement(
             'div',
             { className: 'forum-thread' },
             React.createElement('div', { className: 'forum-thread-title' }, title),
             React.createElement('div', { className: 'forum-thread-description' }, content),
-
-                    comments.map((comment) =>
-                        createComment(
-                            { name: comment.username, avatar: React.createElement(Avatar, { name: comment.username, size: '40', round: true }) },
-                            comment.content
-                        )
-
-
-                )
-
+            React.createElement(
+                'div',
+                { className: 'post-actions',  style: { display: 'flex', justifyContent: 'flex-start', gap: '10px' } },
+                ['0', '0'].map((action, index) => {
+                    const icons = [FaThumbsUp, FaComment];
+                    return React.createElement(
+                        'button',
+                        { key: action,style: {backgroundColor: "transparent"} },
+                        React.createElement(icons[index], { style: { marginRight: '5px' } }),
+                        action
+                    );
+                })
+            )
         );
     }
-
-
-
 
     return React.createElement(
         'div',
@@ -373,40 +382,33 @@ function Forum() : React.ReactElement{
                         {className: 'forum-header'},
                         'Astronomy Enthusiasts Forum'
                     ),
-                    React.createElement(
-                        'div',
-                        { className: 'new-thread-container' },
-                        React.createElement(
-                            'h2',
-                            {className: 'forum-thread-title'},
-                            'Create a New Thread'
-                        ),
-                        React.createElement(
-                            'input',
-                            {
-                                type: 'text',
-                                placeholder: 'Enter thread title...',
-                                className: 'new-thread-title-input',
+                    React.createElement('div', { className: 'create-post-forum' },
+                        React.createElement('div', {className: 'post-line'},
+
+                            React.createElement('div', {className: 'post-photo'},
+                                React.createElement(Avatar, { name: username ?? 'User', size: '40px', round: true }),
+                            ),
+                            React.createElement('textarea', { placeholder: "Ask a question",
                                 value: newPostTitle,
-                                onChange: (e) => setNewPostTitle(e.target.value)
-                            }
+                                onChange: (e: { target: { value: any; }; }) => setNewPostTitle(e.target.value),
+
+                            },
+                                ),
+
                         ),
                         React.createElement(
                             'textarea',
                             {
-                                type: 'text',
-                                placeholder: 'Enter thread description...',
-                                className: 'new-thread-textarea',
+                                placeholder: 'Add a description',
                                 value: newPostDescription,
-                                onChange: (e: { target: { value: any; }; }) => setNewPostDescription(e.target.value),
+                                onChange: (e: { target: { value: React.SetStateAction<string>; }; }) => setNewPostDescription(e.target.value),
+                                className: 'post-description-textarea'
                             }
                         ),
-                        React.createElement(
-                            'button',
-                            { className: 'forum-new-thread-btn', onClick: postForumPost},
-                            'Post Thread'
-                        )
+
+                        React.createElement('button', { className: 'post-forum-btn', onClick: postForumPost},  'Publish')
                     ),
+
                     forumPosts.map((forumPost) => {
                         const postComments = comments.filter(comment => comment.postId === forumPost.id);
                         return createForumPost(
@@ -416,25 +418,11 @@ function Forum() : React.ReactElement{
                             },
                             forumPost.title,
                             forumPost.description,
-                            postComments
+
+
                         );
 
                     }),
-
-
-                    React.createElement(
-                        'div',
-                        { className: 'new-comment-container' },
-                        React.createElement(
-                            'textarea',
-                            { placeholder: 'Add a comment...', className: 'new-comment-textarea' }
-                        ),
-                        React.createElement(
-                            'button',
-                            { className: 'forum-new-comment-btn' },
-                            'Add Comment'
-                        )
-                    ),
 
                 ),
                 React.createElement(
