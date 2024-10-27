@@ -8,6 +8,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faCamera, faVideo, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { faNewspaper, faInfoCircle, faUserFriends, faImage, faFilm, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faMapMarkerAlt, faHeart, faEye, faStar } from '@fortawesome/free-solid-svg-icons';
+
 
 function Profil(): React.ReactElement {
     const { username } = useAuth();
@@ -19,6 +21,7 @@ function Profil(): React.ReactElement {
     const [selectedUser, setSelectedUser] = useState<string | null>(null);
     const [newPostDescription, setNewPostDescription] = useState<string>("");
     const [newPostImage, setNewPostImage] = useState<string | null>(null);
+    const [isEditWindowVisible, setEditWindowVisible] = React.useState(false);
 
     function handleDescriptionChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
 
@@ -62,6 +65,9 @@ function Profil(): React.ReactElement {
         fetchPosts();
     }, []);
 
+    const toggleEditWindow = () => {
+        setEditWindowVisible(!isEditWindowVisible);
+    };
 
     const postPost = async () => {
         const newPost = {
@@ -251,30 +257,60 @@ function Profil(): React.ReactElement {
         React.createElement('div', {className: 'user-profile-photo'},
             React.createElement(Avatar, { name: username ?? 'User', size: '100%', round: true })
             ),
-        React.createElement('div', {className: 'user-info'},
-
-            React.createElement('h3', null, username ?? 'User'),
-            React.createElement('p', {className: 'user-location'},'Location:' ),
-            React.createElement('p', {className: 'user-interests'}, 'Interests:')
-
-        ),
         React.createElement(
             'div',
             {className: 'user-details'},
             React.createElement(
                 'div',
                 {className: 'user-stats'},
+                React.createElement('p', null,'Location:' ),
+                React.createElement('p', null, 'Interests:'),
                 React.createElement('p', null, 'Observations:'),
                 React.createElement('p', null, 'Favourite Constellations:')
             ),
             React.createElement(
+                'button',
+                {className: 'button-modern',  onClick: toggleEditWindow,},
+                'Edit details'
+            ),
+            isEditWindowVisible &&
+            React.createElement(
                 'div',
-                {className: 'user-quote'},
+                { className: 'edit-window' },
+                React.createElement('h2', null, 'Edit details'),
+                React.createElement(
+                    'div',
+                    {className: 'edit-window-smaller-container'},
+                    React.createElement(FontAwesomeIcon, { icon: faMapMarkerAlt, style: { color: 'white'} }),
+                    React.createElement('textarea', { placeholder: 'Enter location here...', className: 'edit-input' }),
+                ),
+                React.createElement(
+                    'div',
+                    {className: 'edit-window-smaller-container'},
+                    React.createElement(FontAwesomeIcon, { icon: faHeart, style: { color: 'white'}  }),
+                    React.createElement('textarea', { placeholder: 'Enter your interests here...', className: 'edit-input' }),
+                ),
+                React.createElement(
+                    'div',
+                    {className: 'edit-window-smaller-container'},
+                    React.createElement(FontAwesomeIcon, { icon: faEye, style: { color: 'white'} }),
+                    React.createElement('textarea', { placeholder: 'Enter your observations here...', className: 'edit-input' }),
+                ),
+                React.createElement(
+                    'div',
+                    {className: 'edit-window-smaller-container'},
+                    React.createElement(FontAwesomeIcon, { icon: faStar, style: { color: 'white'} }),
+                    React.createElement('textarea', {className:'edit-input', placeholder: 'Enter constellations here...' }),
+                ),
 
-            )
+                React.createElement(
+                    'button',
+                    { onClick: toggleEditWindow },
+                    'Save'
+                )
+            ),
+
         ),
-
-
     );
 
     const friendCard = React.createElement(
@@ -422,25 +458,10 @@ function Profil(): React.ReactElement {
                     'More'
                 )
             )
-
-
-
     ),
-
-
-
-
 ),
-
-
-
-
-
                         )
-
                 ),
-
-
             ),
             React.createElement('div', {className: 'profile-dark-container'},
 
@@ -511,6 +532,7 @@ function Profil(): React.ReactElement {
                 React.createElement('div', { className: 'posts' },
 
                 ),
+
 
                 React.createElement('div', {className: 'profile-posts'},
 

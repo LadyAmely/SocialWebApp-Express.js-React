@@ -82,6 +82,8 @@
 
 }
 
+
+
 .edit-background-btn:hover {
     background-color: #155bc1;
 }
@@ -540,5 +542,100 @@
 
 .profile-top-menu li a:hover {
     color: #ffffff;
+}
+
+.button-modern {
+    display: inline-block;
+    padding: 10px 20px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+    background-color: rgba(10, 30, 35, 0.7);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.button-modern:hover {
+    background-color: rgba(14, 194, 237, 0.9);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.button-modern:active {
+    background-color: rgba(10, 30, 35, 1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.edit-window{
+    height: auto;
+    width: 100%;
+    background-color: rgba(91, 102, 126, 0.15);
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.edit-window h2{
+    color: #f9f9f9;
+    font-weight: bold;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.edit-window button{
+    color: #ffffff;
+    background-color: rgb(34, 139, 241);
+    font-size: 16px;
+    border-radius: 5px;
+    height: 40px;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    width: 95%;
+}
+
+.edit-window button:hover{
+    background-color: #3b5998;
+    pointer-events: auto;
+}
+
+.edit-window-smaller-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding:10px;
+}
+
+.edit-input {
+    width: 90%;
+    height: 20px;
+    padding: 10px;
+    margin: 8px 0;
+    background-color: rgba(46, 46, 46, 0.27);
+    border: 1px solid #444;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #f5f5f5;
+    resize: none;
+    outline: none;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.edit-input:hover {
+    background-color: #383838;
+}
+
+.edit-input:focus {
+    border-color: #5b667e;
+    box-shadow: 0 0 5px rgba(91, 102, 126, 0.5);
 }
 

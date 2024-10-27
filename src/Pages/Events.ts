@@ -335,6 +335,47 @@ function Events() : React.ReactElement{
         );
     }
 
+    function createProfileSidebar(
+        username: string
+    ):React.ReactElement{
+        return React.createElement(
+            'div',
+            {className: 'profile-sidebar'},
+            React.createElement(
+                'div',
+                {className: 'background-container'},
+            ),
+            React.createElement(
+                'div',
+                {className: 'avatar-container'},
+                React.createElement(
+                    Avatar,
+                    {
+                        name: username,
+                        size: '100%',
+                        round: true,
+                    }
+                )
+            ),
+            React.createElement(
+                'p',
+                null,
+                'Welcome back'
+            ),
+            React.createElement(
+                'h3',
+                null,
+                username
+            ),
+            React.createElement(
+                'button',
+                {onClick: () => (window.location.href = '/profile')},
+                'Visit your profile'
+            )
+        )
+    }
+
+
 
 
     return React.createElement(
@@ -363,6 +404,7 @@ function Events() : React.ReactElement{
             React.createElement(
               'div',
                 {className: 'right-container'},
+                createProfileSidebar(displayName),
                 createChatSidebar(
                     { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },
                     users,
