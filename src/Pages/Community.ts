@@ -272,6 +272,46 @@ function Community() : React.ReactElement{
         );
     }
 
+    function createProfileSidebar(
+        username: string
+    ):React.ReactElement{
+        return React.createElement(
+            'div',
+            {className: 'profile-sidebar'},
+            React.createElement(
+                'div',
+                {className: 'background-container'},
+            ),
+            React.createElement(
+                'div',
+                {className: 'avatar-container'},
+                React.createElement(
+                    Avatar,
+                    {
+                        name: username,
+                        size: '100%',
+                        round: true,
+                    }
+                )
+            ),
+            React.createElement(
+                'p',
+                null,
+                'Welcome back'
+            ),
+            React.createElement(
+                'h3',
+                null,
+                username
+            ),
+            React.createElement(
+                'button',
+                {onClick: () => (window.location.href = '/profile')},
+                'Visit your profile'
+            )
+        )
+    }
+
     function createPost(
         user: { name: string; avatar: string | React.ReactNode; time: string },
         content: string,
@@ -356,21 +396,23 @@ function Community() : React.ReactElement{
 
                 ),
             ),
-            createChatSidebar(
-                { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },
-                users,
-                activeChats,
-                handleUserClick,
-                username ?? 'Unknown User'
+            React.createElement(
+                'div',
+                {className: 'right-container'},
+                createProfileSidebar(displayName),
+                createChatSidebar(
+                    { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },
+                    users,
+                    activeChats,
+                    handleUserClick,
+                    username ?? 'Unknown User'
+                ),
+
             ),
+
         ),
         React.createElement(Footer)
     );
-
-
-
-
-
 }
 
 export default Community;

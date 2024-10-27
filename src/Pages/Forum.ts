@@ -588,13 +588,18 @@ function Forum() : React.ReactElement{
                     )
                 )
             ),
-            createChatSidebar(
-                { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },
-                users,
-                activeChats,
-                handleUserClick,
-                username ?? 'Unknown User'
+            React.createElement(
+                'div',
+                {className: 'right-container'},
+                createChatSidebar(
+                    { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },
+                    users,
+                    activeChats,
+                    handleUserClick,
+                    username ?? 'Unknown User'
+                ),
             ),
+
         ),
         React.createElement(Footer)
     );

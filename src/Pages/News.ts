@@ -81,6 +81,13 @@ function News() : React.ReactElement{
         fetchEventPosts();
     }, []);
 
+    function dropMenu(){
+        return React.createElement(
+            'div',
+            {className: 'navbar'}
+        );
+    }
+
     const handleLogout = async () => {
         console.log('Logout button clicked');
         try {
@@ -158,7 +165,7 @@ function News() : React.ReactElement{
                             name: username,
                             size: '40',
                             round: true,
-                            onClick: handleLogout
+                            onClick: dropMenu
                         }
                     )
                 )
@@ -228,7 +235,7 @@ function News() : React.ReactElement{
     ): React.ReactElement {
         return React.createElement(
             'aside',
-            { className: 'chat-sidebar' },
+            { className: 'chat-sidebar'},
             React.createElement('h2', null, 'Chats'),
             React.createElement(
                 'ul',
@@ -356,13 +363,18 @@ function News() : React.ReactElement{
                     )
                 ),
             ),
-            createChatSidebar(
-                { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },
-                users,
-                activeChats,
-                handleUserClick,
-                username ?? 'Unknown User'
+            React.createElement(
+                'div',
+                {className: 'right-container'},
+                createChatSidebar(
+                    { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },
+                    users,
+                    activeChats,
+                    handleUserClick,
+                    username ?? 'Unknown User'
+                ),
             ),
+
         ),
         React.createElement(Footer)
     );
