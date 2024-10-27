@@ -22,10 +22,34 @@ function Profil(): React.ReactElement {
     const [newPostDescription, setNewPostDescription] = useState<string>("");
     const [newPostImage, setNewPostImage] = useState<string | null>(null);
     const [isEditWindowVisible, setEditWindowVisible] = React.useState(false);
+    const [newLocation, setNewLocation] = useState<string>("");
+    const [newInterests, setNewInterests] = useState<string>("");
+    const [newObservations, setNewObservations] = useState<string>("");
+    const [newConstellations, setNewConstellations] = useState<string>("");
+   // const [userInfo, setUserInfo] = useState<string[]>([]);
+
+
+    const [userInfo, setUserInfo] = useState({});
 
     function handleDescriptionChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
 
         setNewPostDescription(event.target.value);
+    }
+
+    function handleLocationChange(event: React.ChangeEvent<HTMLTextAreaElement>){
+        setNewLocation(event.target.value);
+    }
+
+    function handleInterestsChange(event: React.ChangeEvent<HTMLTextAreaElement>){
+        setNewInterests(event.target.value);
+    }
+
+    function handleObservationsChange(event: React.ChangeEvent<HTMLTextAreaElement>){
+        setNewObservations(event.target.value);
+    }
+
+    function handleConstellationsChange(event: React.ChangeEvent<HTMLTextAreaElement>){
+        setNewConstellations(event.target.value);
     }
 
     useEffect(() => {
@@ -33,6 +57,19 @@ function Profil(): React.ReactElement {
         if (storedImageUrl) {
             setImageUrl(storedImageUrl);
         }
+    }, []);
+
+    useEffect( () =>{
+        const fetchUserInfo = async()=>{
+            try{
+                const response = await fetch('http://localhost:5000/api/user-info');
+                const data = await response.json();
+                setUserInfo(data);
+            }catch(error){
+                console.log(error);
+            }
+        };
+        fetchUserInfo();
     }, []);
 
     useEffect(() => {
@@ -67,6 +104,39 @@ function Profil(): React.ReactElement {
 
     const toggleEditWindow = () => {
         setEditWindowVisible(!isEditWindowVisible);
+    };
+
+    const postUserInfo = async() =>{
+        const newUserInfo = {
+            username: username,
+            location: newLocation,
+            interests: newInterests,
+            observations: newObservations,
+            constellations: newConstellations
+        };
+        try{
+            const response = await fetch('http://localhost:5000/api/user-info', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newUserInfo),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to user data');
+            }
+
+            const data = await response.json();
+            setNewConstellations('');
+            setNewLocation('');
+            setNewInterests('');
+            setNewObservations('');
+
+        }catch(error){
+            console.log(error);
+        }
+
     };
 
     const postPost = async () => {
@@ -248,6 +318,11 @@ function Profil(): React.ReactElement {
         }
     }
 
+    const handleSave = () => {
+        postUserInfo();
+        toggleEditWindow();
+    };
+
     const userCard = React.createElement(
 
         'div',
@@ -263,7 +338,7 @@ function Profil(): React.ReactElement {
             React.createElement(
                 'div',
                 {className: 'user-stats'},
-                React.createElement('p', null,'Location:' ),
+                React.createElement('p', null,'Location:'),
                 React.createElement('p', null, 'Interests:'),
                 React.createElement('p', null, 'Observations:'),
                 React.createElement('p', null, 'Favourite Constellations:')
@@ -282,36 +357,42 @@ function Profil(): React.ReactElement {
                     'div',
                     {className: 'edit-window-smaller-container'},
                     React.createElement(FontAwesomeIcon, { icon: faMapMarkerAlt, style: { color: 'white'} }),
-                    React.createElement('textarea', { placeholder: 'Enter location here...', className: 'edit-input' }),
+                    React.createElement('textarea', { placeholder: 'Enter location here...', className: 'edit-input',  value: newLocation,
+                        onChange: handleLocationChange }),
                 ),
                 React.createElement(
                     'div',
                     {className: 'edit-window-smaller-container'},
                     React.createElement(FontAwesomeIcon, { icon: faHeart, style: { color: 'white'}  }),
-                    React.createElement('textarea', { placeholder: 'Enter your interests here...', className: 'edit-input' }),
+                    React.createElement('textarea', { placeholder: 'Enter your interests here...', className: 'edit-input',  value: newInterests,
+                        onChange: handleInterestsChange }),
                 ),
                 React.createElement(
                     'div',
                     {className: 'edit-window-smaller-container'},
                     React.createElement(FontAwesomeIcon, { icon: faEye, style: { color: 'white'} }),
-                    React.createElement('textarea', { placeholder: 'Enter your observations here...', className: 'edit-input' }),
+                    React.createElement('textarea', { placeholder: 'Enter your observations here...', className: 'edit-input',  value: newObservations,
+                        onChange: handleObservationsChange }),
                 ),
                 React.createElement(
                     'div',
                     {className: 'edit-window-smaller-container'},
                     React.createElement(FontAwesomeIcon, { icon: faStar, style: { color: 'white'} }),
-                    React.createElement('textarea', {className:'edit-input', placeholder: 'Enter constellations here...' }),
+                    React.createElement('textarea', {className:'edit-input', placeholder: 'Enter constellations here...',  value: newConstellations,
+                        onChange: handleConstellationsChange }),
                 ),
 
                 React.createElement(
                     'button',
-                    { onClick: toggleEditWindow },
+                    { onClick: handleSave},
                     'Save'
                 )
             ),
 
         ),
     );
+
+
 
     const friendCard = React.createElement(
         'div',
