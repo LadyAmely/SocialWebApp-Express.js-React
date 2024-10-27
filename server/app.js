@@ -122,6 +122,41 @@ app.post('/api/events', async(req, res)=>{
    }
 });
 
+app.post('/api/user-info', async(req, res)=>{
+
+    const{username, location, interests, observations, constellations} = req.body;
+
+    if(!username || !location || !interests || !observations)
+    {
+        return res.status(400).json({error: 'All elements are required.'});
+    }
+    try{
+        const userInfo = await sequelize.query(
+            'INSERT INTO user_info (username, location, interests, observations, constellations) VALUES (:username, :location, :interests, :observations, :constellations)',
+            {
+                replacements: {username, location, interests, observations, constellations},
+                type: sequelize.QueryTypes.INSERT
+            }
+        );
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+});
+
+app.get('/api/user-info', async(req, res)=>{
+
+    try{
+        const [results, metadata] = await sequelize.query('SELECT * FROM user_info');
+        res.status(200).json(results);
+    }catch(error){
+        console.log(error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+
+});
+
 app.post('/api/forum-posts', async(req, res)=>{
     const{title, description, username} = req.body;
 
