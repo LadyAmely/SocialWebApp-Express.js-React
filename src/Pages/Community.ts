@@ -7,6 +7,7 @@ import '../css/pages/dashboard.css';
 import '../css/pages/community.css';
 import Chat from "../Components/Chat";
 import Footer from "../Components/Footer";
+import CommentGroups  from "../Components/CommentGroups";
 import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
 
 function Community() : React.ReactElement{
@@ -316,6 +317,8 @@ function Community() : React.ReactElement{
         user: { name: string; avatar: string | React.ReactNode; time: string },
         content: string,
         image: string,
+        postId: number,
+        username: string,
     ): React.ReactElement {
         return React.createElement(
             'div',
@@ -367,7 +370,8 @@ function Community() : React.ReactElement{
                         action
                     );
                 })
-            )
+            ),
+            React.createElement(CommentGroups,  { postId, username }),
 
         );
     }
@@ -392,6 +396,8 @@ function Community() : React.ReactElement{
                         },
                         groupPost.description,
                         groupPost.image_path,
+                        groupPost.group_id,
+                        displayName
                     )
 
                 ),

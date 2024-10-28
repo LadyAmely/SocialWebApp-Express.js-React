@@ -8,7 +8,6 @@ import '../css/pages/news.css';
 import Chat from "../Components/Chat";
 import Footer from "../Components/Footer";
 import Comment  from "../Components/Comment";
-import WriteComment from "../Components/WriteComment";
 import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
 
 function News() : React.ReactElement{
@@ -20,7 +19,6 @@ function News() : React.ReactElement{
     const [activeChats, setActiveChats] = useState<string[]>([]);
     const [userGroups, setUserGroup] = useState<string[]>([]);
     const [userId, setUserId] = useState<string | null>(null);
-    const [comments, setComments] = useState<any[]>([]);
 
 
 
