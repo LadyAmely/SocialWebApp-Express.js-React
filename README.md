@@ -14,8 +14,12 @@ Users can create their own account by registering with an email address. The reg
 
 The app enables users to chat with others effortlessly through its chat feature. Users can send text messages in real time, facilitating instant communication. This functionality enhances the user experience by allowing seamless interactions.
 
-![GalaxyFlow-dashboard](https://github.com/LadyAmely/SocialWebApp/blob/master/galaxy-flow-dashboard.png)
+![GalaxyFlow-dashboard](https://github.com/LadyAmely/SocialWebApp/blob/master/dashboard-galaxyflow.png)
 
+## Discussion Forum:
+This project implements a discussion forum where users can create and participate in various discussions. Users can post new questions, view existing topics, and provide answers to other users' inquiries.
+
+![GalaxyFlow-dashboard](https://github.com/LadyAmely/SocialWebApp/blob/master/forum-discussion-galaxyflow.png)
 ## License
 
 This project is licensed under the MIT License.
