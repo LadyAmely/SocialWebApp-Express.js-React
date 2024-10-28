@@ -108,6 +108,28 @@ app.get('/api/comments/:id', async(req, res)=>{
     }
 });
 
+app.post('/api/comments', async (req, res)=>{
+
+    const {username, news_id, comment_text, created_at} = req.body;
+    if(!username || !news_id || !comment_text || !created_at){
+        return res.status(400).json({ error: '400 error' });
+    }
+    try{
+        const comment = await sequelize.query(
+          'INSERT INTO comments(username, news_id, comment_text, created_at) VALUES (:username, :news_id, :comment_text, NOW())',
+            {
+                replacements: {username, news_id, comment_text},
+                type: sequelize.QueryTypes.INSERT
+            }
+        );
+        res.status(201).json({ id: comment[0], username, news_id, comment_text});
+    }catch(error){
+        console.error(error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+
+});
+
 app.get('/api/events', async(req, res)=> {
     try{
         const [results, metadata] = await sequelize.query('SELECT * FROM events');
@@ -117,6 +139,8 @@ app.get('/api/events', async(req, res)=> {
         res.status(500).json({error: 'Internal server error'});
     }
 });
+
+
 
 app.post('/api/events', async(req, res)=>{
    const{description, image_path, username} = req.body;
