@@ -8,6 +8,7 @@ import '../css/pages/news.css';
 import Chat from "../Components/Chat";
 import Footer from "../Components/Footer";
 import Comment  from "../Components/Comment";
+import WriteComment from "../Components/WriteComment";
 import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
 
 function News() : React.ReactElement{
@@ -284,6 +285,7 @@ function News() : React.ReactElement{
         content: string,
         image: string,
         postId: number,
+        username: string,
     ): React.ReactElement {
         return React.createElement(
             'div',
@@ -336,7 +338,8 @@ function News() : React.ReactElement{
                     );
                 })
             ),
-            React.createElement(Comment, { postId })
+            React.createElement(Comment, { postId }),
+            React.createElement(WriteComment, { username}),
 
         );
     }
@@ -404,6 +407,7 @@ function News() : React.ReactElement{
                         new_post.description,
                         new_post.image_path,
                         new_post.news_id,
+                        displayName
                     ),
 
                 ),
