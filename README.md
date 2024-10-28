@@ -16,6 +16,10 @@ The app enables users to chat with others effortlessly through its chat feature.
 
 ![GalaxyFlow-dashboard](https://github.com/LadyAmely/SocialWebApp/blob/master/dashboard-galaxyflow.png)
 
+## Discussion Forum:
+This project implements a discussion forum where users can create and participate in various discussions. Users can post new questions, view existing topics, and provide answers to other users' inquiries.
+
+![GalaxyFlow-dashboard](https://github.com/LadyAmely/SocialWebApp/blob/master/forum-discussion-galaxyflow.png)
 ## License
 
 This project is licensed under the MIT License.
