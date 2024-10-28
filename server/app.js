@@ -125,9 +125,22 @@ app.get('/api/comments-groups/:id', async(req, res)=>{
     }
 });
 
-
-
-
+app.get('/api/comments-main-posts/:id', async(req, res)=>{
+    try{
+        const { id } = req.params;
+        const results = await sequelize.query(
+            'SELECT * FROM comments_main_posts WHERE post_id = :id',
+            {
+                replacements: { id: id },
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+        res.status(200).json(results);
+    }catch(error){
+        console.log(error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+});
 
 app.post('/api/comments', async (req, res)=>{
 
@@ -174,6 +187,73 @@ app.post('/api/comments-groups', async(req, res)=>{
     }
 
 });
+
+app.post('/api/comments-main-posts', async(req, res)=>{
+
+    const{username, post_id, comment_text, created_at} = req.body;
+    if(!username || !post_id || !comment_text || !created_at){
+        return res.status(400).json({ error: '400 error' });
+    }
+
+    try{
+        const comment = await sequelize.query(
+            'INSERT INTO comments_main_posts(username, post_id, comment_text, created_at) VALUES (:username, :post_id, :comment_text, NOW())',
+            {
+                replacements: {username, post_id, comment_text},
+                type: sequelize.QueryTypes.INSERT
+            }
+        );
+        res.status(201).json({ id: comment[0], username, post_id, comment_text});
+
+    }catch(error){
+        console.error(error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+
+});
+
+app.post('/api/comments-forum-posts', async(req, res)=>{
+
+    const{username, forum_post_id, comment_text, created_at} = req.body;
+    if(!username || !forum_post_id || !comment_text || !created_at){
+        return res.status(400).json({ error: '400 error' });
+    }
+
+    try{
+        const comment = await sequelize.query(
+            'INSERT INTO comment_forum_posts(username, forum_post_id, comment_text, created_at) VALUES (:username, :forum_post_id, :comment_text, NOW())',
+            {
+                replacements: {username, forum_post_id, comment_text},
+                type: sequelize.QueryTypes.INSERT
+            }
+        );
+        res.status(201).json({ id: comment[0], username, forum_post_id, comment_text});
+
+    }catch(error){
+        console.error(error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+
+});
+
+app.get('/api/comments-forum-posts/:id', async(req, res)=>{
+    try{
+        const { id } = req.params;
+        const results = await sequelize.query(
+            'SELECT * FROM comment_forum_posts WHERE forum_post_id = :id',
+            {
+                replacements: { id: id },
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+        res.status(200).json(results);
+    }catch(error){
+        console.log(error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+});
+
+
 
 app.get('/api/events', async(req, res)=> {
     try{
