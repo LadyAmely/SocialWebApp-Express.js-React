@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Avatar from "react-avatar";
+import { FaPaperPlane } from 'react-icons/fa';
 
-interface writeCommentProps{
-    username: string,
+interface WriteCommentProps {
+    username: string;
     news_id: number;
+    refreshComments: () => void;
 }
 
-function WriteComment({username, news_id}: writeCommentProps){
-
+function WriteComment({ username, news_id, refreshComments }: WriteCommentProps) {
     const [commentText, setCommentText] = useState("");
 
     const submitComment = async () => {
-
-        const created_at = new Date().toISOString(); // Current timestamp
+        if (!commentText.trim()) return;
+        const created_at = new Date().toISOString();
         const commentData = { username, news_id, comment_text: commentText, created_at };
 
         try {
@@ -26,32 +27,41 @@ function WriteComment({username, news_id}: writeCommentProps){
 
             if (response.ok) {
                 setCommentText("");
+                refreshComments();
             }
         } catch (err) {
             console.error(err);
         }
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter') {
+            submitComment();
+        }
+    };
 
-    return React.createElement('div', { className: 'create-post-comment' },
-        React.createElement('div', { className: 'post-line' },
-            React.createElement('div', { className: 'post-photo' },
-               React.createElement(Avatar, { name: username, size: '100%', round: true }),
+    return React.createElement(
+        'div',
+        { className: 'create-post-comment' },
+        React.createElement(
+            'div',
+            { className: 'post-line' },
+            React.createElement(
+                'div',
+                { className: 'post-photo' },
+                React.createElement(Avatar, { name: username, size: '100%', round: true })
             ),
             React.createElement('textarea', {
                 className: "create-post-comment-textarea",
                 placeholder: "Add a comment...",
                 value: commentText,
-                onChange: (e: { target: { value: React.SetStateAction<string>; }; }) => setCommentText(e.target.value)
-            }),
-            React.createElement(
-                'button',
-                {onClick: submitComment},
-                'send'
-            )
-        )
-    )
+                onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => setCommentText(e.target.value),
+                    onKeyDown: handleKeyDown
+            },
 
+            ),
+        )
+    );
 }
 
 export default WriteComment;

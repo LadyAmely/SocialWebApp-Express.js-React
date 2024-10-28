@@ -20,6 +20,7 @@ function News() : React.ReactElement{
     const [activeChats, setActiveChats] = useState<string[]>([]);
     const [userGroups, setUserGroup] = useState<string[]>([]);
     const [userId, setUserId] = useState<string | null>(null);
+    const [comments, setComments] = useState<any[]>([]);
 
 
 
@@ -280,6 +281,7 @@ function News() : React.ReactElement{
         );
     }
 
+
     function createPost(
         user: { name: string; avatar: string | React.ReactNode; time: string },
         content: string,
@@ -287,6 +289,7 @@ function News() : React.ReactElement{
         postId: number,
         username: string,
     ): React.ReactElement {
+
         return React.createElement(
             'div',
             { className: 'post' },
@@ -338,8 +341,7 @@ function News() : React.ReactElement{
                     );
                 })
             ),
-            React.createElement(Comment, { postId }),
-            React.createElement(WriteComment, {username, news_id: postId} ),
+            React.createElement(Comment,  { postId, username }),
 
         );
     }
