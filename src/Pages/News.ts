@@ -7,6 +7,7 @@ import '../css/pages/dashboard.css';
 import '../css/pages/news.css';
 import Chat from "../Components/Chat";
 import Footer from "../Components/Footer";
+import Comment  from "../Components/Comment";
 import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
 
 function News() : React.ReactElement{
@@ -18,6 +19,8 @@ function News() : React.ReactElement{
     const [activeChats, setActiveChats] = useState<string[]>([]);
     const [userGroups, setUserGroup] = useState<string[]>([]);
     const [userId, setUserId] = useState<string | null>(null);
+
+
 
     const fetchUserIdByUsername = async () => {
         try {
@@ -58,8 +61,6 @@ function News() : React.ReactElement{
             fetchUserIdByUsername();
         }
     }, [username]);
-
-
 
     useEffect(() => {
         fetchUserGroup();
@@ -282,6 +283,7 @@ function News() : React.ReactElement{
         user: { name: string; avatar: string | React.ReactNode; time: string },
         content: string,
         image: string,
+        postId: number,
     ): React.ReactElement {
         return React.createElement(
             'div',
@@ -333,7 +335,8 @@ function News() : React.ReactElement{
                         action
                     );
                 })
-            )
+            ),
+            React.createElement(Comment, { postId })
 
         );
     }
@@ -400,7 +403,9 @@ function News() : React.ReactElement{
                         },
                         new_post.description,
                         new_post.image_path,
-                    )
+                        new_post.news_id,
+                    ),
+
                 ),
             ),
             React.createElement(

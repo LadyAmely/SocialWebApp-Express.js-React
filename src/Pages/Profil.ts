@@ -26,10 +26,25 @@ function Profil(): React.ReactElement {
     const [newInterests, setNewInterests] = useState<string>("");
     const [newObservations, setNewObservations] = useState<string>("");
     const [newConstellations, setNewConstellations] = useState<string>("");
-   // const [userInfo, setUserInfo] = useState<string[]>([]);
+    //const [userInfo, setUserInfo] = useState(null);
+    //const [userInfo, setUserInfo] = useState<any>(null);
 
+    /*
+    const [userInfo, setUserInfo] = useState({
+        location: '',
+        interests: [],
+        observations: [],
+        favouriteConstellations: [],
+    });
 
-    const [userInfo, setUserInfo] = useState({});
+     */
+
+    const [userInfo, setUserInfo] = useState({
+        location: 'Brak lokalizacji',
+        interests: ['Brak zainteresowań'],
+        observations: ['Brak obserwacji'],
+        favouriteConstellations: ['Brak ulubionych konstelacji'],
+    });
 
     function handleDescriptionChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
 
@@ -59,18 +74,47 @@ function Profil(): React.ReactElement {
         }
     }, []);
 
-    useEffect( () =>{
-        const fetchUserInfo = async()=>{
-            try{
-                const response = await fetch('http://localhost:5000/api/user-info');
+    /*
+
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await fetch(`/api/user-info/${username}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
                 const data = await response.json();
                 setUserInfo(data);
-            }catch(error){
-                console.log(error);
+            } catch (err) {
+                console.error(err);
             }
         };
         fetchUserInfo();
-    }, []);
+    }, [username]);
+
+     */
+
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await fetch(`/api/user-info/${username}`);
+                if (!response.ok) {
+                    throw new Error('Błąd sieci - nie udało się pobrać danych');
+                }
+                const data = await response.json();
+
+                setUserInfo({
+                    location: data.location || 'Brak lokalizacji',
+                    interests: data.interests.length > 0 ? data.interests : ['Brak zainteresowań'],
+                    observations: data.observations.length > 0 ? data.observations : ['Brak obserwacji'],
+                    favouriteConstellations: data.favouriteConstellations.length > 0 ? data.favouriteConstellations : ['Brak ulubionych konstelacji'],
+                });
+            } catch (err) {
+                console.error('Błąd:', err);
+            }
+        };
+        fetchUserInfo();
+    }, [username]);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -338,10 +382,10 @@ function Profil(): React.ReactElement {
             React.createElement(
                 'div',
                 {className: 'user-stats'},
-                React.createElement('p', null,'Location:'),
-                React.createElement('p', null, 'Interests:'),
-                React.createElement('p', null, 'Observations:'),
-                React.createElement('p', null, 'Favourite Constellations:')
+                React.createElement('p', null, `Location: ${userInfo.location}`),
+                React.createElement('p', null,  `Interests: ${userInfo.interests.join(', ')}` ),
+                React.createElement('p', null,  `Observations: ${userInfo.observations.join(', ')}`),
+                React.createElement('p', null, `Favourite Constellations: ${userInfo.favouriteConstellations.join(', ')}`)
             ),
             React.createElement(
                 'button',
