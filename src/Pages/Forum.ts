@@ -17,8 +17,10 @@ import '../css/pages/forum.css';
 import "../css/pages/profil.css";
 import Chat from "../Components/Chat";
 import Footer from "../Components/Footer";
+import CommentForum from "../Components/CommentForum";
 import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
 import {INTEGER} from "sequelize";
+import CommentGroups from "../Components/CommentGroups";
 
 function Forum() : React.ReactElement{
 
@@ -461,15 +463,16 @@ function Forum() : React.ReactElement{
         user: { name: string; avatar: React.ReactNode },
         title: string,
         content: string,
-        postId: string,
+        postId: number,
+        username: string,
         likesCount: number,
-        handleLike: (postId: string)=>void,
     ): React.ReactElement {
 
 
         return React.createElement(
             'div',
             { className: 'forum-thread' },
+            React.createElement('p', {className: 'forum-post-user'},'by ' + user.name),
             React.createElement('div', { className: 'forum-thread-title' }, title),
             React.createElement('div', { className: 'forum-thread-description' }, content),
             React.createElement(
@@ -485,22 +488,7 @@ function Forum() : React.ReactElement{
                     );
                 })
             ),
-            React.createElement('div', { className: 'create-post-comment' },
-                React.createElement('div', { className: 'post-line' },
-                    React.createElement('div', { className: 'post-photo' },
-                        React.createElement(Avatar, { name: user.name, size: '100%', round: true }),
-                    ),
-                    React.createElement('textarea', {
-                        className: "create-post-comment-textarea",
-                        placeholder: "Add a comment...",
-                        value: newComments[postId] || "",
-                        onFocus: () => handleTextareaFocus(postId),
-                       // onChange: (e) => handleCommentChange(postId, e.target.value),
-                    }),
-                    //React.createElement('button', { onClick: () => addComment(postId) }, 'Submit')
-                )
-            )
-
+            React.createElement(CommentForum,  { postId, username }),
         );
     }
 
@@ -601,8 +589,9 @@ function Forum() : React.ReactElement{
                             forumPost.title,
                             forumPost.description,
                             forumPost.forum_post_id,
+                            displayName,
                             likes[forumPost.forum_post_id] || 0,
-                            handleLike
+                           // handleLike
                            // forumPost.likes,
 
                         );

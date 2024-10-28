@@ -8,6 +8,8 @@ import { faHome, faUser, faComments, faUsers, faCalendar, faNewspaper, faCog } f
 import Chat from '../Components/Chat';
 import { FaThumbsUp, FaComment, FaShare } from 'react-icons/fa';
 import Footer from "../Components/Footer";
+import CommentMain from "../Components/CommentMain";
+import CommentGroups from "../Components/CommentGroups";
 
 
 function Dashboard(): React.ReactElement {
@@ -153,6 +155,8 @@ function Dashboard(): React.ReactElement {
                         },
                         post.description,
                         post.image_path,
+                        post.post_id,
+                        displayName
                     )
                 ),
             ),
@@ -265,6 +269,8 @@ function createPost(
     user: { name: string; avatar: string | React.ReactNode; time: string },
     content: string,
     image: string,
+    postId: number,
+    username: string,
 ): React.ReactElement {
     return React.createElement(
         'div',
@@ -316,7 +322,8 @@ function createPost(
                     action
                 );
             })
-        )
+        ),
+        React.createElement(CommentMain,  { postId, username }),
 
    );
 }

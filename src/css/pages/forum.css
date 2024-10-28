@@ -26,7 +26,7 @@
 .forum-container {
     max-width: 800px;
     width: 100%;
-    background-color: rgba(21, 34, 45, 0.65);
+    background-color: rgba(28, 21, 45, 0.25);
     border-radius: 10px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     overflow: hidden;
@@ -39,7 +39,7 @@
 
 .forum-header {
     font-size: 1.8em;
-    color: rgba(200, 255, 255, 0.9);
+    color: rgb(255, 255, 255);
     padding-bottom: 20px;
     font-weight: bold;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -47,18 +47,14 @@
     margin-bottom: 20px;
 }
 
-
-
-
 .forum-thread {
-    background-color: rgba(31, 48, 61, 0.95);
+    background-color: rgba(28, 45, 56, 0.18);
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 25px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s ease, background-color 0.2s ease;
 }
-
 
 
 .forum-thread-title {
@@ -78,7 +74,7 @@
 
 
 .forum-comment {
-    background-color: rgba(24, 40, 50, 0.95);
+    background-color: rgba(24, 40, 50, 0.24);
     border-left: 4px solid rgba(100, 200, 255, 0.8);
     border-radius: 8px;
     padding: 15px;
@@ -102,7 +98,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 15px;
     border-radius: 10px;
-    background-color: rgba(28, 45, 56, 0.9);
+    background-color: rgba(28, 45, 56, 0.2);
 }
 
 .new-thread-textarea, .new-comment-textarea {
@@ -183,7 +179,7 @@
 
 .create-post-forum {
     width: 100%;
-    background-color: rgba(28, 45, 56, 0.9);
+    background-color: rgba(28, 45, 56, 0.18);
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -339,4 +335,11 @@ textarea.new-thread-textarea:focus {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     letter-spacing: 1px;
     transition: color 0.3s;
+}
+
+.forum-post-user{
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 10px
 }
