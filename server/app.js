@@ -91,6 +91,23 @@ app.get('/api/community', async(req, res) => {
     }
 });
 
+app.get('/api/comments/:id', async(req, res)=>{
+    try{
+        const { id } = req.params;
+        const results = await sequelize.query(
+            'SELECT * FROM comments WHERE news_id = :id',
+            {
+                replacements: { id: id },
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+        res.status(200).json(results);
+    }catch(error){
+        console.log(error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+});
+
 app.get('/api/events', async(req, res)=> {
     try{
         const [results, metadata] = await sequelize.query('SELECT * FROM events');
@@ -145,10 +162,16 @@ app.post('/api/user-info', async(req, res)=>{
     }
 });
 
-app.get('/api/user-info', async(req, res)=>{
+app.get('/api/user-info/:username', async(req, res)=>{
 
+    const {username} = req.params;
     try{
-        const [results, metadata] = await sequelize.query('SELECT * FROM user_info');
+        const [results, metadata] = await sequelize.query('SELECT * FROM user_info WHERE username = :username', {
+            replacements: { username: username },
+        });
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
         res.status(200).json(results);
     }catch(error){
         console.log(error);
