@@ -339,7 +339,7 @@ function News() : React.ReactElement{
                 })
             ),
             React.createElement(Comment, { postId }),
-            React.createElement(WriteComment, { username}),
+            React.createElement(WriteComment, {username, news_id: postId} ),
 
         );
     }
