@@ -11,20 +11,58 @@
 
 }
 
+
+
 .profile-dark-container{
     width: 100%;
     height: auto;
-    background-color:  rgb(19, 19, 28);
+    background: radial-gradient(
+            circle at 50% 50%,
+            rgba(30, 30, 46, 0.95) 10%,
+            rgba(40, 25, 65, 0.85) 40%,
+            rgba(20, 20, 30, 1) 70%
+    ),
+    radial-gradient(
+            circle at 25% 75%,
+            rgba(49, 34, 66, 0.4) 0%,
+            rgba(25, 15, 30, 0.9) 60%,
+            rgba(10, 10, 20, 1) 100%
+    ),
+    radial-gradient(
+            circle at 85% 15%,
+            rgba(66, 35, 78, 0.4) 0%,
+            rgba(20, 10, 25, 0.8) 60%,
+            rgba(10, 10, 10, 1) 100%
+    );
+
+
     overflow-x: hidden;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 30px;
+    display: flex;
+    flex-direction: column;
     align-items: start;
     justify-content: space-between;
     flex-wrap: wrap;
 
 }
+.profile-first-container {
+    width: 100vw;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0;
+}
 
+.profile-second-container{
+    width: 100vw;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0;
+}
 
 .profile-transparent{
     width: 100%;
@@ -46,9 +84,9 @@
     margin-top: 0;
     background: linear-gradient(
             to bottom,
-            rgba(30, 94, 112, 0.76),
-            rgba(8, 18, 24, 0.58),
-            rgb(19, 19, 28)
+            rgba(0, 0, 20, 1) 0%,
+            rgba(40, 20, 60, 0.8) 50%,
+            rgba(70, 60, 30, 0.6) 100%
     );
     z-index: 1;
 
@@ -61,7 +99,7 @@
 }
 
 .background-image {
-    background-image: url("../../../public/best.jpg");
+    background-image: url("../../../public/sky.jpg");
     background-size: cover;
     background-position: center;
     height: 400px;
@@ -146,15 +184,15 @@
 }
 
 .create-post {
-    padding: 20px;
     display: flex;
-    max-width: 600px;
+    width: 60%;
+    padding-right: 40px;
+    padding-left: 5px;
     margin-top: 20px;
     flex-direction: column;
     background-color: rgba(0, 0, 0, 0.2);
     justify-content: center;
     border-radius: 12px;
-    margin-right: 10%;
     margin-bottom: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
@@ -162,7 +200,7 @@
 
 
 .create-post textarea {
-    width: 90%;
+    width: 100%;
     height: 20px;
     padding: 12px;
     justify-content: center;
@@ -194,8 +232,10 @@
     border-radius: 8px;
     cursor: pointer;
     text-align: center;
-    width: 100%;
-    margin-top: 20px;
+    width: 95%;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -211,12 +251,12 @@
 }
 
 .create-post .post-btn:hover {
-    background-color: #155bc1;
+    background-color: rgba(21, 91, 193, 0.38);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .create-post .post-btn:active {
-    background-color: #0e45a3;
+    background-color: rgba(14, 69, 163, 0.37);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -352,7 +392,7 @@
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     margin-top: 20px;
     transition: transform 0.2s;
     display: flex;
@@ -501,15 +541,15 @@
     background-color: #155bc1;
 }
 
-
-.profile-posts{
+.profile-posts {
     height: auto;
-    max-width: 650px;
+    width: auto;
     grid-row: 2;
     grid-column: 2;
-
-
+    max-width: 60%;
+    padding-right: 40px;
 }
+
 
 .profile-top-menu{
     width: 100%;
@@ -551,7 +591,7 @@
     font-size: 16px;
     font-weight: 500;
     color: #ffffff;
-    background-color: rgba(10, 30, 35, 0.7);
+    background-color: rgba(39, 50, 71, 0.26);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -560,12 +600,12 @@
 }
 
 .button-modern:hover {
-    background-color: rgba(14, 194, 237, 0.9);
+    background-color: rgba(14, 194, 237, 0.19);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .button-modern:active {
-    background-color: rgba(10, 30, 35, 1);
+    background-color: rgba(10, 30, 35, 0.35);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 

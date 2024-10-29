@@ -74,25 +74,6 @@ function Profil(): React.ReactElement {
         }
     }, []);
 
-    /*
-
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            try {
-                const response = await fetch(`/api/user-info/${username}`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setUserInfo(data);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-        fetchUserInfo();
-    }, [username]);
-
-     */
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -590,96 +571,105 @@ function Profil(): React.ReactElement {
             ),
             React.createElement('div', {className: 'profile-dark-container'},
 
-               userCard,
-                React.createElement('div', { className: 'create-post' },
-                    React.createElement('div', {className:'post-title'}, 'Create post'),
-                    React.createElement('div', {className: 'post-line'},
+                React.createElement('div', {className: 'profile-first-container'},
+                       userCard,
+                    React.createElement('div', { className: 'create-post' },
+                        React.createElement('div', {className: 'post-line'},
 
-                        React.createElement('div', {className: 'post-photo'},
-                            React.createElement(Avatar, { name: username ?? 'User', size: '100%', round: true }),
-                        ),
-                        React.createElement('textarea', { placeholder: "What's on your mind?",
-                            value: newPostDescription,
-                            onChange: handleDescriptionChange
-                        },),
-
-                        ),
-                    React.createElement('div', {className: 'post-button-container'},
-                        React.createElement(
-                            'ul',
-                            null,
-                            React.createElement(
-                                'li',
-                                null,
-                                React.createElement(
-                                    'a',
-                                    {
-                                        href:"#",
-                                        onClick: () => document.getElementById('file-input')?.click()
-                                    },
-
-                                    React.createElement(FontAwesomeIcon, { icon: faCamera, style: { marginRight: '10px' } }),
-                                    'Photo/film'
-                                )
+                            React.createElement('div', {className: 'post-photo'},
+                                React.createElement(Avatar, { name: username ?? 'User', size: '100%', round: true }),
                             ),
-                            React.createElement('input', {
-                                id: 'file-input',
-                                type: 'file',
-                                accept: 'image/*',
-                                style: { display: 'none' },
-                                onChange: handleFileChange
-                            }),
+                            React.createElement('textarea', { placeholder: "What's on your mind?",
+                                value: newPostDescription,
+                                onChange: handleDescriptionChange
+                            },),
+
+                        ),
+                        React.createElement('div', {className: 'post-button-container'},
                             React.createElement(
-                                'li',
+                                'ul',
                                 null,
                                 React.createElement(
-                                    'a',
-                                    {href: "#"},
-                                    React.createElement(FontAwesomeIcon, { icon: faVideo, style: { marginRight: '10px' } }),
-                                    'Live video broadcast'
+                                    'li',
+                                    null,
+                                    React.createElement(
+                                        'a',
+                                        {
+                                            href:"#",
+                                            onClick: () => document.getElementById('file-input')?.click()
+                                        },
+
+                                        React.createElement(FontAwesomeIcon, { icon: faCamera, style: { marginRight: '10px' } }),
+                                        'Photo/film'
+                                    )
                                 ),
-                            ),
-                            React.createElement(
-                                'li',
-                                null,
+                                React.createElement('input', {
+                                    id: 'file-input',
+                                    type: 'file',
+                                    accept: 'image/*',
+                                    style: { display: 'none' },
+                                    onChange: handleFileChange
+                                }),
                                 React.createElement(
-                                    'a',
-                                    {href: "#"},
-                                    React.createElement(FontAwesomeIcon, { icon: faCalendar, style: { marginRight: '10px' } }),
-                                    'Life events'
+                                    'li',
+                                    null,
+                                    React.createElement(
+                                        'a',
+                                        {href: "#"},
+                                        React.createElement(FontAwesomeIcon, { icon: faVideo, style: { marginRight: '10px' } }),
+                                        'Live video broadcast'
+                                    ),
+                                ),
+                                React.createElement(
+                                    'li',
+                                    null,
+                                    React.createElement(
+                                        'a',
+                                        {href: "#"},
+                                        React.createElement(FontAwesomeIcon, { icon: faCalendar, style: { marginRight: '10px' } }),
+                                        'Life events'
+                                    )
                                 )
                             )
-                        )
                         ),
 
-                    React.createElement('button', { className: 'post-btn', onClick: postPost }, 'Publish')
-                ),
-                React.createElement('div', { className: 'posts' },
-
-                ),
-
-
-                React.createElement('div', {className: 'profile-posts'},
-
-                    posts
-                        .filter(post => post.username === username)
-                        .map((post) =>
-                        createPostInProfile(
-                            {
-                                name: post.username,
-                                avatar: React.createElement(Avatar, { name: post.username, size: '50', round: true }),
-                                time: new Date(post.created_at).toLocaleString(),
-                            },
-                            post.description,
-                            post.image_path,
-                            username ?? 'Unknown User'
-                        )
+                        React.createElement('button', { className: 'post-btn', onClick: postPost }, 'Publish')
                     ),
+
+
+                ),
+
+                React.createElement('div', {className: 'profile-second-container'},
+
+
+                        friendCard,
+                    React.createElement('div', {className: 'profile-posts'},
+
+
+                        posts
+                            .filter(post => post.username === username)
+                            .map((post) =>
+                                createPostInProfile(
+                                    {
+                                        name: post.username,
+                                        avatar: React.createElement(Avatar, { name: post.username, size: '50', round: true }),
+                                        time: new Date(post.created_at).toLocaleString(),
+                                    },
+                                    post.description,
+                                    post.image_path,
+                                    username ?? 'Unknown User'
+                                )
+                            ),
+
+                        ),
+
                     ),
-                friendCard,
             ),
-    )
-    );
+        ),
+
+
+
+);
 
     return React.createElement(
         React.Fragment,
