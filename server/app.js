@@ -286,13 +286,16 @@ app.post('/api/favourite_events', async(req, res)=>{
     }
 });
 
-app.get('/api/favourite_events/:id', async(req, res)=>{
+app.get('/api/favourite_events/:username', async(req, res)=>{
     try{
-        const { id } = req.params;
+        const { username } = req.params;
         const results = await sequelize.query(
-            'SELECT * FROM favourite_events WHERE event_id = :id',
+            'SELECT events.* \n' +
+            '             FROM favourite_events \n' +
+            '             JOIN events ON favourite_events.event_id = events.event_id \n' +
+            '             WHERE favourite_events.username = :username',
             {
-                replacements: { id: id },
+                replacements: { username: username },
                 type: sequelize.QueryTypes.SELECT
             }
         );
