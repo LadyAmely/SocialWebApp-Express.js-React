@@ -22,3 +22,10 @@
     position: relative;
     z-index: 2;
 }
+
+.event-text-style{
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+
+}

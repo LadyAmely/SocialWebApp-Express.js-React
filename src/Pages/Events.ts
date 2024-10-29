@@ -7,7 +7,7 @@ import '../css/pages/dashboard.css';
 import '../css/pages/events.css';
 import Chat from "../Components/Chat";
 import Footer from "../Components/Footer";
-import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
+import {FaCalendar, FaComment, FaShare, FaStar, FaThumbsUp} from "react-icons/fa";
 
 function Events() : React.ReactElement{
 
@@ -321,8 +321,8 @@ function Events() : React.ReactElement{
             React.createElement(
                 'div',
                 { className: 'post-actions' },
-                ['Like', 'Comment', 'Share'].map((action, index) => {
-                    const icons = [FaThumbsUp, FaComment, FaShare];
+                ['Interested', 'Calendar', 'Share'].map((action, index) => {
+                    const icons = [FaStar,FaCalendar, FaShare];
                     return React.createElement(
                         'button',
                         { key: action },
@@ -389,6 +389,7 @@ function Events() : React.ReactElement{
             React.createElement(
                 'section',
                 {className: 'feed'},
+                React.createElement('h2', {className: 'event-text-style'}, 'Discover events'),
                 eventPosts.map((event_post) =>
                     createPost(
                         {

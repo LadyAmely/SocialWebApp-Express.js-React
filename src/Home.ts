@@ -36,43 +36,6 @@ function Home(): React.ReactElement{
         ),
         React.createElement('div', { className: 'hero-image' }),
         ),
-        React.createElement(
-            'div',
-            {className: 'grid-layout'},
-            React.createElement(
-                'div',
-                {className: 'grid-card'},
-                React.createElement('h3', null, 'Chat with astronomy experts'),
-                React.createElement('p', null, 'ask questions and stay up to date with the latest discoveries!')
-            ),
-            React.createElement(
-                'div',
-                {className: 'grid-card'},
-                React.createElement('h3', null, 'Create events and meetups'),
-                React.createElement('p', null, 'Connect with other astronomy enthusiasts at local and online events!')
-            ),
-            React.createElement(
-                'div',
-                {className: 'grid-card'},
-                React.createElement('h3', null, 'Build your own observations'),
-                React.createElement('p', null, 'Record your findings and create notes that will help you in your further development!')
-            ),
-            React.createElement(
-                'div',
-                {className: 'grid-card'},
-                React.createElement('h3', null, 'Explore the sky together'),
-                React.createElement('p', null, 'Use the forum feature to share experiences and exchange ideas with others!')
-            ),
-            React.createElement(
-                'div',
-                {className: 'grid-card'},
-                React.createElement('h3', null, 'Be part of the galactic community'),
-                React.createElement('p', null, 'Exchange ideas, experiences and passion for astronomy!')
-
-            )
-        ),
-
-
         React.createElement(Footer)
     );
 }
