@@ -26,18 +26,7 @@ function Profil(): React.ReactElement {
     const [newInterests, setNewInterests] = useState<string>("");
     const [newObservations, setNewObservations] = useState<string>("");
     const [newConstellations, setNewConstellations] = useState<string>("");
-    //const [userInfo, setUserInfo] = useState(null);
-    //const [userInfo, setUserInfo] = useState<any>(null);
 
-    /*
-    const [userInfo, setUserInfo] = useState({
-        location: '',
-        interests: [],
-        observations: [],
-        favouriteConstellations: [],
-    });
-
-     */
 
     const [userInfo, setUserInfo] = useState({
         location: 'Brak lokalizacji',

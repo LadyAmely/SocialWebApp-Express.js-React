@@ -9,7 +9,8 @@ import Chat from '../Components/Chat';
 import { FaThumbsUp, FaComment, FaShare } from 'react-icons/fa';
 import Footer from "../Components/Footer";
 import CommentMain from "../Components/CommentMain";
-import CommentGroups from "../Components/CommentGroups";
+import DropMenu from "../Components/DropMenu";
+
 
 
 function Dashboard(): React.ReactElement {
@@ -21,9 +22,13 @@ function Dashboard(): React.ReactElement {
     const displayName = username || 'Unknown User';
     const [userGroups, setUserGroup] = useState<string[]>([]);
     const [userId, setUserId] = useState<string | null>(null);
-
+    const [isDropMenu, setDropMenu] = React.useState(false);
     const { FaThumbsUp, FaComment, FaShare } = require('react-icons/fa');
 
+
+    const toggleMenuWindow = () => {
+        setDropMenu(!isDropMenu);
+    };
 
     const fetchUserIdByUsername = async () => {
         try {
@@ -138,7 +143,7 @@ function Dashboard(): React.ReactElement {
     return React.createElement(
         React.Fragment,
         null,
-        createHeader(displayName, handleLogout),
+        createHeader(displayName, toggleMenuWindow, isDropMenu),
         React.createElement(
             'div',
             { className: 'main-container' },
@@ -163,6 +168,7 @@ function Dashboard(): React.ReactElement {
             React.createElement(
                 'div',
                 {className: 'right-container'},
+                isDropMenu && DropMenu(displayName),
                 createProfileSidebar(displayName),
                 createChatSidebar(
                     { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },
@@ -177,7 +183,7 @@ function Dashboard(): React.ReactElement {
     );
 }
 
-function createHeader(username: string, handleLogout: () => void): React.ReactElement {
+function createHeader(username: string, toggleMenuWindow: () => void, isDropMenu: boolean): React.ReactElement {
     const navItems = [
         { name: 'Home', icon: faHome, href: '/dashboard' },
         { name: 'Profile', icon: faUser, href: '/profile' },
@@ -224,10 +230,11 @@ function createHeader(username: string, handleLogout: () => void): React.ReactEl
                         name: username,
                         size: '40',
                         round: true,
-                        onClick: handleLogout
+                        onClick: toggleMenuWindow
                     }
                 )
             ),
+            //isDropMenu && DropMenu()
 
         ),
 
