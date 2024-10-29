@@ -25,6 +25,8 @@ This project implements a discussion forum where users can create and participat
 
 The social media app’s event favorites feature allows users to easily save interesting events using the “Favorites” button. Users can view and manage their list of favorite events.
 
+![GalaxyFlow-dashboard](https://github.com/LadyAmely/SocialWebApp/blob/master/events-galaxyflow.png)
+
 ## License
 
 This project is licensed under the MIT License.
