@@ -29,3 +29,62 @@
     color: white;
 
 }
+
+.layout{
+    height: auto;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    overflow-x: auto;
+}
+
+.grid-event-card{
+    height: 300px;
+    width: 300px;
+    background-color: rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.grid-event-card .grid-image{
+    height: 60%;
+    width: 100%;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+
+}
+
+.grid-event-card h2{
+    font-weight: bold;
+    font-size: 13px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: -10px;
+    color: #f9f9f9;
+}
+
+.grid-event-card p{
+    font-size: 14px;
+    color: rgb(117, 167, 216);
+    margin-left: 10px;
+}
+
+.grid-event-card-h3{
+    font-size: 12px;
+    color: rgba(249, 249, 249, 0.61);
+    font-weight: normal;
+    font-family: sans-serif;
+    margin-right: auto;
+    margin-left: 10px;
+    margin-top: -5px;
+    text-align: justify;
+    margin-bottom: 10px;
+    text-shadow: none;
+
+}

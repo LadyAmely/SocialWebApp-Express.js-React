@@ -7,6 +7,7 @@ import '../css/pages/dashboard.css';
 import '../css/pages/events.css';
 import Chat from "../Components/Chat";
 import Footer from "../Components/Footer";
+import FavouriteEvents from "../Components/FavouriteEvents";
 import {FaCalendar, FaComment, FaShare, FaStar, FaThumbsUp} from "react-icons/fa";
 
 function Events() : React.ReactElement{
@@ -18,7 +19,8 @@ function Events() : React.ReactElement{
     const [activeChats, setActiveChats] = useState<string[]>([]);
     const [userGroups, setUserGroup] = useState<string[]>([]);
     const [userId, setUserId] = useState<string | null>(null);
-
+    const [favouriteEvents, setFavouriteEvents] = useState<any[]>([]);
+    const [event_id, setEventId] = useState<number | null>(null);
 
     const fetchUserIdByUsername = async () => {
         try {
@@ -40,6 +42,25 @@ function Events() : React.ReactElement{
     interface UserGroup {
         title: string;
     }
+
+    useEffect(() => {
+        const fetchFavouriteEvents = async () => {
+            try {
+                const response = await fetch(`http://localhost:5000/api/favourite_events/${username}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch favourite events');
+                }
+                const data = await response.json();
+                setFavouriteEvents(data);
+            } catch (error) {
+                console.error("Error fetching favourite events:", error);
+            }
+        };
+
+        if (username) {
+            fetchFavouriteEvents();
+        }
+    }, [username]);
 
 
 
@@ -65,9 +86,6 @@ function Events() : React.ReactElement{
     useEffect(() => {
         fetchUserGroup();
     }, [userId]);
-
-
-
 
 
     useEffect(()=>{
@@ -113,6 +131,12 @@ function Events() : React.ReactElement{
             setActiveChats((prevChats) => [...prevChats, user]);
         }
     };
+
+
+    const handleSelectEvent = (id: number) => {
+        setEventId(id);
+    };
+
 
     function createHeader(username: string, handleLogout: () => void): React.ReactElement {
         const navItems = [
@@ -275,10 +299,50 @@ function Events() : React.ReactElement{
         );
     }
 
+    function createFavouriteEvent(
+        user: { name: string; avatar: string | React.ReactNode; time: string },
+        content: string,
+        image: string,
+        title: string,
+        date: string,
+        place: string,
+    ):React.ReactElement{
+        return React.createElement(
+            'div',
+            {className: 'grid-event-card'},
+            React.createElement(
+                'div',
+                {className:'grid-image', style: { backgroundImage: `url(${image})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',}},
+
+            ),
+            React.createElement(
+                'p',
+                null,
+                date
+            ),
+            React.createElement(
+              'h2',
+              null,
+                title
+            ),
+            React.createElement(
+                'h3',
+                {className: 'grid-event-card-h3'},
+                place
+            )
+        )
+
+    }
+
+
+
     function createPost(
         user: { name: string; avatar: string | React.ReactNode; time: string },
         content: string,
         image: string,
+        event_id: number,
     ): React.ReactElement {
         return React.createElement(
             'div',
@@ -325,9 +389,12 @@ function Events() : React.ReactElement{
                     const icons = [FaStar,FaCalendar, FaShare];
                     return React.createElement(
                         'button',
-                        { key: action },
+                        {
+                            key: action,
+                        },
                         React.createElement(icons[index], { style: { marginRight: '5px' } }),
-                        action
+                        action,
+                      //  event_id !== null && React.createElement(FavouriteEvents, { username, event_id })
                     );
                 })
             )
@@ -389,6 +456,21 @@ function Events() : React.ReactElement{
             React.createElement(
                 'section',
                 {className: 'feed'},
+                React.createElement('h2', {className: "event-text-style"}, 'My events'),
+                React.createElement('div', {className: 'layout'},
+                        favouriteEvents.map((my_event)=>createFavouriteEvent(
+                            {name: my_event.username,
+                                avatar: React.createElement(Avatar, { name: my_event.username, size: '50', round: true }),
+                                time: new Date(my_event.created_at).toLocaleString(),
+                                },
+                            my_event.description,
+                            my_event.image_path,
+                            my_event.title,
+                            my_event.date_of_event,
+                            my_event.place_of_event,
+                            )
+                        ),
+                    ),
                 React.createElement('h2', {className: 'event-text-style'}, 'Discover events'),
                 eventPosts.map((event_post) =>
                     createPost(
@@ -399,6 +481,7 @@ function Events() : React.ReactElement{
                         },
                         event_post.description,
                         event_post.image_path,
+                        event_post.event_id,
                     )
                 ),
             ),

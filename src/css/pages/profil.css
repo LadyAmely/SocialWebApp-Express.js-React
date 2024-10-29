@@ -276,9 +276,7 @@
     transition: transform 0.2s;
 }
 
-.post:hover {
-    transform: scale(1.02);
-}
+
 
 .post-header {
     display: flex;
