@@ -77,9 +77,6 @@ function Dashboard(): React.ReactElement {
     }, [userId]);
 
 
-
-
-
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -147,7 +144,7 @@ function Dashboard(): React.ReactElement {
         React.createElement(
             'div',
             { className: 'main-container' },
-            createSidebar(),
+            createSidebar(userGroups),
             React.createElement(
                 'section',
                 { className: 'feed' },
@@ -241,7 +238,7 @@ function createHeader(username: string, toggleMenuWindow: () => void, isDropMenu
     );
 }
 
-function createSidebar(): React.ReactElement {
+function createSidebar(userGroups: string[]): React.ReactElement {
     const menuItems = [
         { name: 'Home', icon: faHome, href:'/dashboard' },
         { name: 'Forum', icon: faComments, href: '/forum' },
@@ -267,6 +264,31 @@ function createSidebar(): React.ReactElement {
                 )
             )
         ),
+        React.createElement(
+            'p',
+            {className: 'text-group'},
+            'Your groups'
+        ),
+        userGroups.map((groupTitle, index) =>
+            React.createElement(
+                'li',
+                { key: `group-${index}`, style: { listStyleType: 'none', marginBottom: '10px', display: 'flex', alignItems: 'center' } }, // Ustawienie display na flex, aby wyśrodkować elementy
+                React.createElement(
+                    Avatar,
+                    {
+                        name: groupTitle,
+                        size: '40',
+                        round: true,
+                    }
+                ),
+                React.createElement(
+                    'span',
+                    { style: { marginLeft: '10px', color: 'rgba(200, 220, 230, 0.6)' } },
+                    groupTitle
+                )
+            ),
+        )
+
 
 
     );

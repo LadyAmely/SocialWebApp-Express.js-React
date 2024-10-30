@@ -1,6 +1,4 @@
 
-
-
 .profile-gradient{
     width: 100%;
     max-width: 1000px;
@@ -10,8 +8,6 @@
     padding: 20px;
 
 }
-
-
 
 .profile-dark-container{
     width: 100%;
@@ -275,8 +271,6 @@
     margin-bottom: 20px;
     transition: transform 0.2s;
 }
-
-
 
 .post-header {
     display: flex;

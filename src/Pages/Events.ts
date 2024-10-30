@@ -37,6 +37,21 @@ function Events() : React.ReactElement{
         }
     };
 
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/auth/users');
+                const data = await response.json();
+                console.log("Fetched users: ", data);
+                setUsers(data);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
 
 
     interface UserGroup {
@@ -394,7 +409,7 @@ function Events() : React.ReactElement{
                         },
                         React.createElement(icons[index], { style: { marginRight: '5px' } }),
                         action,
-                      //  event_id !== null && React.createElement(FavouriteEvents, { username, event_id })
+
                     );
                 })
             )

@@ -6,12 +6,11 @@ interface FavouriteEventProps {
 }
 
 const FavouriteEvents: React.FC<FavouriteEventProps> = ({ username, event_id }) => {
+    const [isAdded, setIsAdded] = React.useState(false);
+
     useEffect(() => {
         const addFavouriteEvent = async () => {
-            if (!username || !event_id) {
-                console.error("Username or event ID is missing");
-                return;
-            }
+            if (!username || !event_id || isAdded) return;
 
             try {
                 const response = await fetch('/api/favourite_events', {
@@ -22,21 +21,22 @@ const FavouriteEvents: React.FC<FavouriteEventProps> = ({ username, event_id }) 
                     body: JSON.stringify({ username, event_id }),
                 });
 
-                if (!response.ok) {
+                if (response.ok) {
+                    setIsAdded(true);
+                    const data = await response.json();
+                    console.log('Wydarzenie dodane do ulubionych:', data);
+                } else {
                     const errorData = await response.json();
-                    console.error('Error:', errorData.error);
-                    return;
+                    console.error('Błąd:', errorData.error);
                 }
-
-                const data = await response.json();
-                console.log('Favourite event added:', data);
             } catch (error) {
-                console.error('Fetch error:', error);
+                console.error('Błąd podczas fetch:', error);
             }
         };
 
         addFavouriteEvent();
-    }, [username, event_id]);
+    }, [username, event_id, isAdded]);
+
     return null;
 };
 
