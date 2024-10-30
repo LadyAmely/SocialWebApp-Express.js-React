@@ -435,6 +435,7 @@ function Profil(): React.ReactElement {
     const friendCard = React.createElement(
         'div',
         { className: 'friends-card' },
+        React.createElement('h2', {style: {color: 'white'}}, 'Friends'),
         React.createElement(
             'div',
             { className: 'friends-list' },
