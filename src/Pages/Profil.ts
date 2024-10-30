@@ -9,10 +9,13 @@ import { faCamera, faVideo, faCalendar } from '@fortawesome/free-solid-svg-icons
 import { faNewspaper, faInfoCircle, faUserFriends, faImage, faFilm, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { faMapMarkerAlt, faHeart, faEye, faStar } from '@fortawesome/free-solid-svg-icons';
+import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
+import CommentMain from "../Components/CommentMain";
 
 
 function Profil(): React.ReactElement {
     const { username } = useAuth();
+    const displayName = username || 'Unknown User';
     const [imageUrl, setImageUrl] = useState<string>("/best.jpg");
     const [backgroundColor, setBackgroundColor] = useState<string>('#ffffff');
     const [fileInputKey, setFileInputKey] = useState<number>(0);
@@ -214,6 +217,8 @@ function Profil(): React.ReactElement {
         user: { name: string; avatar: string | React.ReactNode; time: string },
         content: string,
         image: string,
+        postId: number,
+        username: string,
         loggedInUser: string
     ): React.ReactElement {
 
@@ -258,10 +263,17 @@ function Profil(): React.ReactElement {
             React.createElement(
                 'div',
                 { className: 'post-actions' },
-                ['Like', 'Comment', 'Share'].map((action) =>
-                    React.createElement('button', null, action)
-                )
-            )
+                ['Like', 'Comment', 'Share'].map((action, index) => {
+                    const icons = [FaThumbsUp, FaComment, FaShare];
+                    return React.createElement(
+                        'button',
+                        { key: action },
+                        React.createElement(icons[index], { style: { marginRight: '5px' } }),
+                        action
+                    );
+                }),
+            ),
+            React.createElement(CommentMain,  { postId, username }),
         );
     }
 
@@ -672,6 +684,8 @@ function Profil(): React.ReactElement {
                                     },
                                     post.description,
                                     post.image_path,
+                                    post.post_id,
+                                    displayName,
                                     username ?? 'Unknown User'
                                 )
                             ),
