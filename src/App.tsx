@@ -8,6 +8,7 @@ import { AuthProvider } from './context/AuthContext';
 import Profil from "./Pages/Profil";
 import Forum from './Pages/Forum';
 import Events from './Pages/Events';
+import Groups from './Pages/Groups';
 import Community from "./Pages/Community";
 import News from './Pages/News';
 
