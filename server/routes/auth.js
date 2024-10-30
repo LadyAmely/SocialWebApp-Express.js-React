@@ -7,11 +7,9 @@ const sequelize = require("../config/db");
 
 let loggedInUsers = [];
 
-
 router.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });
-
 
 router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));

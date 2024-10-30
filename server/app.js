@@ -71,6 +71,27 @@ app.get('/api/user-groups/:id', async (req, res) => {
     }
 });
 
+app.get('/api/friends/:username', async (req, res) => {
+    try {
+        const { username } = req.params;
+        const results = await sequelize.query(
+            'SELECT friend_user FROM friends WHERE username = :username',
+            {
+                replacements: { username },
+                type: sequelize.QueryTypes.SELECT,
+            }
+        );
+
+        res.status(200).json(results);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
+
+
 app.get('/api/news', async(req, res) => {
     try {
         const [results, metadata] = await sequelize.query('SELECT * FROM news');
@@ -83,7 +104,12 @@ app.get('/api/news', async(req, res) => {
 
 app.get('/api/community', async(req, res) => {
     try {
-        const [results, metadata] = await sequelize.query('SELECT * FROM groups');
+        const [results, metadata] = await sequelize.query('SELECT * FROM groups',
+            {
+                replacements: { id: id },
+                type: sequelize.QueryTypes.SELECT
+            }
+            );
         res.status(200).json(results);
     }catch(error){
         console.error('Error fetching news posts:', error);
@@ -264,6 +290,8 @@ app.get('/api/events', async(req, res)=> {
     }
 });
 
+/*
+
 app.post('/api/favourite_events', async(req, res)=>{
 
     const{username, event_id} = req.body;
@@ -285,6 +313,44 @@ app.post('/api/favourite_events', async(req, res)=>{
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+ */
+
+app.post('/api/favourite_events', async (req, res) => {
+    const { username, event_id } = req.body;
+    if (!username || !event_id) {
+        return res.status(400).json({ error: '400 error' });
+    }
+    try {
+
+        const [existingEvent] = await sequelize.query(
+            'SELECT * FROM favourite_events WHERE username = :username AND event_id = :event_id',
+            {
+                replacements: { username, event_id },
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        if (existingEvent) {
+            return res.status(200).json({ message: 'Event already marked as favourite' });
+        }
+
+
+        const favouriteEvent = await sequelize.query(
+            'INSERT INTO favourite_events (username, event_id) VALUES (:username, :event_id)',
+            {
+                replacements: { username, event_id },
+                type: sequelize.QueryTypes.INSERT
+            }
+        );
+
+        res.status(201).json({ id: favouriteEvent[0], username, event_id });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 app.get('/api/favourite_events/:username', async(req, res)=>{
     try{
