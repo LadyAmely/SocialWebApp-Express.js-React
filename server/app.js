@@ -104,11 +104,7 @@ app.get('/api/news', async(req, res) => {
 
 app.get('/api/community', async(req, res) => {
     try {
-        const [results, metadata] = await sequelize.query('SELECT * FROM groups',
-            {
-                replacements: { id: id },
-                type: sequelize.QueryTypes.SELECT
-            }
+        const [results, metadata] = await sequelize.query('SELECT * FROM groups'
             );
         res.status(200).json(results);
     }catch(error){
