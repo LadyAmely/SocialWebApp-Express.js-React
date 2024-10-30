@@ -26,6 +26,14 @@ function Profil(): React.ReactElement {
     const [newInterests, setNewInterests] = useState<string>("");
     const [newObservations, setNewObservations] = useState<string>("");
     const [newConstellations, setNewConstellations] = useState<string>("");
+   // const [friends, setFriends] = useState<string[]>([]);
+
+    interface Friend {
+        friend_user: string;
+
+    }
+
+    const [friends, setFriends] = useState<Friend[]>([]);
 
 
     const [userInfo, setUserInfo] = useState({
@@ -85,6 +93,22 @@ function Profil(): React.ReactElement {
         };
         fetchUserInfo();
     }, [username]);
+
+    const fetchFriends = async()=>{
+        try{
+            const response = await fetch(`http://localhost:5000/api/friends/${username}`);
+            const data = await response.json();
+            console.log("Fetched friends:", data);
+            setFriends(data);
+        }catch(err){
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        fetchFriends();
+    }, [username]);
+
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -410,29 +434,30 @@ function Profil(): React.ReactElement {
 
     const friendCard = React.createElement(
         'div',
-        {className: 'friends-card'},
+        { className: 'friends-card' },
         React.createElement(
             'div',
-            {className: 'friends-list'},
-            users.map((username, index) =>
-            React.createElement(
-                'div',
-                {className: 'friend', key: index},
+            { className: 'friends-list' },
+            friends.length > 0 ? friends.map((friend, index) => (
                 React.createElement(
                     'div',
-                    {className: 'friend-photo'},
-                    React.createElement(Avatar, { name: username, size: '100', round: false })
-                ),
-                React.createElement(
-                    'div',
-                    {className: 'friend-info'},
-                    React.createElement('h4', null,  username),
-                    React.createElement('p', null)
+                    { className: 'friend', key: index },
+                    React.createElement(
+                        'div',
+                        { className: 'friend-photo' },
+                        React.createElement(Avatar, { name: friend.friend_user, size: '100', round: false })
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'friend-info' },
+                        React.createElement('h4', null, friend.friend_user),
+                        React.createElement('p', null)
+                    )
                 )
-            )
-            )
+            )) : React.createElement('p', null, 'Brak przyjaciół do wyświetlenia.')
         )
     );
+
 
 
     const profileSection = React.createElement(
