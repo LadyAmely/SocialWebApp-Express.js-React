@@ -27,6 +27,10 @@ The social media app’s event favorites feature allows users to easily save int
 
 ![GalaxyFlow-dashboard](https://github.com/LadyAmely/SocialWebApp/blob/master/events-galaxyflow.png)
 
+## Create your own profile
+
+The function of creating your own profile in the social media application allows users to personalize their account. With the profile, each user can introduce themselves, share interests and add their own content that will be visible to others. The profile also allows you to edit personal data, such as a profile picture or description.
+
 ## License
 
 This project is licensed under the MIT License.
