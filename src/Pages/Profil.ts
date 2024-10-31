@@ -292,7 +292,6 @@ function Profil(): React.ReactElement {
 
     }
 
-
     function createHeader(): React.ReactElement {
         const navItems = [
             { name: 'Home', icon: faHome, href: '/home' },
@@ -535,7 +534,7 @@ function Profil(): React.ReactElement {
                                 React.createElement(
                                     'p',
                                     null,
-                                    '0 friends'
+                                    '3 friends'
                                 )
                             ),
 
@@ -616,6 +615,12 @@ function Profil(): React.ReactElement {
 
                 React.createElement('div', {className: 'profile-first-container'},
                        userCard,
+                       friendCard,
+
+                ),
+
+                React.createElement('div', {className: 'profile-second-container'},
+
                     React.createElement('div', { className: 'create-post' },
                         React.createElement('div', {className: 'post-line'},
 
@@ -680,12 +685,6 @@ function Profil(): React.ReactElement {
                     ),
 
 
-                ),
-
-                React.createElement('div', {className: 'profile-second-container'},
-
-
-                        friendCard,
                     React.createElement('div', {className: 'profile-posts'},
 
 

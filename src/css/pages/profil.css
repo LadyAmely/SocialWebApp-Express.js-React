@@ -9,7 +9,7 @@
 
 }
 
-.profile-dark-container{
+.profile-dark-container {
     width: 100%;
     height: auto;
     background: radial-gradient(
@@ -31,32 +31,30 @@
             rgba(10, 10, 10, 1) 100%
     );
 
-
     overflow-x: hidden;
     display: flex;
-    flex-direction: column;
-    align-items: start;
-    justify-content: space-between;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
     flex-wrap: wrap;
-
 }
-.profile-first-container {
-    width: 100vw;
+
+.profile-first-container{
+    flex-basis: 45%;
     height: auto;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    margin: 0;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 0;
     padding: 0;
 }
-
-.profile-second-container{
-    width: 100vw;
+.profile-second-container {
+    flex-basis: 55%;
     height: auto;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    margin: 0;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 0;
     padding: 0;
 }
 
@@ -181,9 +179,8 @@
 
 .create-post {
     display: flex;
-    width: 60%;
+    max-width: 750px;
     padding-right: 40px;
-    padding-left: 5px;
     margin-top: 20px;
     flex-direction: column;
     background-color: rgba(0, 0, 0, 0.2);
@@ -221,17 +218,19 @@
 
 .post-btn {
     padding: 12px;
-    background-color: rgba(23, 58, 142, 0.15);
-    color: #fff;
-    font-weight: bold;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     text-align: center;
-    width: 95%;
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-top: 40px;
+    width: 80%;
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+    background-color: rgba(39, 50, 71, 0.26);
+    margin-left: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -242,17 +241,19 @@
     height: 50px;
     display: flex;
     gap: 30px;
-    margin: 5px 5px 5px 15px;
+    margin-bottom: 15px;
+    margin-left: 60px;
+    margin-right: auto;
 
 }
 
 .create-post .post-btn:hover {
-    background-color: rgba(21, 91, 193, 0.38);
+    background-color: rgb(50, 54, 67);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .create-post .post-btn:active {
-    background-color: rgba(14, 69, 163, 0.37);
+    background-color: rgb(50, 54, 67);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -323,11 +324,12 @@
 .post-line{
     display: flex;
     height: auto;
-    width: 100%;
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 20px;
     border-top: 3px solid rgba(40, 44, 52, 0.34);
     border-bottom: 3px solid rgba(40, 44, 52, 0.34);
-    margin-right: 5px;
-    margin-left: 5px;
 }
 
 .post-title{
@@ -375,6 +377,7 @@
 .post-button-container li a:hover::before {
     background-color: rgba(255, 255, 255, 0.12);
 }
+
 
 .user-card {
     padding: 20px;
@@ -538,7 +541,7 @@
     width: auto;
     grid-row: 2;
     grid-column: 2;
-    max-width: 60%;
+    max-width: 800px;
     padding-right: 40px;
 }
 
@@ -592,7 +595,7 @@
 }
 
 .button-modern:hover {
-    background-color: rgba(14, 194, 237, 0.19);
+    background-color: rgb(50, 54, 67);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
