@@ -15,8 +15,6 @@ function Register(): React.ReactElement {
         const username = (event.currentTarget.username.value);
         const password = (event.currentTarget.password.value);
 
-        console.log("Wartości formularza:", { username, email,  password });
-
         setIsLoading(true);
         setErrorMessage(null);
 

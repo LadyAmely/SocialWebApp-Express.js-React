@@ -27,7 +27,6 @@ function Login(): React.ReactElement {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Login successful:', data);
                 localStorage.setItem('authToken', data.token);
                 localStorage.setItem('username', data.username);
                 window.location.href = '/dashboard';
@@ -96,7 +95,7 @@ function Login(): React.ReactElement {
                         'Don\'t have an account? ',
                         React.createElement(
                             'a',
-                            { href: '/register' },
+                            { href: '/auth/register' },
                             'Sign Up'
                         )
                     )

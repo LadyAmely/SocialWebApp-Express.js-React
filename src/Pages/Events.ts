@@ -9,6 +9,11 @@ import Chat from "../Components/Chat";
 import Footer from "../Components/Footer";
 import FavouriteEvents from "../Components/FavouriteEvents";
 import {FaCalendar, FaComment, FaShare, FaStar, FaThumbsUp} from "react-icons/fa";
+import ChatSidebar from "../Components/ChatSidebar";
+import ProfileSidebar from "../Components/ProfileSidebar";
+import HomeHeader from "../Components/HomeHeader";
+import DropMenu from "../Components/DropMenu";
+
 
 function Events() : React.ReactElement{
 
@@ -21,6 +26,11 @@ function Events() : React.ReactElement{
     const [userId, setUserId] = useState<string | null>(null);
     const [favouriteEvents, setFavouriteEvents] = useState<any[]>([]);
     const [event_id, setEventId] = useState<number | null>(null);
+    const [isDropMenu, setDropMenu] = React.useState(false);
+
+    const toggleMenuWindow = () => {
+        setDropMenu(!isDropMenu);
+    };
 
     const fetchUserIdByUsername = async () => {
         try {
@@ -153,60 +163,6 @@ function Events() : React.ReactElement{
     };
 
 
-    function createHeader(username: string, handleLogout: () => void): React.ReactElement {
-        const navItems = [
-            { name: 'Home', icon: faHome, href: '/dashboard' },
-            { name: 'Profile', icon: faUser, href: '/profile' },
-            { name: 'Forum', icon: faComments, href: '/forum' },
-            { name: 'Community', icon: faUsers, href: '/community' },
-            { name: 'Settings', icon: faCog, href: '/settings' }
-        ];
-
-        return React.createElement(
-            'header',
-            { className: 'dashboard-header' },
-            React.createElement(
-                'div',
-                { className: 'dashboard-header-left' },
-                React.createElement('h1', { className: 'dashboard-logo' }, 'GalaxyFlow'),
-            ),
-            React.createElement(
-                'div',
-                { className: 'dashboard-header-center' },
-                React.createElement(
-                    'nav',
-                    { className: 'nav' },
-                    React.createElement(
-                        'ul',
-                        null,
-                        navItems.map(item =>
-                            React.createElement(
-                                'li',
-                                { key: item.name, className: 'nav-item' },
-                                React.createElement(
-                                    'a',
-                                    { href: item.href, className: 'nav-link' },
-                                    React.createElement(FontAwesomeIcon, { icon: item.icon, className: 'icon' }),
-                                )
-                            )
-                        )
-                    )
-                ),
-                React.createElement('div',
-                    { className: 'dashboard-header-left' },
-                    React.createElement(
-                        Avatar,
-                        {
-                            name: username,
-                            size: '40',
-                            round: true,
-                            onClick: handleLogout
-                        }
-                    )
-                )
-            )
-        );
-    }
 
 
     function createSidebar(): React.ReactElement {
@@ -262,57 +218,6 @@ function Events() : React.ReactElement{
         );
     }
 
-    function createChatSidebar(
-        user: { name: string; avatar: string | React.ReactNode },
-        users: string[],
-        activeChats: string[],
-        handleUserClick: (username: string) => void,
-        loggedInUser: string
-    ): React.ReactElement {
-        return React.createElement(
-            'aside',
-            { className: 'chat-sidebar' },
-            React.createElement('h2', null, 'Chats'),
-            React.createElement(
-                'ul',
-                null,
-                users
-                    .filter(username => username !== loggedInUser)
-                    .map((username) =>
-                        React.createElement(
-                            'li',
-                            {
-                                className: 'chat-item',
-                                onClick: () => handleUserClick(username),
-                            },
-                            React.createElement('span', null, loggedInUser === user.name
-                                ? React.createElement('div', { className: 'logged-user-circle' })
-                                : React.createElement('div', { className: 'unlogged-user-circle' })),
-                            React.createElement(Avatar, { name: username, size: '40', round: true }),
-                            React.createElement('span', null, username)
-                        )
-                    )
-            ),
-            React.createElement(
-                'div',
-                { className: 'chat-windows-container' },
-                activeChats.length > 0
-                    ? activeChats.map((chatUser) =>
-                        React.createElement(
-                            'div',
-                            { className: 'chat-window', key: chatUser },
-
-                            React.createElement(Chat, { user: chatUser })
-                        )
-                    )
-                    : React.createElement(
-                        'div',
-                        { className: 'no-chat' },
-                        'Select a user to start chatting.'
-                    )
-            )
-        );
-    }
 
     function createFavouriteEvent(
         user: { name: string; avatar: string | React.ReactNode; time: string },
@@ -417,53 +322,11 @@ function Events() : React.ReactElement{
         );
     }
 
-    function createProfileSidebar(
-        username: string
-    ):React.ReactElement{
-        return React.createElement(
-            'div',
-            {className: 'profile-sidebar'},
-            React.createElement(
-                'div',
-                {className: 'background-container'},
-            ),
-            React.createElement(
-                'div',
-                {className: 'avatar-container'},
-                React.createElement(
-                    Avatar,
-                    {
-                        name: username,
-                        size: '100%',
-                        round: true,
-                    }
-                )
-            ),
-            React.createElement(
-                'p',
-                null,
-                'Welcome back'
-            ),
-            React.createElement(
-                'h3',
-                null,
-                username
-            ),
-            React.createElement(
-                'button',
-                {onClick: () => (window.location.href = '/profile')},
-                'Visit your profile'
-            )
-        )
-    }
-
-
-
 
     return React.createElement(
       'div',
       React.Fragment,
-      createHeader(displayName, handleLogout),
+      HomeHeader(displayName, toggleMenuWindow),
         React.createElement(
             'div',
             {className: 'main-container'},
@@ -503,8 +366,9 @@ function Events() : React.ReactElement{
             React.createElement(
               'div',
                 {className: 'right-container'},
-                createProfileSidebar(displayName),
-                createChatSidebar(
+                isDropMenu && DropMenu(displayName),
+                ProfileSidebar(displayName),
+                ChatSidebar(
                     { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },
                     users,
                     activeChats,
@@ -516,11 +380,6 @@ function Events() : React.ReactElement{
         ),
         React.createElement(Footer)
     );
-
-
-
-
-
 }
 
 export default Events;

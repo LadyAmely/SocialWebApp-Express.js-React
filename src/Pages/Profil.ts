@@ -3,7 +3,7 @@ import Avatar from 'react-avatar';
 import Vibrant from 'node-vibrant';
 import { useAuth } from "../context/AuthContext";
 import "../css/pages/profil.css";
-import {faCog, faComments, faHome, faUser, faUsers} from "@fortawesome/free-solid-svg-icons";
+import {faBinoculars, faCog, faComments, faHome, faUser, faUsers} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faCamera, faVideo, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { faNewspaper, faInfoCircle, faUserFriends, faImage, faFilm, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
@@ -36,15 +36,16 @@ function Profil(): React.ReactElement {
 
     }
 
+    interface aboutUser{
+        location: string,
+        interests: string,
+        observations: string,
+        constellations: string,
+    }
+
     const [friends, setFriends] = useState<Friend[]>([]);
 
-
-    const [userInfo, setUserInfo] = useState({
-        location: 'Brak lokalizacji',
-        interests: ['Brak zainteresowań'],
-        observations: ['Brak obserwacji'],
-        favouriteConstellations: ['Brak ulubionych konstelacji'],
-    });
+    const [userInfo, setUserInfo] = useState<aboutUser[]>([]);
 
     function handleDescriptionChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
 
@@ -84,12 +85,7 @@ function Profil(): React.ReactElement {
                 }
                 const data = await response.json();
 
-                setUserInfo({
-                    location: data.location || 'Brak lokalizacji',
-                    interests: data.interests.length > 0 ? data.interests : ['Brak zainteresowań'],
-                    observations: data.observations.length > 0 ? data.observations : ['Brak obserwacji'],
-                    favouriteConstellations: data.favouriteConstellations.length > 0 ? data.favouriteConstellations : ['Brak ulubionych konstelacji'],
-                });
+                setUserInfo(data);
             } catch (err) {
                 console.error('Błąd:', err);
             }
@@ -277,6 +273,25 @@ function Profil(): React.ReactElement {
         );
     }
 
+    function aboutUserInfo(
+        location:string,
+        interests: string,
+        observations: string,
+        favouriteConstellations: string,
+
+    ):React.ReactElement{
+
+        return   React.createElement(
+            'div',
+            {className: 'user-stats'},
+            React.createElement('p', null,  React.createElement(FontAwesomeIcon, { icon: faMapMarkerAlt }), ' Location: '+location),
+            React.createElement('p', null, React.createElement(FontAwesomeIcon, { icon: faHeart }),' Interests: '+interests),
+            React.createElement('p', null,   React.createElement(FontAwesomeIcon, { icon: faBinoculars }),' Observations: '+observations),
+            React.createElement('p', null, React.createElement(FontAwesomeIcon, { icon: faStar }),' Favourite constellations: '+favouriteConstellations),
+        );
+
+    }
+
 
     function createHeader(): React.ReactElement {
         const navItems = [
@@ -385,14 +400,15 @@ function Profil(): React.ReactElement {
         React.createElement(
             'div',
             {className: 'user-details'},
-            React.createElement(
-                'div',
-                {className: 'user-stats'},
-                React.createElement('p', null, `Location: ${userInfo.location}`),
-                React.createElement('p', null,  `Interests: ${userInfo.interests.join(', ')}` ),
-                React.createElement('p', null,  `Observations: ${userInfo.observations.join(', ')}`),
-                React.createElement('p', null, `Favourite Constellations: ${userInfo.favouriteConstellations.join(', ')}`)
-            ),
+                userInfo
+                    .map((userInformation) =>
+                      aboutUserInfo(
+                          userInformation.location,
+                          userInformation.interests,
+                          userInformation.observations,
+                          userInformation.constellations,
+                          )
+                    ),
             React.createElement(
                 'button',
                 {className: 'button-modern',  onClick: toggleEditWindow,},

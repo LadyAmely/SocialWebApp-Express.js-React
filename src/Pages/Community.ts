@@ -5,10 +5,12 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Avatar from "react-avatar";
 import '../css/pages/dashboard.css';
 import '../css/pages/community.css';
-import Chat from "../Components/Chat";
 import Footer from "../Components/Footer";
-import CommentGroups  from "../Components/CommentGroups";
-import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
+import Post from "../Components/Post";
+import HomeHeader from "../Components/HomeHeader";
+import ProfileSidebar from "../Components/ProfileSidebar";
+import ChatSidebar from "../Components/ChatSidebar";
+import DropMenu from "../Components/DropMenu";
 
 function Community() : React.ReactElement{
 
@@ -19,6 +21,11 @@ function Community() : React.ReactElement{
     const [activeChats, setActiveChats] = useState<string[]>([]);
     const [userGroups, setUserGroup] = useState<string[]>([]);
     const [userId, setUserId] = useState<string | null>(null);
+    const [isDropMenu, setDropMenu] = React.useState(false);
+
+    const toggleMenuWindow = () => {
+        setDropMenu(!isDropMenu);
+    };
 
     const fetchUserIdByUsername = async () => {
         try {
@@ -80,9 +87,6 @@ function Community() : React.ReactElement{
         fetchUsers();
     }, []);
 
-
-
-
     useEffect(()=>{
         const fetchEventPosts = async() =>{
             try{
@@ -97,91 +101,12 @@ function Community() : React.ReactElement{
         fetchEventPosts();
     }, []);
 
-    const handleLogout = async () => {
-        console.log('Logout button clicked');
-        try {
-            const response = await fetch('http://localhost:5000/auth/logout', {
-                method: 'POST',
-                credentials: 'include',
-            });
-
-            console.log('Response Status:', response.status);
-            if (response.ok) {
-                console.log('Successfully logged out');
-                setUsername(null);
-                localStorage.removeItem('username');
-                window.location.href = '/';
-            } else {
-                const data = await response.json();
-                console.error('Logout error:', data.message);
-                alert(`${data.message}`);
-            }
-        } catch (error) {
-            console.error('Error during logout:', error);
-        }
-    };
 
     const handleUserClick = (user: string) => {
         if (!activeChats.includes(user)) {
             setActiveChats((prevChats) => [...prevChats, user]);
         }
     };
-
-    function createHeader(username: string, handleLogout: () => void): React.ReactElement {
-        const navItems = [
-            { name: 'Home', icon: faHome, href: '/dashboard' },
-            { name: 'Profile', icon: faUser, href: '/profile' },
-            { name: 'Forum', icon: faComments, href: '/forum' },
-            { name: 'Community', icon: faUsers, href: '/community' },
-            { name: 'Settings', icon: faCog, href: '/settings' }
-        ];
-
-        return React.createElement(
-            'header',
-            { className: 'dashboard-header' },
-            React.createElement(
-                'div',
-                { className: 'dashboard-header-left' },
-                React.createElement('h1', { className: 'dashboard-logo' }, 'GalaxyFlow'),
-            ),
-            React.createElement(
-                'div',
-                { className: 'dashboard-header-center' },
-                React.createElement(
-                    'nav',
-                    { className: 'nav' },
-                    React.createElement(
-                        'ul',
-                        null,
-                        navItems.map(item =>
-                            React.createElement(
-                                'li',
-                                { key: item.name, className: 'nav-item' },
-                                React.createElement(
-                                    'a',
-                                    { href: item.href, className: 'nav-link' },
-                                    React.createElement(FontAwesomeIcon, { icon: item.icon, className: 'icon' }),
-                                )
-                            )
-                        )
-                    )
-                ),
-                React.createElement('div',
-                    { className: 'dashboard-header-left' },
-                    React.createElement(
-                        Avatar,
-                        {
-                            name: username,
-                            size: '40',
-                            round: true,
-                            onClick: handleLogout
-                        }
-                    )
-                )
-            )
-        );
-    }
-
 
     function createSidebar(): React.ReactElement {
         const menuItems = [
@@ -236,165 +161,12 @@ function Community() : React.ReactElement{
         );
     }
 
-    function createChatSidebar(
-        user: { name: string; avatar: string | React.ReactNode },
-        users: string[],
-        activeChats: string[],
-        handleUserClick: (username: string) => void,
-        loggedInUser: string
-    ): React.ReactElement {
-        return React.createElement(
-            'aside',
-            { className: 'chat-sidebar' },
-            React.createElement('h2', null, 'Chats'),
-            React.createElement(
-                'ul',
-                null,
-                users
-                    .filter(username => username !== loggedInUser)
-                    .map((username) =>
-                        React.createElement(
-                            'li',
-                            {
-                                className: 'chat-item',
-                                onClick: () => handleUserClick(username),
-                            },
-                            React.createElement('span', null, loggedInUser === user.name
-                                ? React.createElement('div', { className: 'logged-user-circle' })
-                                : React.createElement('div', { className: 'unlogged-user-circle' })),
-                            React.createElement(Avatar, { name: username, size: '40', round: true }),
-                            React.createElement('span', null, username)
-                        )
-                    )
-            ),
-            React.createElement(
-                'div',
-                { className: 'chat-windows-container' },
-                activeChats.length > 0
-                    ? activeChats.map((chatUser) =>
-                        React.createElement(
-                            'div',
-                            { className: 'chat-window', key: chatUser },
 
-                            React.createElement(Chat, { user: chatUser })
-                        )
-                    )
-                    : React.createElement(
-                        'div',
-                        { className: 'no-chat' },
-                        'Select a user to start chatting.'
-                    )
-            )
-        );
-    }
-
-    function createProfileSidebar(
-        username: string
-    ):React.ReactElement{
-        return React.createElement(
-            'div',
-            {className: 'profile-sidebar'},
-            React.createElement(
-                'div',
-                {className: 'background-container'},
-            ),
-            React.createElement(
-                'div',
-                {className: 'avatar-container'},
-                React.createElement(
-                    Avatar,
-                    {
-                        name: username,
-                        size: '100%',
-                        round: true,
-                    }
-                )
-            ),
-            React.createElement(
-                'p',
-                null,
-                'Welcome back'
-            ),
-            React.createElement(
-                'h3',
-                null,
-                username
-            ),
-            React.createElement(
-                'button',
-                {onClick: () => (window.location.href = '/profile')},
-                'Visit your profile'
-            )
-        )
-    }
-
-    function createPost(
-        user: { name: string; avatar: string | React.ReactNode; time: string },
-        content: string,
-        image: string,
-        postId: number,
-        username: string,
-    ): React.ReactElement {
-        return React.createElement(
-            'div',
-            { className: 'post' },
-            React.createElement(
-                'div',
-                { className: 'post-header' },
-                typeof user.avatar === 'string'
-                    ? React.createElement('img', {
-                        src: user.avatar,
-                        alt: 'User Avatar',
-                        className: 'post-avatar'
-                    })
-                    : user.avatar,
-                React.createElement(
-                    'div',
-                    { className: 'post-user-info' },
-                    React.createElement('h2', null, user.name),
-                    React.createElement('span', null, user.time),
-                )
-            ),
-            React.createElement(
-                'div',
-                { className: 'post-content' },
-                React.createElement('p', null, content)
-            ),
-            React.createElement(
-                'div',
-                {
-                    className: 'post-image',
-                    style: {
-                        backgroundImage: `url(${image})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        height: '200px',
-                    }
-                }
-            ),
-
-            React.createElement(
-                'div',
-                { className: 'post-actions' },
-                ['Like', 'Comment', 'Share'].map((action, index) => {
-                    const icons = [FaThumbsUp, FaComment, FaShare];
-                    return React.createElement(
-                        'button',
-                        { key: action },
-                        React.createElement(icons[index], { style: { marginRight: '5px' } }),
-                        action
-                    );
-                })
-            ),
-            React.createElement(CommentGroups,  { postId, username }),
-
-        );
-    }
 
     return React.createElement(
         'div',
         React.Fragment,
-        createHeader(displayName, handleLogout),
+        HomeHeader(displayName, toggleMenuWindow),
         React.createElement(
             'div',
             {className: 'main-container'},
@@ -403,7 +175,7 @@ function Community() : React.ReactElement{
                 'section',
                 {className: 'feed'},
                 groupPosts.map((groupPost)=>
-                    createPost(
+                    Post(
                         {
                             name: groupPost.username,
                             avatar: React.createElement(Avatar, { name: groupPost.username, size: '50', round: true }),
@@ -420,8 +192,9 @@ function Community() : React.ReactElement{
             React.createElement(
                 'div',
                 {className: 'right-container'},
-                createProfileSidebar(displayName),
-                createChatSidebar(
+                isDropMenu && DropMenu(displayName),
+                ProfileSidebar(displayName),
+                ChatSidebar(
                     { name: username ?? 'Unknown User', avatar: React.createElement(Avatar, { name: username ?? 'Unknown User', size: '50', round: true }) },
                     users,
                     activeChats,
