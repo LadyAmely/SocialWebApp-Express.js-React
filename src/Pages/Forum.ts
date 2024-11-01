@@ -40,6 +40,8 @@ function Forum() : React.ReactElement{
     const [userGroups, setUserGroup] = useState<string[]>([]);
     const [userId, setUserId] = useState<string | null>(null);
 
+    const [targetUser, setTargetUser] = useState<string>("");
+
     useEffect(() => {
         const initialLikes = forumPosts.reduce((acc, post) => {
             acc[post.forum_post_id] = post.likes;
@@ -206,6 +208,7 @@ function Forum() : React.ReactElement{
 
     const handleUserClick = (user: string) => {
         if (!activeChats.includes(user)) {
+            setTargetUser(user);
             setActiveChats((prevChats) => [...prevChats, user]);
         }
     };
@@ -326,7 +329,8 @@ function Forum() : React.ReactElement{
         users: string[],
         activeChats: string[],
         handleUserClick: (username: string) => void,
-        loggedInUser: string
+        loggedInUser: string,
+        targetUser: string,
     ): React.ReactElement {
         return React.createElement(
             'aside',
@@ -361,7 +365,7 @@ function Forum() : React.ReactElement{
                             'div',
                             { className: 'chat-window', key: chatUser },
 
-                            React.createElement(Chat, { user: chatUser })
+                            React.createElement(Chat, { user: chatUser,targetUser: targetUser })
                         )
                     )
                     : React.createElement(
@@ -641,7 +645,8 @@ function Forum() : React.ReactElement{
                     users,
                     activeChats,
                     handleUserClick,
-                    username ?? 'Unknown User'
+                    username ?? 'Unknown User',
+                    targetUser
                 ),
             ),
 

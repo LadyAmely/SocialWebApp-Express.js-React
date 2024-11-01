@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../css/pages/dashboard.css';
 import Avatar from "react-avatar";
 import Chat from "./Chat";
@@ -8,8 +8,10 @@ function ChatSidebar(
     users: string[],
     activeChats: string[],
     handleUserClick: (username: string) => void,
-    loggedInUser: string
+    loggedInUser: string,
+    targetUser: string,
 ): React.ReactElement {
+
     return React.createElement(
         'aside',
         { className: 'chat-sidebar' },
@@ -43,7 +45,7 @@ function ChatSidebar(
                         'div',
                         { className: 'chat-window', key: chatUser },
 
-                        React.createElement(Chat, { user: chatUser })
+                        React.createElement(Chat, { user: chatUser, targetUser: targetUser })
                     )
                 )
                 : React.createElement(

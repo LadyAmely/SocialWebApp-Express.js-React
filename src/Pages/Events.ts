@@ -28,6 +28,8 @@ function Events() : React.ReactElement{
     const [event_id, setEventId] = useState<number | null>(null);
     const [isDropMenu, setDropMenu] = React.useState(false);
 
+    const [targetUser, setTargetUser] = useState<string>("");
+
     const toggleMenuWindow = () => {
         setDropMenu(!isDropMenu);
     };
@@ -153,6 +155,7 @@ function Events() : React.ReactElement{
 
     const handleUserClick = (user: string) => {
         if (!activeChats.includes(user)) {
+            setTargetUser(user);
             setActiveChats((prevChats) => [...prevChats, user]);
         }
     };
@@ -373,7 +376,8 @@ function Events() : React.ReactElement{
                     users,
                     activeChats,
                     handleUserClick,
-                    username ?? 'Unknown User'
+                    username ?? 'Unknown User',
+                    targetUser
                 ),
             ),
 

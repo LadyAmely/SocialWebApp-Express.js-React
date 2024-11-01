@@ -23,6 +23,8 @@ function Community() : React.ReactElement{
     const [userId, setUserId] = useState<string | null>(null);
     const [isDropMenu, setDropMenu] = React.useState(false);
 
+    const [targetUser, setTargetUser] = useState<string>("");
+
     const toggleMenuWindow = () => {
         setDropMenu(!isDropMenu);
     };
@@ -104,6 +106,7 @@ function Community() : React.ReactElement{
 
     const handleUserClick = (user: string) => {
         if (!activeChats.includes(user)) {
+            setTargetUser(user);
             setActiveChats((prevChats) => [...prevChats, user]);
         }
     };
@@ -199,7 +202,8 @@ function Community() : React.ReactElement{
                     users,
                     activeChats,
                     handleUserClick,
-                    username ?? 'Unknown User'
+                    username ?? 'Unknown User',
+                    targetUser
                 ),
 
             ),

@@ -674,3 +674,23 @@
     box-shadow: 0 0 5px rgba(91, 102, 126, 0.5);
 }
 
+.delete-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(126, 161, 243, 0.2);
+    color: rgba(255, 255, 255, 0.68);
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.delete-button i {
+    margin:0;
+}
+
+.delete-button:hover{
+    background-color: rgba(249, 249, 249, 0.35);
+}

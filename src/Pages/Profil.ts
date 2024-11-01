@@ -11,6 +11,7 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { faMapMarkerAlt, faHeart, faEye, faStar } from '@fortawesome/free-solid-svg-icons';
 import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
 import CommentMain from "../Components/CommentMain";
+import DropMenu from "../Components/DropMenu";
 
 
 function Profil(): React.ReactElement {
@@ -30,6 +31,13 @@ function Profil(): React.ReactElement {
     const [newObservations, setNewObservations] = useState<string>("");
     const [newConstellations, setNewConstellations] = useState<string>("");
    // const [friends, setFriends] = useState<string[]>([]);
+    const [isDropMenu, setDropMenu] = React.useState(false);
+
+    const [postId, setPostId] = useState<number | null>(null);
+
+    const toggleMenuWindow = () => {
+        setDropMenu(!isDropMenu);
+    };
 
     interface Friend {
         friend_user: string;
@@ -75,8 +83,39 @@ function Profil(): React.ReactElement {
         }
     }, []);
 
+    const deletePost = async () => {
+
+        if (!postId) {
+            console.error("postId is null, cannot delete post");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/posts/${postId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Coś poszło nie tak');
+            }
+
+            const data = await response.json();
+            console.log(data.message);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
+        if (postId) {
+            deletePost();
+        }
+    }, [postId]);
+
         const fetchUserInfo = async () => {
             try {
                 const response = await fetch(`/api/user-info/${username}`);
@@ -90,6 +129,9 @@ function Profil(): React.ReactElement {
                 console.error('Błąd:', err);
             }
         };
+
+
+    useEffect(() => {
         fetchUserInfo();
     }, [username]);
 
@@ -153,7 +195,7 @@ function Profil(): React.ReactElement {
         };
         try{
             const response = await fetch('http://localhost:5000/api/user-info', {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -164,7 +206,9 @@ function Profil(): React.ReactElement {
                 throw new Error('Failed to user data');
             }
 
-            const data = await response.json();
+            await fetchUserInfo();
+
+           // const data = await response.json();
             setNewConstellations('');
             setNewLocation('');
             setNewInterests('');
@@ -215,9 +259,14 @@ function Profil(): React.ReactElement {
         image: string,
         postId: number,
         username: string,
-        loggedInUser: string
+        setPostId: (id: number | null) => void,
+        deletePost: () => void
     ): React.ReactElement {
 
+        const handleDeletePost = () => {
+            setPostId(postId);
+            deletePost();
+        };
 
         return React.createElement(
             'div',
@@ -237,6 +286,11 @@ function Profil(): React.ReactElement {
                     { className: 'post-user-info' },
                     React.createElement('h2', null, user.name),
                     React.createElement('span', null,  user.time),
+                ),
+                React.createElement(
+                    'button',
+                    {className: 'delete-button', onClick: handleDeletePost},
+                    React.createElement('i', { className: 'fas fa-trash' })
                 )
             ),
             React.createElement(
@@ -292,13 +346,13 @@ function Profil(): React.ReactElement {
 
     }
 
-    function createHeader(): React.ReactElement {
+    function createHeader(username: string, toggleMenuWindow: () => void): React.ReactElement {
         const navItems = [
-            { name: 'Home', icon: faHome, href: '/home' },
+            { name: 'Home', icon: faHome, href: '/dashboard' },
             { name: 'Profile', icon: faUser, href: '/profile' },
             { name: 'Forum', icon: faComments, href: '/forum' },
             { name: 'Community', icon: faUsers, href: '/community' },
-            { name: 'Settings', icon: faCog, href: '/settings' }
+
         ];
 
         return React.createElement(
@@ -307,7 +361,7 @@ function Profil(): React.ReactElement {
             React.createElement(
                 'div',
                 { className: 'dashboard-header-left' },
-                React.createElement('h1', { className: 'dashboard-logo' }, 'GalaxyNET'),
+                React.createElement('h1', { className: 'dashboard-logo' }, 'GalaxyFlow'),
             ),
             React.createElement(
                 'div',
@@ -332,16 +386,17 @@ function Profil(): React.ReactElement {
                     )
                 ),
                 React.createElement('div',
-                    {className: 'dashboard-header-left'},
+                    { className: 'dashboard-header-left' },
                     React.createElement(
-                        'button',
+                        Avatar,
                         {
-                            className: 'logout-button'
-                        },
-                        ' Log Out'
+                            name: username,
+                            size: '40',
+                            round: true,
+                            onClick: toggleMenuWindow
+                        }
                     )
-
-                )
+                ),
 
             )
         );
@@ -382,10 +437,15 @@ function Profil(): React.ReactElement {
         }
     }
 
+
+
+
     const handleSave = () => {
         postUserInfo();
         toggleEditWindow();
     };
+
+
 
     const userCard = React.createElement(
 
@@ -494,8 +554,6 @@ function Profil(): React.ReactElement {
         React.createElement(
             'div',
             {className: 'profile-transparent'},
-
-
             React.createElement('div', {className: 'profile-gradient'},
                 React.createElement('div', {className: 'profile-transparent-container'},
                     React.createElement(
@@ -701,7 +759,9 @@ function Profil(): React.ReactElement {
                                     post.image_path,
                                     post.post_id,
                                     displayName,
-                                    username ?? 'Unknown User'
+                                    setPostId,
+                                    deletePost
+
                                 )
                             ),
 
@@ -710,15 +770,12 @@ function Profil(): React.ReactElement {
                     ),
             ),
         ),
-
-
-
 );
 
     return React.createElement(
         React.Fragment,
         null,
-        createHeader(),
+        createHeader(displayName, toggleMenuWindow),
         profileSection
     );
 }
