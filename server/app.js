@@ -63,7 +63,6 @@ app.get('/api/user-groups/:id', async (req, res) => {
                 type: sequelize.QueryTypes.SELECT
             }
         );
-
         res.status(200).json(results);
     } catch (error) {
         console.error(error);
@@ -392,7 +391,7 @@ app.post('/api/events', async(req, res)=>{
    }
 });
 
-app.post('/api/user-info', async(req, res)=>{
+app.put('/api/user-info', async(req, res)=>{
 
     const{username, location, interests, observations, constellations} = req.body;
 
@@ -402,11 +401,12 @@ app.post('/api/user-info', async(req, res)=>{
     }
     try{
         const userInfo = await sequelize.query(
-            'INSERT INTO user_info (username, location, interests, observations, constellations) VALUES (:username, :location, :interests, :observations, :constellations)',
+            'UPDATE user_info SET location = :location, interests = :interests, observations = :observations, constellations = :constellations WHERE username = :username',
             {
-                replacements: {username, location, interests, observations, constellations},
-                type: sequelize.QueryTypes.INSERT
+                replacements: { username, location, interests, observations, constellations },
+                type: sequelize.QueryTypes.UPDATE
             }
+
         );
 
     }catch(error){
@@ -758,13 +758,13 @@ app.post('/api/personal_info', async(req, res) => {
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
 const server = http.createServer(app);
 
+const userStatus = new Map();
 
 const wss = new WebSocket.Server({ server });
 
@@ -777,6 +777,7 @@ wss.on('connection', (ws, req) => {
             console.log(`WebSocket: użytkownik ${username} połączony`);
 
             userSockets.set(username, ws);
+            userStatus.set(username, { online: true, socket: ws });
 
             ws.on('message', (message) => {
                 console.log(` ${username}: ${message}`);
@@ -792,7 +793,8 @@ wss.on('connection', (ws, req) => {
                     const parsedMessage = JSON.parse(message);
                     targetSocket.send(`${username}: ${parsedMessage.message}`);
                 } else {
-                    ws.send(`Użytkownik ${targetUsername} nie jest dostępny.`);
+                    //ws.send(`Użytkownik ${targetUsername} nie jest dostępny.`);
+
                 }
             });
 
