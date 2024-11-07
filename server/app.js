@@ -12,6 +12,8 @@ const app = express();
 const port = 5000;
 const userSockets = new Map();
 
+
+
 const newsRouter = require('./routes/news');
 const eventRouter = require('./routes/event');
 const postRouter = require('./routes/post');

@@ -9,15 +9,16 @@
   "test": {
     "username": "postgres",
     "password": "sql2023",
-    "database": "express-db_test",
+    "database": "express-db-test",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "production": {
     "username": "postgres",
     "password": "sql2023",
-    "database": "express-db_production",
+    "database": "express-db-production",
     "host": "127.0.0.1",
     "dialect": "postgres"
   }
 }
+
