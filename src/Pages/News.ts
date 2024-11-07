@@ -8,6 +8,7 @@ import '../css/pages/news.css';
 import Chat from "../Components/Chat";
 import Footer from "../Components/Footer";
 import Comment  from "../Components/Comment";
+import HomeHeader from "../Components/HomeHeader";
 import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
 
 function News() : React.ReactElement{
@@ -21,8 +22,12 @@ function News() : React.ReactElement{
     const [userId, setUserId] = useState<string | null>(null);
 
     const [targetUser, setTargetUser] = useState<string>("");
+    const [isDropMenu, setDropMenu] = React.useState(false);
 
 
+    const toggleMenuWindow = () => {
+        setDropMenu(!isDropMenu);
+    };
 
     const fetchUserIdByUsername = async () => {
         try {
@@ -143,7 +148,6 @@ function News() : React.ReactElement{
             { name: 'Profile', icon: faUser, href: '/profile' },
             { name: 'Forum', icon: faComments, href: '/forum' },
             { name: 'Community', icon: faUsers, href: '/community' },
-            { name: 'Settings', icon: faCog, href: '/settings' }
         ];
 
         return React.createElement(
@@ -408,7 +412,8 @@ function News() : React.ReactElement{
     return React.createElement(
         'div',
         React.Fragment,
-        createHeader(displayName, handleLogout),
+        HomeHeader(displayName, toggleMenuWindow),
+       // createHeader(displayName, handleLogout),
         React.createElement(
             'div',
             {className: 'main-container'},

@@ -21,6 +21,7 @@ import CommentForum from "../Components/CommentForum";
 import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
 import {INTEGER} from "sequelize";
 import CommentGroups from "../Components/CommentGroups";
+import HomeHeader from "../Components/HomeHeader";
 
 function Forum() : React.ReactElement{
 
@@ -41,6 +42,13 @@ function Forum() : React.ReactElement{
     const [userId, setUserId] = useState<string | null>(null);
 
     const [targetUser, setTargetUser] = useState<string>("");
+
+    const [isDropMenu, setDropMenu] = React.useState(false);
+
+
+    const toggleMenuWindow = () => {
+        setDropMenu(!isDropMenu);
+    };
 
     useEffect(() => {
         const initialLikes = forumPosts.reduce((acc, post) => {
@@ -219,7 +227,6 @@ function Forum() : React.ReactElement{
             { name: 'Profile', icon: faUser, href: '/profile' },
             { name: 'Forum', icon: faComments, href: '/forum' },
             { name: 'Community', icon: faUsers, href: '/community' },
-            { name: 'Settings', icon: faCog, href: '/settings' }
         ];
 
         return React.createElement(
@@ -556,7 +563,8 @@ function Forum() : React.ReactElement{
     return React.createElement(
         'div',
         React.Fragment,
-        createHeader(displayName, handleLogout),
+        HomeHeader(displayName, toggleMenuWindow),
+        //createHeader(displayName, handleLogout),
         React.createElement(
             'div',
             {className: 'main-container'},

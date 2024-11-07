@@ -4,6 +4,7 @@
     width: auto;
     height: 100%;
     overflow: hidden;
+
 }
 
 .main-container::before {
@@ -48,7 +49,7 @@
 
 
 .dashboard-logo {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: bold;
     margin-right: 40px;
     color: rgba(255, 255, 255, 0.9);
@@ -58,7 +59,7 @@
 nav ul {
     list-style: none;
     display: flex;
-    gap: 40px;
+    gap: 20px;
     margin-left: auto;
     padding: 0;
 }
@@ -67,7 +68,7 @@ nav ul li a {
     text-decoration: none;
     color: rgba(255, 255, 255, 0.8);
     font-weight: 500;
-    font-size: 18px;
+    font-size: 14px;
     padding: 10px 20px;
     border-radius: 4px;
     transition: color 0.3s ease, background-color 0.3s ease;
@@ -104,33 +105,6 @@ nav ul li a:hover::after {
     background-color: rgba(0, 123, 255, 0.1);
     border-radius: 4px;
 }
-
-.search-bar {
-    padding: 4px;
-    border-radius: 20px;
-    border: none;
-    width: 200px;
-    height: 50px;
-    color: #ffffff;
-    opacity: 0.6;
-    background-color: rgba(123, 133, 152, 0.94);
-    font-size: 13px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s;
-}
-
-
-.search-bar:focus {
-    outline: none;
-    box-shadow: 0 0 10px rgba(59, 89, 152, 0.6),
-    0 0 20px rgba(59, 89, 152, 0.8),
-    0 0 30px rgba(59, 89, 152, 1);
-}
-.search-bar::placeholder {
-    color: rgb(255, 255, 255);
-    opacity: 1;
-}
-
 
 
 .dashboard-header-right {
@@ -542,3 +516,62 @@ nav ul li a:hover::after {
     letter-spacing: 1px;
     transition: color 0.3s;
 }
+
+
+.search-container {
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 25px;
+    padding: 5px;
+    height: 30px;
+    width: 250px;
+    background-color: rgba(249, 249, 249, 0.3);
+}
+
+
+.search-input {
+    border: none;
+    outline: none;
+    flex: 1;
+    background-color: transparent;
+    padding: 10px;
+    font-size: 13px;
+    color: #ffffff;
+    border-radius: 25px;
+}
+
+
+
+.search-input::placeholder {
+    color: #aaa;
+}
+
+.search-dropdown {
+    position: relative;
+    width: 150px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 300px;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
