@@ -129,7 +129,7 @@ router.post('/login', async (req, res) => {
             email: user.email
         };
 
-        res.json({ message: 'Zalogowano pomyślnie', token: 'twój-token', username: user.username  });
+        res.json({ message: 'Zalogowano pomyślnie', username: user.username  });
     } catch (err) {
         console.error('Błąd logowania:', err);
         res.status(500).json({ message: 'Błąd serwera' });

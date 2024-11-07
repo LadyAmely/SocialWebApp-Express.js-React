@@ -4,17 +4,49 @@ const session = require('express-session');
 const authRoutes = require('./routes/auth');
 const sequelize = require('./config/db');
 const path = require('path');
+const { Post } = require('./models');
 const http = require('http');
 const WebSocket = require('ws');
 const { v4: uuidv4 } = require('uuid');
-
 const app = express();
 const port = 5000;
 const userSockets = new Map();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const newsRouter = require('./routes/news');
+const eventRouter = require('./routes/event');
+const postRouter = require('./routes/post');
+const userRouter = require('./routes/user');
+const communityRouter = require('./routes/community');
+const forumRouter = require('./routes/forum');
+const userInfoRouter = require('./routes/userInfo');
+const commentRouter = require('./routes/comment');
+const friendRouter = require('./routes/friend');
+const userGroupRouter = require('./routes/userGroups');
+const commentGroupRouter = require('./routes/commentGroups');
+const commentMainRouter = require('./routes/commentMain');
+const commentForumPostRouter = require('./routes/commentForumPost');
+const favouriteEventRouter = require('./routes/favouriteEvent');
+const commentPostRouter = require('./routes/commentPost');
 
+app.use(express.json());
+app.use('/api/news', newsRouter);
+app.use('/api/events', eventRouter);
+app.use('/api/posts', postRouter);
+app.use('/api/all-users', userRouter);
+app.use('/api/community', communityRouter);
+app.use('/api/forum-posts', forumRouter);
+app.use('/api/user-info', userInfoRouter);
+app.use('/api/comments', commentRouter);
+app.use('/api/friends', friendRouter);
+app.use('/api/user-groups', userGroupRouter);
+app.use('/api/comment-groups', commentGroupRouter);
+app.use('/api/comments-main-posts', commentMainRouter);
+app.use('/api/comments-forum-posts', commentForumPostRouter);
+app.use('/api/favourite-events', favouriteEventRouter);
+//app.use('/api/comment-posts', commentPostRouter);
+
+
+app.use(express.urlencoded({ extended: true }));
 
 const sessionMiddleware = session({
     secret: 'mysecret',
@@ -43,310 +75,6 @@ app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
-app.get('/api/posts', async (req, res) => {
-    try {
-        const [results, metadata] = await sequelize.query('SELECT * FROM posts');
-        res.status(200).json(results);
-    } catch (error) {
-        console.error('Error fetching posts:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-app.get('/api/user-groups/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const results = await sequelize.query(
-            'SELECT title FROM user_groups WHERE user_id = :id',
-            {
-                replacements: { id: id },
-                type: sequelize.QueryTypes.SELECT
-            }
-        );
-        res.status(200).json(results);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-app.get('/api/friends/:username', async (req, res) => {
-    try {
-        const { username } = req.params;
-        const results = await sequelize.query(
-            'SELECT friend_user FROM friends WHERE username = :username',
-            {
-                replacements: { username },
-                type: sequelize.QueryTypes.SELECT,
-            }
-        );
-
-        res.status(200).json(results);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-
-
-
-app.get('/api/news', async(req, res) => {
-    try {
-        const [results, metadata] = await sequelize.query('SELECT * FROM news');
-        res.status(200).json(results);
-    }catch(error){
-        console.error('Error fetching news posts:', error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-});
-
-app.get('/api/community', async(req, res) => {
-    try {
-        const [results, metadata] = await sequelize.query('SELECT * FROM groups'
-            );
-        res.status(200).json(results);
-    }catch(error){
-        console.error('Error fetching news posts:', error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-});
-
-app.get('/api/comments/:id', async(req, res)=>{
-    try{
-        const { id } = req.params;
-        const results = await sequelize.query(
-            'SELECT * FROM comments WHERE news_id = :id',
-            {
-                replacements: { id: id },
-                type: sequelize.QueryTypes.SELECT
-            }
-        );
-        res.status(200).json(results);
-    }catch(error){
-        console.log(error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-});
-
-app.get('/api/comments-groups/:id', async(req, res)=>{
-    try{
-        const { id } = req.params;
-        const results = await sequelize.query(
-            'SELECT * FROM comments_groups WHERE group_id = :id',
-            {
-                replacements: { id: id },
-                type: sequelize.QueryTypes.SELECT
-            }
-        );
-        res.status(200).json(results);
-    }catch(error){
-        console.log(error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-});
-
-app.get('/api/comments-main-posts/:id', async(req, res)=>{
-    try{
-        const { id } = req.params;
-        const results = await sequelize.query(
-            'SELECT * FROM comments_main_posts WHERE post_id = :id',
-            {
-                replacements: { id: id },
-                type: sequelize.QueryTypes.SELECT
-            }
-        );
-        res.status(200).json(results);
-    }catch(error){
-        console.log(error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-});
-
-app.post('/api/comments', async (req, res)=>{
-
-    const {username, news_id, comment_text, created_at} = req.body;
-    if(!username || !news_id || !comment_text || !created_at){
-        return res.status(400).json({ error: '400 error' });
-    }
-    try{
-        const comment = await sequelize.query(
-          'INSERT INTO comments(username, news_id, comment_text, created_at) VALUES (:username, :news_id, :comment_text, NOW())',
-            {
-                replacements: {username, news_id, comment_text},
-                type: sequelize.QueryTypes.INSERT
-            }
-        );
-        res.status(201).json({ id: comment[0], username, news_id, comment_text});
-    }catch(error){
-        console.error(error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-
-});
-
-app.post('/api/comments-groups', async(req, res)=>{
-
-    const{username, group_id, comment_text, created_at} = req.body;
-    if(!username || !group_id || !comment_text || !created_at){
-        return res.status(400).json({ error: '400 error' });
-    }
-
-    try{
-        const comment = await sequelize.query(
-            'INSERT INTO comments_groups(username, group_id, comment_text, created_at) VALUES (:username, :group_id, :comment_text, NOW())',
-            {
-                replacements: {username, group_id, comment_text},
-                type: sequelize.QueryTypes.INSERT
-            }
-        );
-        res.status(201).json({ id: comment[0], username, group_id, comment_text});
-
-    }catch(error){
-        console.error(error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-
-});
-
-app.post('/api/comments-main-posts', async(req, res)=>{
-
-    const{username, post_id, comment_text, created_at} = req.body;
-    if(!username || !post_id || !comment_text || !created_at){
-        return res.status(400).json({ error: '400 error' });
-    }
-
-    try{
-        const comment = await sequelize.query(
-            'INSERT INTO comments_main_posts(username, post_id, comment_text, created_at) VALUES (:username, :post_id, :comment_text, NOW())',
-            {
-                replacements: {username, post_id, comment_text},
-                type: sequelize.QueryTypes.INSERT
-            }
-        );
-        res.status(201).json({ id: comment[0], username, post_id, comment_text});
-
-    }catch(error){
-        console.error(error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-
-});
-
-app.post('/api/comments-forum-posts', async(req, res)=>{
-
-    const{username, forum_post_id, comment_text, created_at} = req.body;
-    if(!username || !forum_post_id || !comment_text || !created_at){
-        return res.status(400).json({ error: '400 error' });
-    }
-
-    try{
-        const comment = await sequelize.query(
-            'INSERT INTO comment_forum_posts(username, forum_post_id, comment_text, created_at) VALUES (:username, :forum_post_id, :comment_text, NOW())',
-            {
-                replacements: {username, forum_post_id, comment_text},
-                type: sequelize.QueryTypes.INSERT
-            }
-        );
-        res.status(201).json({ id: comment[0], username, forum_post_id, comment_text});
-
-    }catch(error){
-        console.error(error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-
-});
-
-app.get('/api/comments-forum-posts/:id', async(req, res)=>{
-    try{
-        const { id } = req.params;
-        const results = await sequelize.query(
-            'SELECT * FROM comment_forum_posts WHERE forum_post_id = :id',
-            {
-                replacements: { id: id },
-                type: sequelize.QueryTypes.SELECT
-            }
-        );
-        res.status(200).json(results);
-    }catch(error){
-        console.log(error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-});
-
-
-app.get('/api/events', async(req, res)=> {
-    try{
-        const [results, metadata] = await sequelize.query('SELECT * FROM events');
-        res.status(200).json(results);
-    }catch(error){
-        console.log(error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-});
-
-/*
-
-app.post('/api/favourite_events', async(req, res)=>{
-
-    const{username, event_id} = req.body;
-    if(!username || !event_id){
-        return res.status(400).json({error: '400 error'});
-    }
-    try{
-        const favouriteEvent = await sequelize.query(
-
-            'INSERT INTO favourite_events (username, event_id) VALUES (:username, :event_id)',
-            {
-                replacements: {username,  event_id},
-                type: sequelize.QueryTypes.INSERT
-            }
-        );
-        res.status(201).json({ id: favouriteEvent[0], username, event_id });
-    }catch(error){
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
- */
-
-app.post('/api/favourite_events', async (req, res) => {
-    const { username, event_id } = req.body;
-    if (!username || !event_id) {
-        return res.status(400).json({ error: '400 error' });
-    }
-    try {
-
-        const [existingEvent] = await sequelize.query(
-            'SELECT * FROM favourite_events WHERE username = :username AND event_id = :event_id',
-            {
-                replacements: { username, event_id },
-                type: sequelize.QueryTypes.SELECT
-            }
-        );
-
-        if (existingEvent) {
-            return res.status(200).json({ message: 'Event already marked as favourite' });
-        }
-
-
-        const favouriteEvent = await sequelize.query(
-            'INSERT INTO favourite_events (username, event_id) VALUES (:username, :event_id)',
-            {
-                replacements: { username, event_id },
-                type: sequelize.QueryTypes.INSERT
-            }
-        );
-
-        res.status(201).json({ id: favouriteEvent[0], username, event_id });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-
 app.get('/api/favourite_events/:username', async(req, res)=>{
     try{
         const { username } = req.params;
@@ -368,148 +96,6 @@ app.get('/api/favourite_events/:username', async(req, res)=>{
     }
 });
 
-
-
-app.post('/api/events', async(req, res)=>{
-   const{description, image_path, username} = req.body;
-
-   if(!description || !image_path || !username){
-       return res.status(400).json({ error: 'Description, image_path, and username are required' });
-   }
-   try{
-       const eventPost = await sequelize.query(
-           'INSERT INTO events (description, created_at, updated_at, image_path, username) VALUES (:description, NOW(), NOW(), :image_path, :username)',
-           {
-               replacements: {description, image_path, username},
-               type: sequelize.QueryTypes.INSERT
-           }
-       );
-       res.status(201).json({ id: eventPost[0], description, image_path, username });
-   }catch(error){
-       console.log(error);
-       res.status(500).json({ error: 'Internal server error' });
-   }
-});
-
-app.put('/api/user-info', async(req, res)=>{
-
-    const{username, location, interests, observations, constellations} = req.body;
-
-    if(!username || !location || !interests || !observations)
-    {
-        return res.status(400).json({error: 'All elements are required.'});
-    }
-    try{
-        const userInfo = await sequelize.query(
-            'UPDATE user_info SET location = :location, interests = :interests, observations = :observations, constellations = :constellations WHERE username = :username',
-            {
-                replacements: { username, location, interests, observations, constellations },
-                type: sequelize.QueryTypes.UPDATE
-            }
-
-        );
-
-    }catch(error){
-        console.log(error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-});
-
-app.get('/api/user-info/:username', async(req, res)=>{
-
-    const {username} = req.params;
-    try{
-        const [results, metadata] = await sequelize.query('SELECT * FROM user_info WHERE username = :username', {
-            replacements: { username: username },
-        });
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-        res.status(200).json(results);
-    }catch(error){
-        console.log(error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-
-});
-
-app.post('/api/forum-posts', async(req, res)=>{
-    const{title, description, username} = req.body;
-
-    if(!description || !title || !username){
-        return res.status(400).json({ error: 'Description, title, and username are required' });
-    }
-    try{
-        const forumPost = await sequelize.query(
-            'INSERT INTO forum_posts (title, description, username, created_at, updated_at) VALUES (:title, :description, :username, NOW(),NOW())',
-            {
-                replacements: {title, description, username},
-                type: sequelize.QueryTypes.INSERT
-            }
-        );
-        res.status(201).json({ id: forumPost[0], title, description, username });
-    }catch(error){
-        console.log(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-app.get('/api/forum-posts', async (req, res) => {
-    try {
-        const [results, metadata] = await sequelize.query('SELECT * FROM forum_posts');
-        res.status(200).json(results);
-    } catch (error) {
-        console.error('Error fetching posts:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-app.put('/api/forum-posts/:forum_post_id/like', async (req, res) => {
-    const { forum_post_id } = req.params;
-
-    console.log(`Attempting to like post with ID: ${forum_post_id}`);
-
-    try {
-        const [results] = await sequelize.query(
-            'UPDATE forum_posts SET likes = likes + 1 WHERE forum_post_id = :forum_post_id',
-            {
-                replacements: { forum_post_id },
-            }
-        );
-        console.log('Query results:', results);
-
-        if (results[0] > 0) {
-            res.status(200).json({ message: 'Likes increased successfully.' });
-        } else {
-            res.status(404).json({ error: 'Post not found.' });
-        }
-    } catch (error) {
-        console.error('Error updating likes:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-
-app.post('/api/community', async(req, res)=>{
-    const{description, image_path, username} = req.body;
-
-    if(!description || !image_path || !username){
-        return res.status(400).json({ error: 'Description, image_path, and username are required' });
-    }
-    try{
-        const eventPost = await sequelize.query(
-            'INSERT INTO groups (description, created_at, updated_at, image_path, username) VALUES (:description, NOW(), NOW(), :image_path, :username)',
-            {
-                replacements: {description, image_path, username},
-                type: sequelize.QueryTypes.INSERT
-            }
-        );
-        res.status(201).json({ id: eventPost[0], description, image_path, username });
-    }catch(error){
-        console.log(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
 
 app.post('/api/comment-posts', async (req, res) => {
     const { forum_post_id, content, username } = req.body;
@@ -547,195 +133,6 @@ app.get('/api/comment-posts', async(req, res) => {
     }
 });
 
-
-
-
-
-
-app.delete('/api/events/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const result = await sequelize.query(
-            'DELETE FROM events WHERE event_id = :id',
-            {
-                replacements: { id },
-                type: sequelize.QueryTypes.DELETE
-            }
-        );
-        if (result[1] === 0) {
-            return res.status(404).json({ error: 'Event not found' });
-        }
-        res.status(200).json({ message: `Event with ID ${id} deleted successfully` });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-app.delete('/api/community/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const result = await sequelize.query(
-            'DELETE FROM groups WHERE group_id = :id',
-            {
-                replacements: { id },
-                type: sequelize.QueryTypes.DELETE
-            }
-        );
-        if (result[1] === 0) {
-            return res.status(404).json({ error: 'Event not found' });
-        }
-        res.status(200).json({ message: `Event with ID ${id} deleted successfully` });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-
-
-app.put('/api/events/:id', async (req, res) => {
-    const { id } = req.params;
-    const { description, image_path} = req.body;
-
-    if (!description || !image_path) {
-        return res.status(400).json({ error: 'Description, image_path are required' });
-    }
-
-    try {
-
-        const [updatedRows] = await sequelize.query(
-            `UPDATE events 
-             SET description = :description, 
-                 image_path = :image_path,
-                 updated_at = NOW() 
-             WHERE event_id = :id`,
-            {
-                replacements: { id, description, image_path},
-                type: sequelize.QueryTypes.UPDATE
-            }
-        );
-
-        if (updatedRows === 0) {
-            return res.status(404).json({ error: 'Event not found' });
-        }
-
-        res.status(200).json({ message: 'Event updated successfully', id, description, image_path, username });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-app.put('/api/posts/:id', async (req, res) => {
-    const { id } = req.params;
-    const { description, image_path} = req.body;
-
-    if (!description || !image_path) {
-        return res.status(400).json({ error: 'Description, image_path are required' });
-    }
-
-    try {
-
-        const [updatedRows] = await sequelize.query(
-            `UPDATE posts 
-             SET description = :description, 
-                 image_path = :image_path,
-                 updated_at = NOW() 
-             WHERE post_id = :id`,
-            {
-                replacements: { id, description, image_path},
-                type: sequelize.QueryTypes.UPDATE
-            }
-        );
-
-        if (updatedRows === 0) {
-            return res.status(404).json({ error: 'Event not found' });
-        }
-
-        res.status(200).json({ message: 'Event updated successfully', id, description, image_path, username });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-app.put('/api/community/:id', async (req, res) => {
-    const { id } = req.params;
-    const { description, image_path} = req.body;
-
-    if (!description || !image_path) {
-        return res.status(400).json({ error: 'Description, image_path are required' });
-    }
-
-    try {
-
-        const [updatedRows] = await sequelize.query(
-            `UPDATE groups 
-             SET description = :description, 
-                 image_path = :image_path,
-                 updated_at = NOW() 
-             WHERE group_id = :id`,
-            {
-                replacements: { id, description, image_path},
-                type: sequelize.QueryTypes.UPDATE
-            }
-        );
-
-        if (updatedRows === 0) {
-            return res.status(404).json({ error: 'Event not found' });
-        }
-
-        res.status(200).json({ message: 'Group post updated successfully', id, description, image_path, username });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-app.delete('/api/posts/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const result = await sequelize.query(
-            'DELETE FROM posts WHERE post_id = :id',
-            {
-                replacements: { id },
-                type: sequelize.QueryTypes.DELETE
-            }
-        );
-        if (result[1] === 0) {
-            return res.status(404).json({ error: 'Event not found' });
-        }
-        res.status(200).json({ message: `Post with ID ${id} deleted successfully` });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-
-app.post('/api/posts', async (req, res) => {
-    const { description, image_path, username } = req.body;
-
-    if (!description || !image_path || !username) {
-        return res.status(400).json({ error: 'Description, image_path, and username are required' });
-    }
-
-    try {
-        const newPost = await sequelize.query(
-            'INSERT INTO posts (description, created_at, updated_at, image_path, username) VALUES (:description, NOW(), NOW(), :image_path, :username)',
-            {
-                replacements: { description, image_path, username },
-                type: sequelize.QueryTypes.INSERT
-            }
-        );
-
-        res.status(201).json({ id: newPost[0], description, image_path, username });
-    } catch (error) {
-        console.error('Error creating post:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
 
 app.post('/api/personal_info', async(req, res) => {
     const {location, interests, observations, favourite_constellations, username} = req.body;
