@@ -1,5 +1,5 @@
 const sequelize = require('../config/db');
-const { ForumPost, Post} = require('../models');
+const { ForumPost} = require('../models');
 
 exports.getAllForumPosts = async(req, res)=> {
     try {
@@ -18,7 +18,7 @@ exports.createForumPost = async(req, res)=>{
         return res.status(400).json({ error: 'Description, title, and username are required' });
     }
     try{
-        const forumPost = await Post.create({
+        const forumPost = await ForumPost.create({
             title,
             description,
             username,

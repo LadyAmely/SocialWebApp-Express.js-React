@@ -1,18 +1,15 @@
 
+
 const express = require('express');
 const session = require('express-session');
 const authRoutes = require('./routes/auth');
 const sequelize = require('./config/db');
 const path = require('path');
-const { Post } = require('./models');
 const http = require('http');
-const WebSocket = require('ws');
 const { v4: uuidv4 } = require('uuid');
 const app = express();
 const port = 5000;
-const userSockets = new Map();
-
-
+const cookieParser = require('cookie-parser');
 
 const newsRouter = require('./routes/news');
 const eventRouter = require('./routes/event');
@@ -29,6 +26,10 @@ const commentMainRouter = require('./routes/commentMain');
 const commentForumPostRouter = require('./routes/commentForumPost');
 const favouriteEventRouter = require('./routes/favouriteEvent');
 const commentPostRouter = require('./routes/commentPost');
+const dashboardRouter = require('./routes/dashboard');
+const initWebSocketServer = require('./websocket');
+const {verify} = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
 app.use(express.json());
 app.use('/api/news', newsRouter);
@@ -44,116 +45,29 @@ app.use('/api/user-groups', userGroupRouter);
 app.use('/api/comment-groups', commentGroupRouter);
 app.use('/api/comments-main-posts', commentMainRouter);
 app.use('/api/comments-forum-posts', commentForumPostRouter);
-app.use('/api/favourite-events', favouriteEventRouter);
-//app.use('/api/comment-posts', commentPostRouter);
-
-
+app.use('/api/favourite_events', favouriteEventRouter);
+//app.use('/dashboard', dashboardRouter);
+app.use('/api/comment-posts', commentPostRouter);
 app.use(express.urlencoded({ extended: true }));
-
-const sessionMiddleware = session({
-    secret: 'mysecret',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        httpOnly: true,
-        secure: false,
-        sameSite: 'Strict'
-    }
-});
-
-app.use(sessionMiddleware);
+app.use(cookieParser());
 
 sequelize.sync().then(() => {
     console.log('Synchronizacja z bazą danych zakończona');
 });
 
 app.use('/auth', authRoutes);
-
+require('dotenv').config();
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
+/*
 app.get('/dashboard', (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/auth/login');
-    }
-
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
-app.get('/api/favourite_events/:username', async(req, res)=>{
-    try{
-        const { username } = req.params;
-        const results = await sequelize.query(
-            'SELECT events.* \n' +
-            '             FROM favourite_events \n' +
-            '             JOIN events ON favourite_events.event_id = events.event_id \n' +
-            '             WHERE favourite_events.username = :username',
-            {
-                replacements: { username: username },
-                type: sequelize.QueryTypes.SELECT
-            }
-        );
-        res.status(200).json(results);
+ */
 
-    }catch(error){
-        console.log(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
+app.get('/dashboard', authenticateToken, (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
-
-
-app.post('/api/comment-posts', async (req, res) => {
-    const { forum_post_id, content, username } = req.body;
-    if (!forum_post_id || !content || !username) {
-        return res.status(400).json({ error: 'forum_post_id, content, and username are required' });
-    }
-    try {
-        const commentPost = await sequelize.query(
-            'INSERT INTO comment_posts (forum_post_id, content, created_at, username) VALUES (:forum_post_id, :content, NOW(), :username)',
-            {
-                replacements: { forum_post_id, content, username },
-                type: sequelize.QueryTypes.INSERT,
-            }
-        );
-        res.status(201).json({
-            comment_id: commentPost[0],
-            forum_post_id,
-            content,
-            created_at: new Date(),
-            username,
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-app.get('/api/comment-posts', async(req, res) => {
-    try {
-        const [results, metadata] = await sequelize.query('SELECT * FROM comment_posts');
-        res.status(200).json(results);
-    }catch(error){
-        console.error('Error fetching news posts:', error);
-        res.status(500).json({error: 'Internal server error'});
-    }
-});
-
-
-app.post('/api/personal_info', async(req, res) => {
-    const {location, interests, observations, favourite_constellations, username} = req.body;
-
-    try {
-        const newInfo = await sequelize.query(
-            'INSERT INTO personal_data(location, interests, observations, favourite_constellations, username) VALUES (:location, :interests, :observations, :favourite_constellations, :username)',
-            {
-                replacements: {location, interests, observations, favourite_constellations, username},
-                type: sequelize.QueryTypes.INSERT
-            }
-        );
-        res.status(201).json({ personal_id: newInfo[0], location, interests, observations, favourite_constellations, username });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
@@ -162,63 +76,28 @@ app.get('*', (req, res) => {
 });
 
 const server = http.createServer(app);
-
-const userStatus = new Map();
-
-const wss = new WebSocket.Server({ server });
-
-const wrap = middleware => (ws, req, next) => middleware(req, {}, next);
-
-wss.on('connection', (ws, req) => {
-    wrap(sessionMiddleware)(ws, req, () => {
-        if (req.session && req.session.user) {
-            const username = req.session.user.username;
-            console.log(`WebSocket: użytkownik ${username} połączony`);
-
-            userSockets.set(username, ws);
-            userStatus.set(username, { online: true, socket: ws });
-
-            ws.on('message', (message) => {
-                console.log(` ${username}: ${message}`);
-
-                const targetUsername = extractTargetUsername(message);
-                if (!targetUsername) {
-                    ws.send('Błąd: nie podano odbiorcy.');
-                    return;
-                }
-
-                const targetSocket = userSockets.get(targetUsername);
-                if (targetSocket && targetSocket.readyState === WebSocket.OPEN) {
-                    const parsedMessage = JSON.parse(message);
-                    targetSocket.send(`${username}: ${parsedMessage.message}`);
-                } else {
-                    //ws.send(`Użytkownik ${targetUsername} nie jest dostępny.`);
-
-                }
-            });
-
-            ws.on('close', () => {
-                console.log(`WebSocket: użytkownik ${username} rozłączony`);
-                userSockets.delete(username);
-            });
-        } else {
-            ws.close();
-        }
-    });
-});
-
-
-function extractTargetUsername(message) {
-    try {
-        const parsedMessage = JSON.parse(message);
-        return parsedMessage.targetUsername;
-    } catch (e) {
-        console.error('Błąd parsowania wiadomości:', e);
-        return null;
-    }
-}
+//initWebSocketServer(server, sessionMiddleware);
 
 
 server.listen(port, () => {
     console.log(`Serwer działa na porcie ${port}`);
 });
+
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        console.log('Brak tokenu w nagłówku');
+        return res.status(401).json({ message: 'Brak autoryzacji - token nie został dostarczony' });
+    }
+
+    jwt.verify(token, jwtSecretKey, (err, user) => {
+        if (err) {
+            console.log('Błąd weryfikacji tokenu:', err);
+            return res.status(403).json({ message: 'Token jest nieprawidłowy lub wygasł' });
+        }
+        req.user = user;
+        next();
+    });
+}

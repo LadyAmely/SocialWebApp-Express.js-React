@@ -1,11 +1,19 @@
+
+
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const { User } = require('../models');
 const router = express.Router();
 const path = require('path');
 const sequelize = require("../config/db");
+const {sign} = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
+router.use(bodyParser.json());
 
 let loggedInUsers = [];
+require('dotenv').config();
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
 
 router.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
@@ -55,14 +63,11 @@ router.get('/users', async (req, res) => {
 });
 
 
+
 router.get('/api/user/posts', async (req, res) => {
     try {
 
-        if (!req.session.user) {
-            return res.status(401).json({ message: 'Unauthorized - user not logged in' });
-        }
-
-        const username = req.session.user.username;
+        const username = req.user.username;
 
         const posts = await User.findAll({
             where: { username: username }
@@ -75,11 +80,8 @@ router.get('/api/user/posts', async (req, res) => {
     }
 });
 
-
-
-
 router.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
 
     try {
         let user = await User.findOne({ where: { email } });
@@ -93,7 +95,8 @@ router.post('/register', async (req, res) => {
         user = await User.create({
             username,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            role: role || 'user',
         });
 
 
@@ -104,8 +107,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -123,37 +125,24 @@ router.post('/login', async (req, res) => {
             loggedInUsers.push(user.username);
         }
 
-        req.session.user = {
-            id: user.id,
-            username: user.username,
-            email: user.email
-        };
+        const token = jwt.sign(
+            { userId: user.id, username: user.username, role: user.role },
+            jwtSecretKey,
+            { expiresIn: '1h' }
+        );
 
-        res.json({ message: 'Zalogowano pomyślnie', username: user.username  });
+        res.json({ message: 'Zalogowano pomyślnie', username: user.username, token });
     } catch (err) {
         console.error('Błąd logowania:', err);
         res.status(500).json({ message: 'Błąd serwera' });
     }
 });
 
-
-
 router.post('/logout', (req, res) => {
     console.log('Logout request received');
-    if (req.session.user) {
-        loggedInUsers = loggedInUsers.filter(username => username !== req.session.user.username);
-    }
-
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('Error destroying session:', err);
-            return res.status(500).json({ message: 'Błąd przy wylogowaniu' });
-        }
-        console.log('Session destroyed successfully');
-        res.json({ message: 'Successfully logged out' });
-    });
+    res.json({ message: 'Successfully logged out' });
 });
 
 
-
 module.exports = router;
+

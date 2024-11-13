@@ -1,39 +1,31 @@
 const sequelize = require('../config/db');
+const {FavouriteEvent, Event} = require('../models');
 
-exports.createFavouriteEvent = async(req, res)=> {
+exports.createFavouriteEvent = async (req, res) => {
     const { username, event_id } = req.body;
-    if (!username || !event_id) {
-        return res.status(400).json({ error: '400 error' });
-    }
-    try {
 
-        const [existingEvent] = await sequelize.query(
-            'SELECT * FROM favourite_events WHERE username = :username AND event_id = :event_id',
-            {
-                replacements: { username, event_id },
-                type: sequelize.QueryTypes.SELECT
-            }
-        );
+    if (!username || !event_id) {
+        return res.status(400).json({ error: 'Username and event_id are required' });
+    }
+
+    try {
+        const existingEvent = await FavouriteEvent.findOne({
+            where: { username, event_id }
+        });
 
         if (existingEvent) {
             return res.status(200).json({ message: 'Event already marked as favourite' });
         }
 
+        const favouriteEvent = await FavouriteEvent.create({ username, event_id });
 
-        const favouriteEvent = await sequelize.query(
-            'INSERT INTO favourite_events (username, event_id) VALUES (:username, :event_id)',
-            {
-                replacements: { username, event_id },
-                type: sequelize.QueryTypes.INSERT
-            }
-        );
-
-        res.status(201).json({ id: favouriteEvent[0], username, event_id });
+        res.status(201).json(favouriteEvent);
     } catch (error) {
-        console.error(error);
+        console.error('Error creating favourite event:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
 
 exports.getFavouriteEvent =  async(req, res)=>{
     try{
