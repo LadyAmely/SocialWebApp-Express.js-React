@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import "../css/auth/login.css";
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 function Login(): React.ReactElement {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -17,7 +19,7 @@ function Login(): React.ReactElement {
         setErrorMessage(null);
 
         try {
-            const response = await fetch('http://localhost:5000/Auth/login', {
+            const response = await fetch('http://localhost:5000/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,7 +31,7 @@ function Login(): React.ReactElement {
                 const data = await response.json();
                 localStorage.setItem('authToken', data.token);
                 localStorage.setItem('username', data.username);
-                window.location.href = '/dashboard';
+                navigate('/dashboard');
             } else {
                 const errorData = await response.json();
                 setErrorMessage(errorData.message || 'Nieprawidłowe dane logowania');

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import '../css/pages/dashboard.css';
 import Avatar from 'react-avatar';
 import { useAuth } from '../context/AuthContext';
@@ -28,7 +28,9 @@ function Dashboard(): React.ReactElement {
 
     const fetchUserIdByUsername = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/auth/users/user_id?username=${username}`);
+            const response = await fetch(`http://localhost:5000/auth/users/user_id?username=${username}`, {
+
+            });
             const data = await response.json();
 
             if (data && data.id) {
@@ -49,8 +51,10 @@ function Dashboard(): React.ReactElement {
 
         const fetchUserGroup = async () => {
             if (!userId) return;
+           // const token = localStorage.getItem('authToken');
             try {
-                const response = await fetch(`http://localhost:5000/api/user-groups/${userId}`);
+                const response = await fetch(`http://localhost:5000/api/user-groups/${userId}`, {
+                });
                 const data = await response.json();
                 setUserGroup(data.map((group: UserGroup) => group.title));
             } catch (error) {
@@ -62,19 +66,18 @@ function Dashboard(): React.ReactElement {
 
     }, [userId]);
 
-
-
     useEffect(() => {
         if (username) {
             fetchUserIdByUsername();
         }
     }, [username]);
 
-
     useEffect(() => {
         const fetchUsers = async () => {
+            //const token = localStorage.getItem('authToken');
             try {
-                const response = await fetch('http://localhost:5000/auth/users');
+                const response = await fetch('http://localhost:5000/auth/users', {
+                });
                 const data = await response.json();
                 setUsers(data);
             } catch (error) {
@@ -86,8 +89,10 @@ function Dashboard(): React.ReactElement {
 
     useEffect(() => {
         const fetchPosts = async () => {
+           // const token = localStorage.getItem('authToken');
             try {
-                const response = await fetch('http://localhost:5000/api/posts');
+                const response = await fetch('http://localhost:5000/api/posts', {
+                });
                 const data = await response.json();
                 setPosts(data);
             } catch (error) {
@@ -96,7 +101,6 @@ function Dashboard(): React.ReactElement {
         };
         fetchPosts();
     }, []);
-
 
     const handleUserClick = (user: string) => {
         if (!activeChats.includes(user)) {
@@ -148,6 +152,5 @@ function Dashboard(): React.ReactElement {
         React.createElement(Footer)
     );
 }
-
 
 export default Dashboard;
