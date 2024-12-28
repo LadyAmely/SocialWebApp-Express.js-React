@@ -1,19 +1,6 @@
 
 
-.hero {
-    background: linear-gradient(to right, #131723, #10151b);
-    color: #ffffff;
-    text-align: center;
-    padding: 4rem 1rem;
-    display: flex;
-    z-index: 0;
-    justify-content: center;
-    align-items: center;
-    height: 60vh;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
-    position: relative;
-    overflow: hidden;
-}
+
 
 
 

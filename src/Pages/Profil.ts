@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from "react";
+
 import Avatar from 'react-avatar';
 import Vibrant from 'node-vibrant';
-import { useAuth } from "../context/AuthContext";
-import "../css/pages/profil.css";
-import {faBinoculars, faCog, faComments, faHome, faUser, faUsers} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faCamera, faVideo, faCalendar } from '@fortawesome/free-solid-svg-icons';
-import { faNewspaper, faInfoCircle, faUserFriends, faImage, faFilm, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
-import { faMapMarkerAlt, faHeart, faEye, faStar } from '@fortawesome/free-solid-svg-icons';
-import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
-import CommentMain from "../Components/CommentMain";
-import DropMenu from "../Components/DropMenu";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faBinoculars, faCog, faComments, faHome, faUser, faUsers,
+    faCamera, faVideo, faCalendar, faNewspaper, faInfoCircle,
+    faUserFriends, faImage, faFilm, faEllipsisH, faEdit,
+    faMapMarkerAlt, faHeart, faEye, faStar
+} from "@fortawesome/free-solid-svg-icons";
+import { FaComment, FaShare, FaThumbsUp } from "react-icons/fa";
 
+
+import { useAuth } from "../context/AuthContext";
+
+
+import "../css/pages/profil.css";
+
+
+import CommentMain from "../Components/CommentMain";
 
 function Profil(): React.ReactElement {
     const { username } = useAuth();

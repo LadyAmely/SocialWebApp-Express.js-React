@@ -1,31 +1,27 @@
-
 .comment-section {
-    margin-top: 20px;
-    padding: 10px 15px;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-top: 10px;
+    padding: 5px 10px;
+    margin-left: 10px;
+    margin-right: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 
 .comment {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 4px;
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-
 .comment-avatar {
-    width: 40px;
-    height: 40px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    margin-right: 10px;
-    border: 2px solid #bddcfb;
-}
+    margin-right: 5px;
 
+}
 
 .comment-user-info {
     display: flex;
@@ -33,34 +29,30 @@
     color: #ffffff;
 }
 
-
 .comment-user-info h3 {
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 500;
     color: #ffffff;
     margin: 0;
 }
 
-
 .comment-user-info span {
     color: #bddcfb;
-    font-size: 13px;
-    margin-top: 2px;
+    font-size: 10px;
+    margin-top: 1px;
 }
-
 
 .comment-content {
     color: #e0e0e0;
-    font-size: 15px;
-    margin-top: 5px;
-    line-height: 1.4;
+    font-size: 12px;
+    margin-top: 3px;
+    line-height: 1.2;
 }
-
 
 .comment-actions {
     display: flex;
-    gap: 15px;
-    margin-top: 8px;
+    gap: 10px;
+    margin-top: 5px;
 }
 
 .comment-actions button {
@@ -68,9 +60,9 @@
     border: none;
     color: #bddcfb;
     cursor: pointer;
-    font-size: 14px;
-    padding: 6px 8px;
-    border-radius: 6px;
+    font-size: 10px;
+    padding: 4px 6px;
+    border-radius: 4px;
     transition: background-color 0.3s, color 0.3s;
 }
 

@@ -62,16 +62,6 @@ function HomeHeader(username: string, toggleMenuWindow: () => void): React.React
             React.createElement(
                 'nav',
                 { className: 'nav' },
-                React.createElement('div', {className: 'search-container'},
-                    React.createElement('input', {
-                        className: 'search-input',
-                        placeholder: 'Search on GalaxyFlow...'}
-
-                    ),
-
-
-
-                ),
                 React.createElement(
                     'ul',
                     null,

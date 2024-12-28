@@ -33,7 +33,7 @@ function CommentForum({ postId, username }: CommentsForumProps) {
     const commentItems = comments.map(comment =>
         React.createElement('li', { key: comment.comment_id, className: 'comment' },
             React.createElement('div', { className: 'comment-avatar' },
-                React.createElement(Avatar, { name: comment.username, size: '40', round: true })
+                React.createElement(Avatar, { name: comment.username, size: '20', round: true })
             ),
             React.createElement('div', { className: 'comment-user-info' },
                 React.createElement('span', null, comment.timestamp)

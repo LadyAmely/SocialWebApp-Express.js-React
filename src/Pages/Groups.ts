@@ -1,15 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import {useAuth} from "../context/AuthContext";
-import {faCalendar, faCog, faComments, faHome, faNewspaper, faUser, faUsers} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from 'react';
+
+
+import { useAuth } from "../context/AuthContext";
+
+
+import { faCalendar, faCog, faComments, faHome, faNewspaper, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaComment, FaShare, FaThumbsUp } from "react-icons/fa";
 import Avatar from "react-avatar";
+
+
 import '../css/pages/dashboard.css';
 import '../css/pages/community.css';
-import Chat from "../Components/Chat";
-import Footer from "../Components/Footer";
-import CommentGroups  from "../Components/CommentGroups";
-import {FaComment, FaShare, FaThumbsUp} from "react-icons/fa";
 
+
+import Footer from "../Components/Footer";
+import CommentGroups from "../Components/CommentGroups";
 
 function Groups(): React.ReactElement{
 
